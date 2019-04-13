@@ -1,0 +1,24 @@
+[{
+        "text": "bool"
+    }, {
+        "text": "char"
+    },
+    {
+        "text": "uchar"
+    },
+    {
+        "text": "short"
+    },
+    {
+        "text": "ushort"
+    },
+    {
+        "text": "int"
+    },
+    {
+        "text": "uint"
+    },
+    {
+        "text": "float"
+    }
+]

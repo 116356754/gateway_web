@@ -1,0 +1,101 @@
+<!doctype html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN""http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <script src="../static/easyui/jquery.min.js"></script>
+    <link rel="shortcut icon" href="../static/favicon.ico">
+    <link rel=stylesheet href="../static/easyui/themes/bootstrap/easyui.css">
+    <link rel=stylesheet href="../static/easyui/themes/icon.css">
+    <script src="../static/easyui/jquery.easyui.min.js"></script>
+    <script src="../static/javascript/language.js"></script>
+    <script src="../static/easyui/jquery.edatagrid.js"></script>
+    <script src="../static/easyui/jquery.easyui.validatex.js"></script>
+    <script src="../static/javascript/api.js"></script>
+    <script src="../static/resource/vue.min.js"></script>
+    <script src="../static/resource/vue-i18n.min.js"></script>
+</head>
+
+<body>
+    <!-- 事件管理中事件编辑窗口 -->
+    <div id='js_add' title="js脚本" style="width:950px;height:600px;">
+        <form id="event_form" style="height:100%">
+            <div id="ff" class="easyui-layout" data-options="fit:true">
+                <div data-options="region:'north'" style="height:60px;">
+                    <label style="font-size:12px;"><input id="event_check" type="checkbox" checked>启用</label><br>
+                    <input class="easyui-textbox" id='event_name' label="事件名称：" value="New Event" labelWidth="100px" style="width: 90%" validType="maxLength[30]">
+                </div>
+                <div data-options="region:'west',title:'事件来源'" style="width:26%;"><br>
+                    <div style="margin-left:10px">
+                        <div style="margin-bottom:5px">
+                            <div>事件种类:</div>
+                            <select id='event_class' class="easyui-combobox" data-options="panelHeight: 'auto',editable:false" style="width:85%;height:20px">
+                            <option>点值超出范围</option>
+                            <option>质量不为Good</option>
+                        </select>
+                        </div>
+                        <div style="margin-bottom:5px">
+                            <div>间隔时间(s):</div>
+                            <input id='event_interval' class="easyui-textbox" value="5" required="true" style="width:85%;height:20px">
+                        </div>
+                        <div style="margin-bottom:5px">
+                            <div>关联点名称:</div>
+                            <input id='event_piontname' class="easyui-textbox" buttonAlign="left" required="true" buttonText="添加" style="width:85%;height:20px">
+                        </div>
+                        <div style="margin-bottom:5px">
+                            <div id="event_max_div">最大值:</div>
+                            <input id='event_max' class="easyui-textbox" value="0" required="true" style="width:85%;height:20px">
+                        </div>
+                        <div style="margin-bottom:5px">
+                            <div id="event_min_div">最小值:</div>
+                            <input id='event_min' class="easyui-textbox" value="0" required="true" style="width:85%;height:20px">
+                        </div>
+                        <div style="margin-bottom:5px">
+                            <div>抖动延时(ms):</div>
+                            <input id='delay' class="easyui-textbox" value="0" required="true" style="width:85%;height:20px">
+                        </div>
+                    </div>
+                </div>
+                <div data-options="region:'center',title:'当事件触发'"><br><br>
+                    <div style="margin-left:10px">
+                        <div style="margin-bottom:5px">
+                            <div>处理动作选择:</div>
+                            <select id='trigger_action' class="easyui-combobox" data-options="panelHeight: 'auto',editable:false" style="width:40%;height:20px">
+                                <option>不响应</option>
+                                <option selected>写入值</option>
+                            </select>
+                        </div>
+                        <div id="trigger_div" style="margin-bottom:5px;">
+                            <label style="display:inline-block;width:157px">写入点名称:</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label style="display:inline-block;width:64px">写入值:</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick='tadditem("tb")'></a>
+                            <table id="tb">
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div data-options="region:'east',title:'当事件解除'" style="width:37%;"><br><br>
+                    <div style="margin-left:10px">
+                        <div style="margin-bottom:5px">
+                            <div>处理动作选择:</div>
+                            <select id='release_action' class="easyui-combobox" data-options="panelHeight: 'auto',editable:false" style="width:40%;height:20px">
+                        <option>不响应</option>
+                        <option selected>写入值</option>
+                    </select>
+                        </div>
+                        <div id="release_div" style="margin-bottom:5px;">
+                            <label style="display:inline-block;width:157px">写入点名称:</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label style="display:inline-block;width:64px">写入值:</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick='radditem("rb")'></a>
+                            <table id="rb">
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div data-options="region:'south',title:'描述'" style="height:180px;">
+                    <label id="describe"></label>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>

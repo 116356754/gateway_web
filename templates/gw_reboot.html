@@ -1,0 +1,53 @@
+<!doctype html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<style type="text/css">
+    .input_container {
+        margin-bottom: 32px;
+    }
+</style>
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="shortcut icon" href="../static/favicon.ico">
+    <link rel=stylesheet href="../static/easyui/themes/bootstrap/easyui.css">
+    <link rel=stylesheet href="../static/easyui/themes/icon.css">
+    <script src="../static/easyui/jquery.min.js"></script>
+    <script src="../static/easyui/jquery.easyui.min.js"></script>
+    <script src="../static/javascript/api.js"></script>
+</head>
+
+<script>
+    window.onload = function() {  
+        if (self.parent.initial == 'zh-CN') {
+            $.getScript("../static/easyui/locale/easyui-lang-zh_CN.js"); 
+        } else {   
+            $.getScript("../static/easyui/locale/easyui-lang-en.js"); 
+        }
+    }
+
+    $(function() {
+        initial = self.parent.initial;
+        value = get_baseurl()
+        $.messager.confirm(self.parent.messages[initial]['common']['system_hint'], self.parent.messages[initial]['index']['if_gw_reboot'].format(value), function(r) {
+            if (r) {
+                $.ajax({
+                    type: 'post',
+                    url: 'http://' + value + '/gw_reboot',
+                    data: "true",
+                    timeout: 5000,
+                    success: function(data) {
+                        if (data['result']) {
+                            self.parent.insert_info(self.parent.messages[initial]['index']['gw_reboot_success'])
+                        } else {
+                            self.parent.insert_info("Reboot fail")
+                        }
+                    },
+                    error: function() {
+                        $.messager.alert(self.parent.messages[initial]['common']['system_hint'], self.parent.messages[initial]['index']['connectip_fail'].format(value), "info");
+                    }
+                });
+            }
+        });
+    });
+</script>

@@ -1,0 +1,133 @@
+<!doctype html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="shortcut icon" href="../static/favicon.ico">
+    <link rel=stylesheet href="../static/easyui/themes/bootstrap/easyui.css">
+    <link rel=stylesheet href="../static/easyui/themes/icon.css">
+    <script src="../static/easyui/jquery.min.js"></script>
+    <script src="../static/easyui/jquery.easyui.min.js"></script>
+    <script src="../static/easyui/locale/easyui-lang-zh_CN.js"></script>
+    <script src="../static/javascript/language.js"></script>
+    <script src="../static/easyui/jquery.edatagrid.js"></script>
+    <script src="../static/easyui/jquery.easyui.validatex.js"></script>
+    <script src="../static/javascript/api.js"></script>
+    <script src="../static/javascript/junrui.js"></script>
+    <script src="../static/resource/xlsx.core.min.js"></script>
+    <script src="../static/resource/jquery.table2excel.js"></script>
+</head>
+
+<body>
+    <div class="easyui-layout" data-options="fit:true">
+        <div id="master_title" data-options="region:'center',split:false">
+            <div id='mrx' title="导入Excel配置" style="display:none;width:300px;height:100px">
+                <input type=file id="excel-file" accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="padding:20px;">
+            </div>
+            <div id='templete_dialog' title="装载模板文件" style="display:none;width:300px;height:160px;padding:20px;">
+                <input class="easyui-combobox" id='template_name' data-options="editable:false" label="模板名称：" labelWidth="70px" style="width:200px;">
+            </div>
+            <div id='templete_save_dialog' title="保存模板文件" style="display:none;width:300px;height:160px;padding:20px;">
+                <input class="easyui-textbox" id='template_save' label="模板名称：" labelWidth="70px" style="width:200px;">
+            </div>
+            <table id="junrui_xls_config" style="width:100%;height:100%;" scrolling="auto" singleSelect="true" class="easyui-datagrid" data-options="fit:true,fitColumns:true,rownumbers:true,pagination:false">
+
+            </table>
+        </div>
+    </div>
+</body>
+<script>
+    function bulk_operate(persons) {
+        var obj = get_select();
+        sql = "delete from JunRui where deviceCode='{0}'".format(obj.select.text);
+        result = deletesql(obj.path, sql);
+        content = JSON.stringify({
+            "JunRui": persons
+        })
+        result = bulk_insert(obj.path, content);
+        return result;
+    };
+
+    function save_template(persons) {
+        content = JSON.stringify({
+            "JunRui": persons
+        });
+        result = bulk_insert('Template/Template', content);
+        return result;
+    };
+
+    $('#excel-file').change(function(e) {
+        var files = e.target.files;
+
+        var fileReader = new FileReader();
+        fileReader.onload = function(ev) {
+            try {
+                var data = ev.target.result,
+                    workbook = XLSX.read(data, {
+                        type: 'binary'
+                    }), // 以二进制流方式读取得到整份excel表格对象
+                    persons = []; // 存储获取到的数据
+            } catch (e) {
+                $.messager.alert(self.parent.messages[initial]['common']['system_hint'], '文件类型不正确!', "info");
+                return;
+            }
+
+            // 表格的表格范围，可用于判断表头是否数量是否正确
+            var fromTo = '';
+            // 遍历每张表读取
+            for (var sheet in workbook.Sheets) {
+                if (workbook.Sheets.hasOwnProperty(sheet)) {
+                    fromTo = workbook.Sheets[sheet]['!ref'];
+                    console.log(fromTo);
+                    if (fromTo.slice(0, 4) != 'A1:D') {
+                        document.getElementById('excel-file').value = '';
+                        $.messager.alert(self.parent.messages[initial]['common']['system_hint'], '请导入与当前协议相应的Excel!', "info")
+                        return;
+                    }
+                    column_list = ['A1', 'B1', 'C1', 'D1'];
+                    content = readFileSync('TemplateJson/columnchange.json');
+                    content_object = JSON.parse(content);
+                    column_list.forEach(function(column) {
+                        for (var r in content_object['JunRui']) {
+                            if (content_object['JunRui'][r] == workbook.Sheets[sheet][column].w) {
+                                workbook.Sheets[sheet][column].w = r
+                            }
+                        }
+                    })
+                    persons = persons.concat(XLSX.utils.sheet_to_json(workbook.Sheets[sheet]));
+                    break; // 如果只取第一张表，就取消注释这行
+                }
+            }
+            // console.log(persons)
+            if (persons.length != 0) {
+                var headStr = 'tagCode,description,dataItem,rate';
+                if (Object.keys(persons[0]).join(',') == headStr) {
+                    var obj = get_select();
+                    for (person in persons) {
+                        persons[person]['deviceCode'] = obj.select.text
+                    }
+                    result = bulk_operate(persons);
+                    if (result == "true") {
+                        $("#junrui_xls_config").edatagrid('reload');
+                        self.parent.insert_info('导入成功');
+                    } else {
+                        if (result.indexOf('NOT NULL') != -1) {
+                            $.messager.alert(self.parent.messages[initial]['common']['system_hint'], 'Excel中“名称”、“数据项名称”和“倍率”不能为空！', "info")
+                        } else if (result.indexOf('UNIQUE') != -1) {
+                            $.messager.alert(self.parent.messages[initial]['common']['system_hint'], '名称重复！', "info")
+                        } else {
+                            $.messager.alert(self.parent.messages[initial]['common']['system_hint'], result, "info")
+                        }
+                    }
+                } else {
+                    $.messager.alert(self.parent.messages[initial]['common']['system_hint'], '请导入与当前协议相应的Excel!', "info")
+                }
+            } else {
+                $.messager.alert(self.parent.messages[initial]['common']['system_hint'], '导入的Excel中没有数据!', "info")
+            }
+            document.getElementById('excel-file').value = ''
+        };
+        // 以二进制方式打开文件
+        fileReader.readAsBinaryString(files[0]);
+    })
+</script>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="shortcut icon" href="../static/favicon.ico">
+    <link rel=stylesheet href="../static/easyui/themes/bootstrap/easyui.css">
+    <link rel=stylesheet href="../static/easyui/themes/icon.css">
+    <script src="../static/easyui/jquery.min.js"></script>
+    <script src="../static/easyui/jquery.easyui.min.js"></script>
+    <script src="../static/javascript/language.js"></script>
+    <script src="../static/easyui/jquery.edatagrid.js"></script>
+    <script src="../static/easyui/jquery.easyui.validatex.js"></script>
+    <script src="../static/javascript/api.js"></script>
+    <script src="../static/resource/vue.min.js"></script>
+    <script src="../static/resource/vue-i18n.min.js"></script>
+    <script src="../static/resource/xlsx.core.min.js"></script>
+    <script src="../static/javascript/OPC UA.js"></script>
+    <script src="../static/javascript/base-loading.js"></script>
+</head>
+
+<body>
+    <div id='app' style="position:absolute; width:100%;height:100%;left:0;top:0">
+        <div class="easyui-layout" data-options="fit:true">
+            <div id="modbus_config" data-options="region:'north',split:true,collapsible:true" style="height:120px; overflow:hidden">
+                <form id="querytb" method="post" style="padding:10px;" accept-charset="UTF-8">
+                    <div style="float: left;width: 35%">
+                        <label class="my_protocol" style="font-size:12px;"><input id="opc_used" class="input_agreement_protocol" type="checkbox"><span></span>{{ $t('mqtt.used') }}</label><br><br>
+                        <input class="easyui-textbox" id='port' v-bind:label="port" labelWidth="60px" validType="eqmaxLength[5]">
+                    </div>
+
+                    <div>
+                        <a id="btnSearch" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-ok'" onclick="doSearch()">{{ $t('common.save') }}</a>
+                    </div>
+                </form>
+            </div>
+            <div id="master_title" data-options="region:'center',split:false">
+                <div id='mrx' title="导入Excel配置" style="display:none;width:300px;height:100px">
+                    <input type=file id="excel-file" accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="padding:20px;">
+                </div>
+                <table id="tg" class="easyui-treegrid" style="width:100%;height:100%;" data-options="
+				rownumbers: true,
+				animate: true,
+				collapsible: true,
+				fitColumns: true,
+				url: '../static/json/drive.json',
+				method: 'get',
+				idField: 'id',
+				treeField: 'name',
+				showFooter: true
+            ">
+                </table>
+            </div>
+        </div>
+    </div>
+
+</body>
+<script type="text/javascript">
+    window.onload = function() {  
+        contextPath = '../static/easyui/locale/'
+        if (self.parent.vm.$i18n.locale == 'zh-CN') {
+            $.getScript("../static/easyui/locale/easyui-lang-zh_CN.js"); 
+        } else {   
+            $.getScript("../static/easyui/locale/easyui-lang-en.js"); 
+        }
+    }
+
+    Vue.use(VueI18n)
+
+    var initial = self.parent.vm.$i18n.locale
+    var i18n = new VueI18n({
+        locale: initial,
+        messages: self.parent.messages
+    })
+    var vm = new Vue({
+        i18n: i18n,
+        data: {
+            locale: initial,
+            port: self.parent.messages[initial]['modbus_slave']['port'],
+            opcua_config: self.parent.messages[initial]['opcua']['opcua_config']
+        },
+        watch: {
+            locale: function(val) {
+                this.$i18n.locale = val
+            }
+        }
+    }).$mount('#app')
+
+    var dir = self.parent.$('#text').textbox('getText'); // 选中的文件夹名称
+    var feature_path = 'Project/' + dir + '/Gateway';
+
+    $(function() {
+        content = selectsql(feature_path, "select * from feature where protocol='OPCUA'");
+        content_object = JSON.parse(content);
+        obj = JSON.parse(content_object[0]['conf'])
+        if (obj['used']) {
+            $("#opc_used").prop("checked", true);
+        } else {
+            $("#opc_used").prop("checked", false);
+        }
+        $('#port').textbox('setValue', obj.port);
+    });
+
+    function doSearch() {
+        var a = $('#querytb').form('enableValidation').form('validate');
+        if (!a) {
+            return false
+        } else {
+            content = {};
+            content.used = $("#opc_used").is(":checked");
+            content.port = document.getElementById('port').value;
+            if (content.used) {
+                result = updatesql(feature_path, "update feature SET port='{0}',conf='{1}' where protocol='OPCUA'".format(content.port, JSON.stringify(content)));
+            } else {
+                result = updatesql(feature_path, "update feature SET port=nullif('',''), conf='{0}' where protocol='OPCUA'".format(JSON.stringify(content)));
+            }
+            if (result == 'true') {
+                self.parent.insert_info(self.parent.messages[initial]['opcua']['server_config_success']);
+            } else {
+                $.messager.alert(result);
+                self.parent.insert_info(self.parent.messages[initial]['opcua']['server_config_fail'])
+            }
+        }
+    }
+
+    $('#excel-file').change(function(e) {
+        var files = e.target.files;
+
+        var fileReader = new FileReader();
+        fileReader.onload = function(ev) {
+            try {
+                var data = ev.target.result,
+                    workbook = XLSX.read(data, {
+                        type: 'binary'
+                    }), // 以二进制流方式读取得到整份excel表格对象
+                    persons = []; // 存储获取到的数据
+            } catch (e) {
+                $.messager.alert(self.parent.messages[initial]['common']['system_hint'], self.parent.messages[initial]['common']['File_type_is_incorrect'], "info");
+                return;
+            }
+
+            // 表格的表格范围，可用于判断表头是否数量是否正确
+            var fromTo = '';
+            // 遍历每张表读取
+            for (var sheet in workbook.Sheets) {
+                if (workbook.Sheets.hasOwnProperty(sheet)) {
+                    fromTo = workbook.Sheets[sheet]['!ref'];
+                    console.log(fromTo);
+                    if (fromTo.slice(0, 4) != 'A1:E') {
+                        document.getElementById('excel-file').value = '';
+                        $.messager.alert(self.parent.messages[initial]['common']['system_hint'], self.parent.messages[initial]['common']['corresponding_excel'], "info");
+                        return;
+                    }
+                    column_list = ['A1', 'B1', 'C1', 'D1', 'E1'];
+                    content = readFileSync('TemplateJson/columnchange.json');
+                    content_object = JSON.parse(content);
+                    column_list.forEach(function(column) {
+                        for (var r in content_object['OPC_UA']) {
+                            if (content_object['OPC_UA'][r] == workbook.Sheets[sheet][column].w) {
+                                workbook.Sheets[sheet][column].w = r
+                            }
+                        }
+                    })
+                    persons = persons.concat(XLSX.utils.sheet_to_json(workbook.Sheets[sheet]));
+                    break; // 如果只取第一张表，就取消注释这行
+                }
+            }
+            // console.log(persons)
+            if (JSON.stringify(persons) != '[]') {
+                var headStr = 'id,pointType,address,dataType,exceptionDefault';
+                // if (Object.keys(persons[0]).join(',') == headStr) {
+                var obj = get_select();
+                for (person in persons) {
+                    persons[person] = create_modbusaddr(persons[person]);
+                }
+                var dir = self.parent.$('#text').textbox('getText'); // 选中的文件夹Name
+                var select = self.parent.$('#tt').tree('getSelected');
+                var parent1 = self.parent.$('#tt').tree('getParent', select.target);
+                var parent2 = self.parent.$('#tt').tree('getParent', parent1.target);
+                sql = "DELETE FROM OPC_UA";
+                result = truncatesql('Project/' + dir + '/Gateway', sql, 'VACUUM');
+
+                content = JSON.stringify({
+                    "OPC_UA": persons
+                })
+                result = bulk_insert('Project/' + dir + '/Gateway', content);
+                if (result == "true") {
+                    $("#modsv_xls_config").edatagrid('reload');
+                    self.parent.insert_info(self.parent.messages[initial]['common']['load_success']);
+                } else {
+                    if (result.indexOf('NOT NULL') != -1) {
+                        $.messager.alert(self.parent.messages[initial]['common']['system_hint'], 'Excel中“名称”、“点类型”、“Modbus寄存器地址”、“Modbus数据类型”和“异常默认值”不能为空！', "info")
+                    } else if (result.indexOf('UNIQUE') != -1) {
+                        $.messager.alert(self.parent.messages[initial]['common']['system_hint'], self.parent.messages[initial]['common']['duplicate_name'], "info")
+                    } else {
+                        $.messager.alert(self.parent.messages[initial]['common']['system_hint'], result, "info")
+                    }
+                }
+                // } else {
+                //     $.messager.alert(self.parent.messages[initial]['common']['system_hint'], '请导入与当前协议相应的Excel!', "info")
+                // }
+            } else {
+                $.messager.alert(self.parent.messages[initial]['common']['system_hint'], self.parent.messages[initial]['common']['excel_null'], "info")
+            }
+            document.getElementById('excel-file').value = '';
+        };
+        // 以二进制方式打开文件
+        fileReader.readAsBinaryString(files[0]);
+    })
+</script>
+
+</html>

@@ -1,0 +1,108 @@
+{
+    "正向有功总电量": {
+        "parser": "XXXXXX. XX",
+        "request": "BaseRequest",
+        "tag": "00010000"
+    },
+
+    "正向无功总电量": {
+        "parser": "XXXXXX. XX",
+        "request": "BaseRequest",
+        "tag": "00030000"
+    },
+    "反向有功总电量": {
+        "parser": "XXXXXX. XX",
+        "request": "BaseRequest",
+        "tag": "00020000"
+    },
+    "反向无功总电量": {
+        "parser": "XXXXXX. XX",
+        "request": "BaseRequest",
+        "tag": "00040000"
+    },
+    "A相电流": {
+        "parser": "XXX. XXX",
+        "request": "BaseRequest",
+        "tag": "02020100"
+    },
+    "B相电流": {
+        "parser": "XXX. XXX",
+        "request": "BaseRequest",
+        "tag": "02020200"
+    },
+    "C相电流": {
+        "parser": "XXX. XXX",
+        "request": "BaseRequest",
+        "tag": "02020300"
+    },
+    "A相电压": {
+        "parser": "XXX. X",
+        "request": "BaseRequest",
+        "tag": "02010100"
+    },
+    "B相电压": {
+        "parser": "XXX. X",
+        "request": "BaseRequest",
+        "tag": "02010200"
+    },
+    "C相电压": {
+        "parser": "XXX. X",
+        "request": "BaseRequest",
+        "tag": "02010300"
+    },
+    "正向有功尖": {
+        "parser": "XXXXXX. XX",
+        "request": "BaseRequest",
+        "tag": "00010100"
+    },
+    "正向有功峰": {
+        "parser": "XXXXXX. XX",
+        "request": "BaseRequest",
+        "tag": "00010200"
+    },
+    "正向有功平": {
+        "parser": "XXXXXX. XX",
+        "request": "BaseRequest",
+        "tag": "00010300"
+    },
+    "正向有功谷": {
+        "parser": "XXXXXX. XX",
+        "request": "BaseRequest",
+        "tag": "00010400"
+    },
+    "A相功率因数": {
+        "parser": "X. XXX",
+        "request": "BaseRequest",
+        "tag": "02060100"
+    },
+    "B相功率因数": {
+        "parser": "X. XXX",
+        "request": "BaseRequest",
+        "tag": "02060200"
+    },
+    "C相功率因数": {
+        "parser": "X. XXX",
+        "request": "BaseRequest",
+        "tag": "02060300"
+    },
+    "电网频率": {
+        "parser": "XX. XX",
+        "request": "BaseRequest",
+        "tag": "02800002"
+    },
+    "总功率因数": {
+        "parser": "X. XXX",
+        "request": "BaseRequest",
+        "tag": "02060000"
+    },
+    "总瞬时有功功率": {
+        "parser": "XX. XXXX",
+        "request": "BaseRequest",
+        "tag": "02030000"
+    },
+    "总瞬时无功功率": {
+        "parser": "XX. XXXX",
+        "request": "BaseRequest",
+        "tag": "02040000"
+    }
+}

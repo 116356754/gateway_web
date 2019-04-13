@@ -1,0 +1,246 @@
+<!doctype html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="shortcut icon" href="../static/favicon.ico">
+    <link rel=stylesheet href="../static/easyui/themes/bootstrap/easyui.css">
+    <link rel=stylesheet href="../static/easyui/themes/icon.css">
+    <script src="../static/easyui/jquery.min.js"></script>
+    <script src="../static/easyui/jquery.easyui.min.js"></script>
+    <script src="../static/javascript/language.js"></script>
+    <script src="../static/easyui/jquery.edatagrid.js"></script>
+    <script src="../static/easyui/jquery.easyui.validatex.js"></script>
+    <script src="../static/javascript/api.js"></script>
+    <script src="../static/resource/vue.min.js"></script>
+    <script src="../static/resource/vue-i18n.min.js"></script>
+    <script src="../static/resource/datetime.js"></script>
+    <!-- <script src="../static/javascript/debug_real.js"></script> -->
+    <script src='../static/resource/echarts.min.js'></script>
+    <script src="../static/javascript/base-loading.js"></script>
+
+</head>
+
+<style type="text/css">
+    body {
+        padding: 0;
+        margin: 0;
+    }
+    
+    table {
+        border: #95b8e7 1px solid;
+        border-collapse: collapse;
+        border-spacing: 0;
+        text-align: center;
+        font: normal 12px "\5FAE\8F6F\96C5\9ED1";
+        color: #444;
+    }
+    
+    table th {
+        height: 28px;
+        line-height: 28px;
+        background: -webkit-linear-gradient(#eff5fe, #e0ecff);
+        background: -moz-linear-gradient(#eff5fe, #e0ecff);
+        background: -o-linear-gradient(#eff5fe, #e0ecff);
+        background: linear-gradient(#eff5fe, #e0ecff);
+        filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#eff5fe', endColorstr='#e0ecff', GradientType=0);
+        border-bottom: #95b8e7 1px solid;
+        border-right: #95b8e7 1px dotted;
+    }
+    
+    table td {
+        height: 28px;
+        line-height: 28px;
+        border: #95b8e7 1px dotted;
+        padding: 0px;
+    }
+    
+    table tr:nth-child(odd) {
+        background: #F4F4F4;
+    }
+    
+    table tr:hover {
+        background: #e2edff;
+    }
+</style>
+
+
+<body>
+    <div id='app' style="position:absolute; width:100%;height:100%;left:0;top:0">
+        <div class="easyui-layout" data-options="fit:true">
+            <div id="app" data-options="region:'center'" v-bind:title="data">
+                <table id="t1" border="1px" cellspacing="0" width="100%">
+                    <tr align="center">
+                        <td>{{ $t('real_data.name') }}</td>
+                        <td>value</td>
+                        <td>quality</td>
+                        <td>{{ $t('real_data.timestamp') }}</td>
+                        <!-- <td></td> -->
+                    </tr>
+                    <tr v-for="value,index in filterValues" align="center">
+                        <td>{{ value.id }}</td>
+                        <td @click="edit(index)" contenteditable="true">{{ value.val }}</td>
+                        <td>{{ value.status }}</td>
+                        <td>{{ value.timestamp }}</td>
+                        <!-- <td @click="history(index)" contenteditable="true"><a href="http://www.w3school.com.cn">历史数据</a></td> -->
+                    </tr>
+                </table>
+            </div>
+            <div id="updata_val_dialog" style="width:350px;height:250px;padding:10px;display:none">
+                <input class="easyui-textbox" editable=false id='id' v-bind:label="name" labelWidth="70px" style="height:25px;width:250px"><br><br>
+                <input class="easyui-textbox" id='val' label="value: " labelWidth="70px" style="height:25px;width:250px"><br><br>
+                <input class="easyui-textbox" editable=false id='status' label="quality: " labelWidth="70px" style="height:25px;width:250px"><br><br>
+                <input class="easyui-textbox" editable=false id='timestamp' v-bind:label="timestamp" labelWidth="70px" style="height:25px;width:250px">
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    window.onload = function() {  
+        contextPath = '../static/easyui/locale/'
+        if (self.parent.initial == 'zh-CN') {
+            $.getScript("../static/easyui/locale/easyui-lang-zh_CN.js"); 
+        } else {   
+            $.getScript("../static/easyui/locale/easyui-lang-en.js"); 
+        }
+    }
+
+    Vue.use(VueI18n)
+
+    var initial = self.parent.initial
+    var i18n = new VueI18n({
+        locale: initial,
+        messages: self.parent.messages
+    })
+    var index_number = 0;
+    var app = new Vue({
+        i18n: i18n,
+        data: {
+            locale: initial,
+            searchText: '',
+            orderType: 0,
+            values: [],
+            iddatas: [],
+            data: self.parent.messages[initial]['real_data']['data'],
+            name: self.parent.messages[initial]['real_data']['name'],
+            timestamp: self.parent.messages[initial]['real_data']['timestamp'],
+            books: [{
+                name: 'Vue.js',
+                price: 50
+            }, {
+                name: 'Javascript',
+                price: 30
+            }, {
+                name: 'Css',
+                price: 40
+            }, {
+                name: 'Html',
+                price: 60
+            }]
+        },
+        computed: { // 计算属性
+            filterValues() {
+                // 排序
+                if (this.orderType) {
+                    this.values.sort(function(p1, p2) {
+                        return p1['id'].localeCompare(p2['id'])
+                    })
+                }
+                return this.values;
+            }
+        },
+        watch: {
+            locale: function(val) {
+                this.$i18n.locale = val
+            }
+        },
+        methods: {
+            greet: function(event) {
+                select = $('#list').tree('getSelected');
+                if (select != null) {
+                    var level = easyui_tree_options.getLevel('#list', select);
+                    console.log(select)
+                    data_ajax(select, level)
+                } else {
+                    // data_ajax(null, 1)
+                }
+            },
+            edit: function(index) {
+                index_number = index;
+                $("#id").textbox('setText', this.values[index].id);
+                $("#val").textbox('setText', this.values[index].val);
+                $("#status").textbox('setText', this.values[index].status);
+                $("#timestamp").textbox('setText', this.values[index].timestamp);
+                $('#updata_val_dialog').dialog({
+                    title: self.parent.messages[initial]['real_data']['write_operate'],
+                    closable: false,
+                    draggable: false,
+                    modal: true,
+                    buttons: [{
+                        text: self.parent.messages[initial]['real_data']['write'],
+                        iconCls: 'icon-ok',
+                        handler: function() {
+                            id = $("#id").textbox('getText');
+                            val = $("#val").textbox('getText');
+                            write_operate(id, val);
+                            $('#updata_val_dialog').dialog('close')
+                        }
+                    }, {
+                        text: self.parent.messages[initial]['common']['cancel'],
+                        iconCls: 'icon-cancel',
+                        handler: function() {
+                            $('#updata_val_dialog').dialog('close')
+                        }
+                    }]
+                });
+            }
+        }
+    }).$mount('#app');
+
+    $(function() {
+        setInterval(function() //开启循环：每10秒更新一次实时数据
+            {
+                ttselect = self.parent.$("#tt").tree("getSelected");
+                ttparent = self.parent.$("#tt").tree("getParent", ttselect.target);
+                if (ttselect != null) {
+                    if (ttparent.iconCls == 'icon-data-center' && ttselect.iconCls != 'icon-io-point') {
+                        cfxApi.sendCodetoNamepipe(ttselect.pointName);
+                    } else {
+                        cfxApi.sendCodetoNamepipe(ttselect.text);
+                    }
+                    real_data = JSON.parse(self.parent.debug_real_data);
+                    if (real_data['val'] != null) {
+                        real_data['val'].forEach(function(tag) {
+                            var time = new Date(tag['timestamp'] * 1000);
+                            tag['timestamp'] = DateUtil.dateToStr("yyyy-MM-dd HH:mm:ss", time);
+                            if (tag['status'] != 'Good') {
+                                tag['val'] = null
+                            }
+                        })
+                        app.values = real_data['val'];
+                    }
+                }
+            }, 10000);
+    })
+
+    function write_operate(id, val) {
+        data = JSON.stringify({
+            'id': id,
+            'val': val
+        })
+        cfxApi.sendCodetoWritepipe(data);
+    }
+    real_data = JSON.parse(self.parent.debug_real_data);
+    console.log(real_data)
+    if (real_data['val'] != null) {
+        real_data['val'].forEach(function(tag) {
+            var time = new Date(tag['timestamp'] * 1000);
+            tag['timestamp'] = DateUtil.dateToStr("yyyy-MM-dd HH:mm:ss", time);
+            if (tag['status'] != 'Good') {
+                tag['val'] = null
+            }
+        })
+        app.values = real_data['val'];
+    }
+</script>

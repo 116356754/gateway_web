@@ -1,0 +1,539 @@
+<!doctype html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="shortcut icon" href="../static/favicon.ico">
+    <link rel=stylesheet href="../static/easyui/themes/bootstrap/easyui.css">
+    <link rel=stylesheet href="../static/easyui/themes/icon.css">
+    <script src="../static/easyui/jquery.min.js"></script>
+    <script src="../static/easyui/jquery.easyui.min.js"></script>
+    <script src="../static/javascript/language.js"></script>
+    <script src="../static/easyui/jquery.edatagrid.js"></script>
+    <script src="../static/easyui/jquery.easyui.validatex.js"></script>
+    <script src="../static/javascript/api.js"></script>
+    <script src="../static/resource/vue.min.js"></script>
+    <script src="../static/resource/vue-i18n.min.js"></script>
+    <script src="../static/resource/xlsx.core.min.js"></script>
+    <script src="../static/javascript/BaCnetA Service.js"></script>
+    <script src="../static/javascript/BaCnetB Service.js"></script>
+    <script src="../static/javascript/BaCnetM Service.js"></script>
+    <script src="../static/javascript/base-loading.js"></script>
+</head>
+
+<body>
+    <div id='app' style="position:absolute; width:100%;height:100%;left:0;top:0">
+        <div class="easyui-layout" data-options="fit:true">
+            <div id="modbus_config" data-options="region:'north',split:true,collapsible:true" style="height:280px; overflow:hidden">
+                <form id="querytb" method="post" style="padding:10px;" accept-charset="UTF-8">
+                    <div style="float: left;width: 30%">
+                        <input class="easyui-textbox" id='deviceId' v-bind:label="slave_id" labelWidth="110px" style="height:25px;width:222px"><br><br>
+                        <input class="easyui-textbox" id='deviceName' v-bind:label="device_name" labelWidth="110px" style="height:25px;width:222px"><br><br>
+                        <input class="easyui-textbox" id='description' v-bind:label="description" labelWidth="110px" style="height:25px;width:222px"><br><br>
+                        <input class="easyui-textbox" id='manufacturer_name' v-bind:label="manufacturer_name" labelWidth="110px" style="height:25px;width:222px"><br><br>
+                        <input class="easyui-textbox" id='manufacturer_id' v-bind:label="manufacturer_id" labelWidth="110px" style="height:25px;width:222px"><br><br>
+                        <input class="easyui-textbox" id='location' v-bind:label="location" labelWidth="110px" style="height:25px;width:222px">
+                    </div>
+                    <div style="float: left;width: 26%">
+                        <label class="my_protocol" style="font-size:12px;"><input class="input_agreement_protocol" id="BaCnetip_check" type="checkbox"><span></span>{{ $t('bacnet_service.ip_slave') }}</label><br><br>
+                        <input class="easyui-textbox" id='port' v-bind:label="port" labelWidth="80px" validType="eqmaxLength[5]"><br><br>
+                        <input class="easyui-combobox" id='net_name' v-bind:label="net_name" data-options="editable:false" labelWidth="80px" style="height:25px;width:172px">
+                    </div>
+                    <div style="float: left;width: 26%">
+                        <label class="my_protocol" style="font-size:12px;"><input class="input_agreement_protocol" id="BaCnetmstp_check" type="checkbox"><span></span>{{ $t('bacnet_service.mstp_slave') }}</label><br><br>
+                        <input class="easyui-combobox" id='com' v-bind:label="serialport" data-options="editable:false" labelWidth="90px" style="height:25px;width:172px"><br><br>
+                        <input class="easyui-combobox" id='baud' v-bind:label="baud" data-options="editable:false" labelWidth="90px" style="height:25px;width:172px"><br><br>
+                        <input class="easyui-textbox" id='mac' v-bind:label="mac" labelWidth="90px" validType="eqmaxLength[5]"><br><br>
+                        <input class="easyui-textbox" id='timeout' v-bind:label="timeout" labelWidth="90px" validType="eqmaxLength[5]">
+                    </div>
+                    <div>
+                        <a id="btnSearch" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-ok'" onclick="doSearch()">{{ $t('common.save') }}</a>
+                    </div>
+                </form>
+                <div id='mrx' title="导入Excel配置" style="display:none;width:300px;height:100px">
+                    <input type=file id="excel-file" accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="padding:20px;">
+                </div>
+            </div>
+
+            <!-- 多态添加删除窗口 -->
+            <div id="multistate_dialog" style="width:450px;height:420px;padding:10px;display: none">
+                <div id="cc" class="easyui-layout" style="width: auto;height: 320px">
+                    <div data-options="region:'north',border:false" style="height: 60px;"><br>
+                        <a id="btnSearch" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-ok'" onclick="add_multistate()">{{ $t('bacnet_service.add_status') }}</a>
+                        <a id="btnSearch" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove'" onclick="delete_multistate()">{{ $t('bacnet_service.delete_status') }}</a>
+                    </div>
+                    <div data-options="region:'west',border:false" style="width:150px;height:200px">
+                        <ul id="multistate_tree" class="easyui-tree">
+                        </ul>
+                    </div>
+                    <div data-options="region:'center',border:false" style="width:200px">
+                        <input class="easyui-textbox" disabled=true id='number' v-bind:label="multistate_number" labelWidth="80px" style="height:25px;width:180px"><br><br>
+                        <input class="easyui-textbox" id='mtext' v-bind:label="multistate_text" labelWidth="80px" style="height:25px;width:180px">
+                        <a id="btnSearch" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-reload'" onclick="update_text()">{{ $t('bacnet_service.update') }}</a>
+                    </div>
+                </div>
+            </div>
+
+            <div id="excel_title" data-options="region:'center',split:false" style="padding: 30px 0 0 0;">
+                <div id="tabs" class="easyui-tabs" style="width:100%;height: 30px; margin: -30px 0 0">
+                    <div title="AI" data-options="closable:false" style="display:none;">
+                    </div>
+                    <div title="AO" data-options="closable:false" style="overflow:auto;display:none;">
+                    </div>
+                    <div title="AV" data-options="closable:false" style="display:none;">
+                    </div>
+                    <div title="BI" data-options="closable:false" style="display:none;">
+                    </div>
+                    <div title="BO" data-options="closable:false" style="overflow:auto;display:none;">
+                    </div>
+                    <div title="BV" data-options="closable:false" style="display:none;">
+                    </div>
+                    <div title="MSI" data-options="closable:false" style="display:none;">
+                    </div>
+                    <div title="MSO" data-options="closable:false" style="overflow:auto;display:none;">
+                    </div>
+                    <div title="MSV" data-options="closable:false" style="display:none;">
+                    </div>
+                </div>
+                <div id='A' style="width: 100%;height: 100%;">
+                    <table id="BaCnetA_xls_config" style="width:100%;height:100%;" scrolling="auto" singleSelect="true" class="easyui-datagrid" data-options="fit:true,fitColumns:true,rownumbers:true,pagination:false">
+                    </table>
+                </div>
+                <div id='B' style="width: 100%;height: 100%">
+                    <table id="BaCnetB_xls_config" style="width:100%;height:100%;" scrolling="auto" singleSelect="true" class="easyui-datagrid" data-options="fit:true,fitColumns:true,rownumbers:true,pagination:false">
+                    </table>
+                </div>
+                <div id='M' style="width: 100%;height: 100%;display:none">
+                    <table id="BaCnetM_xls_config" style="width:100%;height:100%;" scrolling="auto" singleSelect="true" class="easyui-datagrid" data-options="fit:true,fitColumns:true,rownumbers:true,pagination:false">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    window.onload = function() {  
+        contextPath = '../static/easyui/locale/'
+        if (self.parent.vm.$i18n.locale == 'zh-CN') {
+            $.getScript("../static/easyui/locale/easyui-lang-zh_CN.js"); 
+        } else {   
+            $.getScript("../static/easyui/locale/easyui-lang-en.js"); 
+        }
+    }
+
+
+    function update_text() {
+        number = $('#number').textbox('getValue');
+        mtext = $('#mtext').textbox('getValue');
+        Roots = $('#multistate_tree').tree('getRoots');
+        data = [];
+        i = 0;
+        if (Roots != null) {
+            Roots.forEach(function(multistate) {
+                i += 1;
+                if (parseInt(multistate['number']) == parseInt(number)) {
+                    data.push({
+                        "text": i + '-' + mtext,
+                        "value": mtext,
+                        "number": i,
+                        "iconCls": "icon-blank"
+                    })
+                } else {
+                    data.push({
+                        "text": i + '-' + multistate['value'],
+                        "value": multistate['value'],
+                        "number": i,
+                        "iconCls": "icon-blank"
+                    })
+                }
+            });
+            $('#multistate_tree').tree({
+                data: data,
+                lines: true
+            });
+        };
+    }
+
+
+    // 添加状态
+    function add_multistate() {
+        var options = $('#multistate_tree').tree('options');
+        // console.log(options['data'])
+        if (options['data'] == null) {
+            $('#multistate_tree').tree({
+                data: [{
+                    "text": "1-State1",
+                    "iconCls": "icon-blank",
+                    "number": 1
+                }],
+                lines: true
+            });
+        } else {
+            // console.log(options['data'].length)
+            options['data'].push({
+                "text": options['data'].length + 1 + "-State" + (options['data'].length + 1),
+                "value": "State" + (options['data'].length + 1),
+                "number": options['data'].length + 1,
+                "iconCls": "icon-blank"
+            })
+            $('#multistate_tree').tree({
+                data: options['data'],
+                lines: true
+            });
+        }
+    }
+
+    // 删除状态
+    function delete_multistate() {
+        var Selected = $('#multistate_tree').tree('getSelected');
+        console.log(Selected)
+        if (Selected == null) {
+            $.messager.alert(self.parent.messages[initial]['common']['system_hint'], self.parent.messages[initial]['bacnet_service']['please_selected'], "info")
+        } else {
+            $('#multistate_tree').tree('remove', Selected.target);
+            Roots = $('#multistate_tree').tree('getRoots');
+            data = [];
+            i = 0;
+            Roots.forEach(function(multistate) {
+                i += 1;
+                data.push({
+                    "text": i + '-' + multistate['value'],
+                    "value": multistate['value'],
+                    "number": i,
+                    "iconCls": "icon-blank"
+                })
+            });
+            $('#multistate_tree').tree({
+                data: data,
+                lines: true
+            });
+        }
+
+    }
+
+    Vue.use(VueI18n)
+
+    var initial = self.parent.vm.$i18n.locale
+    var i18n = new VueI18n({
+        locale: initial,
+        messages: self.parent.messages
+    })
+    var vm = new Vue({
+        i18n: i18n,
+        data: {
+            locale: initial,
+            bacnet_config: self.parent.messages[initial]['bacnet_service']['bacnet_config'],
+            port: self.parent.messages[initial]['bacnet_service']['port'],
+            net_name: self.parent.messages[initial]['bacnet_service']['net_name'],
+            serialport: self.parent.messages[initial]['bacnet_service']['serialport'],
+            baud: self.parent.messages[initial]['index']['baud'],
+            mac: self.parent.messages[initial]['index_tree']['mac'],
+            timeout: self.parent.messages[initial]['index']['timeout'],
+            slave_id: self.parent.messages[initial]['bacnet_service']['slave_id'],
+            manufacturer_name: self.parent.messages[initial]['bacnet_service']['manufacturer_name'],
+            manufacturer_id: self.parent.messages[initial]['bacnet_service']['manufacturer_id'],
+            location: self.parent.messages[initial]['bacnet_service']['location'],
+            description: self.parent.messages[initial]['bacnet_service']['description'],
+            device_name: self.parent.messages[initial]['index']['device_name'],
+            point_table: self.parent.messages[initial]['bacnet_service']['point_table'],
+            multistate_number: self.parent.messages[initial]['bacnet_service']['multistate_number'],
+            multistate_text: self.parent.messages[initial]['bacnet_service']['multistate_text']
+        },
+        watch: {
+            locale: function(val) {
+                this.$i18n.locale = val
+            }
+        }
+    }).$mount('#app')
+
+    var title_text = "AI";
+    $('#tabs').tabs({
+        onSelect: function(title, index) {
+            title_text = title;
+            if (['AI', 'AO', 'AV'].indexOf(title) != -1) {
+                document.getElementById('A').style.display = '';
+                document.getElementById('B').style.display = 'none';
+                document.getElementById('M').style.display = 'none';
+                Adisplay();
+            } else if (['BI', 'BO', 'BV'].indexOf(title) != -1) {
+                document.getElementById('A').style.display = 'none';
+                document.getElementById('B').style.display = '';
+                document.getElementById('M').style.display = 'none';
+                Bdisplay();
+            } else if (['MSI', 'MSO', 'MSV'].indexOf(title) != -1) {
+                document.getElementById('A').style.display = 'none';
+                document.getElementById('B').style.display = 'none';
+                document.getElementById('M').style.display = '';
+                Mdisplay();
+            }
+        }
+    });
+
+    var dir = self.parent.$('#text').textbox('getText'); // 选中的文件夹名称
+    var select = self.parent.$('#tt').tree('getSelected');
+    var parent1 = self.parent.$('#tt').tree('getParent', select.target);
+    var parent2 = self.parent.$('#tt').tree('getParent', parent1.target);
+    feature_path = 'Project/' + dir + '/Gateway';
+
+    function set_value() { // 设置textbox和combobox中的值
+        content = selectsql(feature_path, "select conf from feature where protocol='BACnetMSTP' or protocol='BACnetIP'");
+        content_object = JSON.parse(content);
+        BACnetMSTP_data = JSON.parse(content_object[1]['conf']);
+        BACnetIP_data = JSON.parse(content_object[0]['conf']);
+
+        if (BACnetIP_data.used) {
+            $("#BaCnetip_check").prop("checked", true);
+        }
+        if (BACnetMSTP_data.used) {
+            $("#BaCnetmstp_check").prop("checked", true);
+        }
+        $('#port').textbox('setValue', BACnetIP_data.port);
+        $('#net_name').combobox('setValues', BACnetIP_data.netport);
+        $('#deviceId').textbox('setValue', BACnetIP_data.deviceId);
+        $('#deviceName').textbox('setValue', BACnetIP_data.deviceName);
+        $('#com').combobox('setValues', BACnetMSTP_data.com);
+        $('#baud').combobox('setValues', BACnetMSTP_data.baudrate);
+        $('#timeout').textbox('setValue', BACnetMSTP_data.timeout);
+        $('#mac').textbox('setValue', BACnetMSTP_data.mstpMAC);
+        $('#description').textbox('setValue', BACnetMSTP_data.description);
+        $('#manufacturer_name').textbox('setValue', BACnetMSTP_data.vendorName);
+        $('#manufacturer_id').textbox('setValue', BACnetMSTP_data.vendorId);
+        $('#location').textbox('setValue', BACnetMSTP_data['location']);
+    }
+
+    function com_check(com) { // 检测com口是否被占用
+        result = selectsql(feature_path, "select * from serialport where com='{0}'".format(com));
+        if (result != '[]') {
+            return false;
+        } else {
+            bacnet_com = selectsql(feature_path, "select * from feature where com='{0}' and protocol!='BACnetMSTP'".format(com));
+            if (bacnet_com != '[]') {
+                return false;
+            } else {
+                modbus_slave_com = selectsql(path, "select com from feature where protocol='Modbus_RTU'");
+                com_object = JSON.parse(modbus_slave_com);
+                used_com = JSON.parse(com_object[0]['com']);
+                if (used_com.indexOf(com) != -1) {
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+        }
+    }
+
+    $(function() {
+        // console.log(parent2['feature'][0].length)
+        if (parent2['feature'][0].length == 1) {
+            net_data = [{
+                "text": "eth0",
+                "selected": true
+            }]
+        } else {
+            net_data = [{
+                "text": "eth0",
+                "selected": true
+            }, {
+                "text": "eth1"
+            }]
+        }
+        $("#net_name").combobox({
+            valueField: 'text',
+            textField: 'text',
+            data: net_data,
+            panelHeight: 'auto'
+        });
+        com_data = parent2.feature[1];
+        $("#com").combobox({
+            valueField: 'text',
+            textField: 'text',
+            data: com_data,
+            panelHeight: 'auto'
+        });
+        $("#baud").combobox({
+            valueField: 'text',
+            textField: 'text',
+            url: "../static/json/baudrate.json",
+            panelHeight: 'auto'
+        });
+        set_value()
+    });
+
+    function doSearch() {
+        var a = $('#querytb').form('enableValidation').form('validate');
+        if (!a) {
+            return false
+        } else {
+            deviceId = document.getElementById('deviceId').value;
+            deviceName = document.getElementById('deviceName').value;
+            mstpMAC = document.getElementById('mac').value;
+            description = document.getElementById('description').value;
+            vendorName = document.getElementById('manufacturer_name').value;
+            vendorId = document.getElementById('manufacturer_id').value;
+            locat = $("#location").textbox('getValue');
+
+            var MSTP_content = {
+                "used": $("#BaCnetmstp_check").is(":checked"),
+                "com": $("#com").combobox('getText'),
+                "baudrate": $("#baud").combobox('getText'),
+                "timeout": document.getElementById('timeout').value,
+                "deviceId": deviceId,
+                "deviceName": deviceName,
+                "mstpMAC": mstpMAC,
+                "description": description,
+                "vendorName": vendorName,
+                "vendorId": vendorId,
+                "location": locat
+            };
+            var IP_content = {
+                "used": $("#BaCnetip_check").is(":checked"),
+                "port": document.getElementById('port').value,
+                "netport": $("#net_name").combobox('getText'),
+                "deviceId": deviceId,
+                "deviceName": deviceName,
+                "mstpMAC": mstpMAC,
+                "description": description,
+                "vendorName": vendorName,
+                "vendorId": vendorId,
+                "location": locat
+            }
+
+            if (MSTP_content.used) { // bacnet_mstp_slave是否启用
+                status = com_check(MSTP_content.com);
+                if (status == 'true') { // 串口是否被占用
+                    mstp_sql = "update feature SET com='{0}',conf='{1}' where protocol='BACnetMSTP'".format(MSTP_content.com, JSON.stringify(MSTP_content));
+                    if (IP_content.used) {
+                        ip_sql = "update feature SET port='{0}',conf='{1}' where protocol='BACnetIP'".format(IP_content.port, JSON.stringify(IP_content));
+                    } else {
+                        ip_sql = "update feature SET port=nullif('',''),conf='{0}' where protocol='BACnetIP'".format(JSON.stringify(IP_content));
+                    }
+                    result = updatesql(feature_path, mstp_sql);
+                    result = updatesql(feature_path, ip_sql);
+                    if (result == 'true') {
+                        self.parent.insert_info(self.parent.messages[initial]['bacnet_service']['config_save_success']);
+                        //$('#cc').layout('collapse', 'north') // 保存成功后折叠Modbus上传服务器设置面板
+                    } else {
+                        $.messager.alert(result);
+                        self.parent.insert_info(self.parent.messages[initial]['bacnet_service']['config_save_fail'])
+                    }
+                } else {
+                    $.messager.alert(self.parent.messages[initial]['common']['system_hint'], self.parent.messages[initial]['index_tree']['serialport_already'].format(MSTP_content.com), "info")
+                }
+            } else {
+                mstp_sql = "update feature SET com=nullif('',''),conf='{0}' where protocol='BACnetMSTP'".format(JSON.stringify(MSTP_content));
+                if (IP_content.used) {
+                    ip_sql = "update feature SET port='{0}',conf='{1}' where protocol='BACnetIP'".format(IP_content.port, JSON.stringify(IP_content));
+                } else {
+                    ip_sql = "update feature SET port=nullif('',''),conf='{0}' where protocol='BACnetIP'".format(JSON.stringify(IP_content));
+                }
+                result = updatesql(feature_path, mstp_sql);
+                result = updatesql(feature_path, ip_sql);
+                if (result == 'true') {
+                    self.parent.insert_info(self.parent.messages[initial]['bacnet_service']['config_save_success']);
+                } else {
+                    $.messager.alert(result);
+                    self.parent.insert_info(self.parent.messages[initial]['bacnet_service']['config_save_fail'])
+                }
+            }
+        }
+    }
+
+    $('#excel-file').change(function(e) {
+        var files = e.target.files;
+
+        var fileReader = new FileReader();
+        fileReader.onload = function(ev) {
+            try {
+                var data = ev.target.result,
+                    workbook = XLSX.read(data, {
+                        type: 'binary'
+                    }), // 以二进制流方式读取得到整份excel表格对象
+                    sheet_value = []; // 存储获取到的数据
+            } catch (e) {
+                $.messager.alert(self.parent.messages[initial]['common']['system_hint'], self.parent.messages[initial]['common']['File_type_is_incorrect'], "info");
+                return;
+            }
+
+            // 表格的表格范围，可用于判断表头是否数量是否正确
+            var fromTo = '';
+            var persons = [];
+            // 遍历每张表读取
+            for (var sheet in workbook.Sheets) {
+                if (workbook.Sheets.hasOwnProperty(sheet)) {
+                    fromTo = workbook.Sheets[sheet]['!ref'];
+                    console.log(fromTo);
+                    // if (fromTo.slice(0, 4) != 'A1:E') {
+                    //     document.getElementById('excel-file').value = '';
+                    //     $.messager.alert(self.parent.messages[initial]['common']['system_hint'], self.parent.messages[initial]['common']['corresponding_excel'], "info")
+                    //     return;
+                    // }
+                    column_list = ['A1', 'B1', 'C1', 'D1', 'E1'];
+                    content = readFileSync('TemplateJson/columnchange.json');
+                    content_object = JSON.parse(content);
+                    column_list.forEach(function(column) {
+                        for (var r in content_object['AI,AO,AV,BI,BO,BV,MSI,MSO,MSV']) {
+                            if (workbook.Sheets[sheet][column]) {
+                                if (content_object['AI,AO,AV,BI,BO,BV,MSI,MSO,MSV'][r] == workbook.Sheets[sheet][column].w) {
+                                    workbook.Sheets[sheet][column].w = r
+                                }
+                            }
+                        }
+                    })
+                    sheet_value = []; // 存储获取到的数据
+                    sheet_value = sheet_value.concat(XLSX.utils.sheet_to_json(workbook.Sheets[sheet]));
+                    persons[sheet] = sheet_value;
+                    content = [];
+                    // for (value in persons) {
+                    //     if (persons[value]['name'] != '') {
+                    //         content.push(persons[value])
+                    //     }
+                    // }
+                    // break; // 如果只取第一张表，就取消注释这行
+                }
+            }
+            console.log(persons)
+            var headStr = 'AI,AO,AV,BI,BO,BV';
+            // if (Object.keys(persons).join(',') == headStr) {
+            var dir = self.parent.$('#text').textbox('getText'); // 选中的文件夹Name
+            sql = "DELETE FROM BaCnet_Service";
+            result = truncatesql('Project/' + dir + '/Gateway', sql, 'VACUUM');
+            content = [];
+            for (sheetName in persons) {
+                value_object = [];
+                persons[sheetName].forEach(function(tag) {
+                    if (tag['id'] != '' && tag['objectInstance'] != '' && tag['units'] != '') {
+                        tag['objectType'] = sheetName;
+                        value_object.push(tag)
+                    }
+                })
+                content = content.concat(value_object);
+            }
+            console.log(content)
+            content = JSON.stringify({
+                "BaCnet_Service": content
+            })
+            result = bulk_insert('Project/' + dir + '/Gateway', content);
+            if (result == "true") {
+                $("#BaCnetA_xls_config").edatagrid('reload');
+                $("#BaCnetB_xls_config").edatagrid('reload');
+                $("#BaCnetM_xls_config").edatagrid('reload');
+                self.parent.insert_info(self.parent.messages[initial]['common']['load_success']);
+                document.getElementById('excel-file').value = '';
+            } else {
+                if (result.indexOf('NOT NULL') != -1) {
+                    $.messager.alert(self.parent.messages[initial]['common']['system_hint'], 'Excel中“名称”、“对象索引号”和“单位”不能为空！', "info")
+                } else if (result.indexOf('UNIQUE') != -1) {
+                    $.messager.alert(self.parent.messages[initial]['common']['system_hint'], self.parent.messages[initial]['common']['duplicate_name'], "info")
+                } else {
+                    $.messager.alert(self.parent.messages[initial]['common']['system_hint'], result, "info")
+                }
+            }
+            // } else {
+            //     $.messager.alert(self.parent.messages[initial]['common']['system_hint'], '请导入与当前协议相应的Excel!', "info")
+            // }
+        };
+        // 以二进制方式打开文件
+        fileReader.readAsBinaryString(files[0]);
+    })
+</script>

@@ -1,0 +1,306 @@
+<!doctype html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="shortcut icon" href="../static/favicon.ico">
+    <link rel=stylesheet href="../static/easyui/themes/bootstrap/easyui.css">
+    <link rel=stylesheet href="../static/easyui/themes/icon.css">
+    <script src="../static/easyui/jquery.min.js"></script>
+    <script src="../static/easyui/jquery.easyui.min.js"></script>
+    <script src="../static/easyui/locale/easyui-lang-zh_CN.js"></script>
+    <script src="../static/javascript/language.js"></script>
+    <script src="../static/easyui/jquery.edatagrid.js"></script>
+    <script src="../static/easyui/jquery.easyui.validatex.js"></script>
+    <script src="../static/javascript/api.js"></script>
+    <script src="../static/resource/xlsx.core.min.js"></script>
+    <script src="../static/javascript/dlt645_reverse.js"></script>
+</head>
+
+<body>
+    <div class="easyui-layout" id="cc" data-options="fit:true">
+        <div id="modbus_config" data-options="region:'north',split:true,collapsible:true" style="height:280px; overflow:hidden" title="DLT645反向模拟设置">
+            <form id="querytb" method="post" style="padding:10px;" accept-charset="UTF-8">
+                <div style="float: left;width: 30%">
+                    <label style="font-size:12px;"><input id="used" type="checkbox">应用</label><br><br>
+                    <input class="easyui-combobox" id='serial_name' label="串口号：" data-options="editable:false" labelWidth="90px" style="height:25px;width:200px"><br><br>
+                    <input class="easyui-combobox" id='serial_baud' label="波特率：" labelWidth="90px" required="true" data-options="editable:false" style="height:25px;width:200px"><br><br>
+                    <input class="easyui-combobox" id='serial_data' label="数据位：" labelWidth="90px" required="true" data-options="editable:false" style="height:25px;width:200px"><br><br>
+                    <input class="easyui-combobox" id='serial_stop' label="停止位：" labelWidth="90px" required="true" data-options="editable:false" style="height:25px;width:200px"><br><br>
+                    <input class="easyui-combobox" id='serial_parity' label="奇偶校验：" labelWidth="90px" required="true" data-options="editable:false" style="height:25px;width:200px"><br><br>
+                </div>
+                <div>
+                    <a id="btnSearch" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-ok'" onclick="doSearch()">保存</a>
+                </div>
+            </form>
+        </div>
+
+        <div id="excel_title" data-options="region:'center',split:false" title="DLT645反向模拟表">
+            <div id='mrx' title="导入Excel配置" style="display:none;width:300px;height:100px">
+                <input type=file id="excel-file" accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="padding:20px;">
+            </div>
+            <table id="DLT645_reverse_config" style="width:100%;height:100%;" scrolling="auto" singleSelect="true" class="easyui-datagrid" data-options="fit:true,fitColumns:true,rownumbers:true,pagination:false">
+            </table>
+        </div>
+    </div>
+</body>
+<script>
+    $("#serial_baud").combobox({
+        url: "../static/json/baudrate.json",
+        valueField: 'text',
+        textField: 'text',
+        method: "GET",
+        panelHeight: 'auto'
+    });
+    $("#serial_data").combobox({
+        url: "../static/json/databit.json",
+        valueField: 'text',
+        textField: 'text',
+        method: "GET",
+        panelHeight: 'auto'
+    });
+    $("#serial_stop").combobox({
+        url: "../static/json/stopbit.json",
+        valueField: 'text',
+        textField: 'text',
+        method: "GET",
+        panelHeight: 'auto'
+    });
+    $("#serial_parity").combobox({
+        url: "../static/json/parity.json",
+        valueField: 'id',
+        textField: 'text',
+        method: "GET",
+        panelHeight: 'auto'
+    });
+
+    var dir = self.parent.$('#text').textbox('getText'); // 选中的文件夹名称
+    var select = self.parent.$('#tt').tree('getSelected');
+    var parent1 = self.parent.$('#tt').tree('getParent', select.target);
+    var parent2 = self.parent.$('#tt').tree('getParent', parent1.target);
+    feature_path = 'Project/' + dir + '/' + parent2.text;
+
+    function set_disable(status) { // 设置RTU配置项是否禁用
+        if (status == 'true') {
+            $('#serial_name').combobox({
+                disabled: false
+            });
+            $('#serial_baud').combobox({
+                disabled: false
+            });
+            $('#serial_data').combobox({
+                disabled: false
+            });
+            $('#serial_stop').combobox({
+                disabled: false
+            });
+            $('#serial_parity').combobox({
+                disabled: false
+            });
+        } else {
+            $('#serial_name').combobox({
+                disabled: true
+            });
+            $('#serial_baud').combobox({
+                disabled: true
+            });
+            $('#serial_data').combobox({
+                disabled: true
+            });
+            $('#serial_stop').combobox({
+                disabled: true
+            });
+            $('#serial_parity').combobox({
+                disabled: true
+            });
+        }
+    }
+
+    function set_value() { // 设置textbox和combobox中的值
+        content = selectsql(feature_path, "select conf from Server where protocolMode='dlt645_reverse'");
+        content_object = JSON.parse(content);
+        obj = JSON.parse(content_object[0]['conf'])
+        $('#serial_name').combobox('setValues', obj.com);
+        $('#serial_baud').combobox('setValues', obj.baud);
+        $('#serial_data').combobox('setValues', obj.data);
+        $('#serial_stop').combobox('setValues', obj.stop);
+        $('#serial_parity').combobox('setValues', obj.parity);
+    }
+
+    $(function() {
+        com_data = parent2.feature[1];
+        $("#serial_name").combobox({
+            valueField: 'text',
+            textField: 'text',
+            data: com_data,
+            panelHeight: 'auto'
+        });
+
+        content = selectsql(feature_path, "select conf from Server where protocolMode='dlt645_reverse'");
+        content_object = JSON.parse(content);
+        obj = JSON.parse(content_object[0]['conf'])
+        if (content_object[0]['used'] == 'true') {
+            set_disable('true')
+        } else {
+            set_disable('false')
+        }
+
+        // 上传服务器的选择
+        $("#used").change(function() {
+            var status = $("#used").is(":checked");
+            if (!status) {
+                set_disable('false')
+            } else {
+                set_disable('true')
+            }
+            set_value()
+        });
+        set_value();
+        if (content_object[0]['used'] == 'true') {
+            $("#used").prop("checked", true);
+        } else {
+            $("#used").prop("checked", false);
+        }
+    });
+
+    function com_check(com) { // 检测com口是否被占用
+        result = selectsql(feature_path, "select * from channel where com='{0}'".format(com));
+        if (result != '[]') {
+            return false;
+        } else {
+            slave_com = selectsql(feature_path, "select * from Server where com='{0}' and protocolMode!='dlt645_reverse'".format(com));
+            if (slave_com != '[]') {
+                return false;
+            } else {
+                modbus_slave_com = selectsql(path, "select com from Server where protocolMode='Modbus_RTU'");
+                com_object = JSON.parse(modbus_slave_com);
+                used_com = JSON.parse(com_object[0]['com']);
+                if (used_com.indexOf(com) != -1) {
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+        }
+    }
+
+    function doSearch() {
+        var a = $('#querytb').form('enableValidation').form('validate');
+        if (!a) {
+            return false
+        } else {
+            used = $("#used").is(":checked");
+            var content = {};
+            content.com = $("#serial_name").combobox('getText');
+            content.baud = $("#serial_baud").combobox('getText');
+            content.data = $("#serial_data").combobox('getText');
+            content.stop = $("#serial_stop").combobox('getText');
+            content.parity = $("#serial_parity").combobox('getValue');
+
+            if (content.used) { // DLT645反向模拟是否启用
+                status = com_check(content.com);
+                if (status == 'true') { // 串口没有被占用
+                    result = updatesql(feature_path, "update Server SET com='{0}',conf='{1}' where protocolMode='dlt645_reverse'".format(content.com, JSON.stringify(content)));
+                    if (result == 'true') {
+                        console.log(content)
+                        self.parent.insert_info('DLT645反向模拟设置保存成功');
+                        //$('#cc').layout('collapse', 'north') // 保存成功后折叠Modbus上传服务器设置面板
+                    } else {
+                        $.messager.alert(result);
+                        self.parent.insert_info('DLT645反向模拟设置保存失败')
+                    }
+                } else {
+                    $.messager.alert(self.parent.messages[initial]['common']['system_hint'], '串口' + content.com + '已被使用', "info")
+                }
+            } else {
+                result = updatesql(feature_path, "update Server SET com='null',conf='{0}' where protocolMode='dlt645_reverse'".format(JSON.stringify(content)));
+                if (result == 'true') {
+                    self.parent.insert_info('DLT645反向模拟设置保存成功');
+                } else {
+                    $.messager.alert(result);
+                    self.parent.insert_info('DLT645反向模拟设置保存失败')
+                }
+            }
+        }
+    }
+
+    $('#excel-file').change(function(e) {
+        var files = e.target.files;
+
+        var fileReader = new FileReader();
+        fileReader.onload = function(ev) {
+            try {
+                var data = ev.target.result,
+                    workbook = XLSX.read(data, {
+                        type: 'binary'
+                    }), // 以二进制流方式读取得到整份excel表格对象
+                    persons = []; // 存储获取到的数据
+            } catch (e) {
+                console.log(e)
+                $.messager.alert(self.parent.messages[initial]['common']['system_hint'], '文件类型不正确!', "info");
+                return;
+            }
+
+            // 表格的表格范围，可用于判断表头是否数量是否正确
+            var fromTo = '';
+            // 遍历每张表读取
+            for (var sheet in workbook.Sheets) {
+                if (workbook.Sheets.hasOwnProperty(sheet)) {
+                    fromTo = workbook.Sheets[sheet]['!ref'];
+                    console.log(fromTo);
+                    if (fromTo.slice(0, 4) != 'A1:F') {
+                        document.getElementById('excel-file').value = '';
+                        $.messager.alert(self.parent.messages[initial]['common']['system_hint'], '请导入与当前协议相应的Excel!', "info");
+                        return;
+                    }
+                    column_list = ['A1', 'B1', 'C1', 'D1', 'E1', 'F1'];
+                    content = readFileSync('TemplateJson/columnchange.json');
+                    content_object = JSON.parse(content);
+                    column_list.forEach(function(column) {
+                        for (var r in content_object['dlt645_reverse']) {
+                            if (content_object['dlt645_reverse'][r] == workbook.Sheets[sheet][column].w) {
+                                workbook.Sheets[sheet][column].w = r
+                            }
+                        }
+                    })
+                    persons = persons.concat(XLSX.utils.sheet_to_json(workbook.Sheets[sheet]));
+                    break; // 如果只取第一张表，就取消注释这行
+                }
+            }
+            // console.log(persons)
+            var headStr = 'id,slaveID,protocolType,dataItem,dataID,dataFormat';
+            // if (Object.keys(persons[0]).join(',') == headStr) {
+            var obj = get_select();
+            var dir = self.parent.$('#text').textbox('getText'); // 选中的文件夹Name
+            var select = self.parent.$('#tt').tree('getSelected');
+            var parent1 = self.parent.$('#tt').tree('getParent', select.target);
+            var parent2 = self.parent.$('#tt').tree('getParent', parent1.target);
+            sql = "DELETE FROM dlt645_reverse";
+            result = truncatesql('Project/' + dir + '/' + parent2.text, sql, 'VACUUM');
+
+            content = JSON.stringify({
+                "dlt645_reverse": persons
+            })
+            result = bulk_insert('Project/' + dir + '/' + parent2.text, content);
+            if (result == "true") {
+                $("#DLT645_reverse_config").edatagrid('reload');
+                self.parent.insert_info('导入成功');
+            } else {
+                if (result.indexOf('NOT NULL') != -1) {
+                    $.messager.alert(self.parent.messages[initial]['common']['system_hint'], 'Excel中“名称”、“电表表号”、“协议类型”、“数据项名称”、“数据标识”和“数据格式”不能为空！', "info")
+                } else if (result.indexOf('UNIQUE') != -1) {
+                    $.messager.alert(self.parent.messages[initial]['common']['system_hint'], '名称重复！', "info")
+                } else {
+                    $.messager.alert(self.parent.messages[initial]['common']['system_hint'], result, "info")
+                }
+            }
+            // } else {
+            //     $.messager.alert(self.parent.messages[initial]['common']['system_hint'], '请导入与当前协议相应的Excel!', "info")
+            // }
+            document.getElementById('excel-file').value = '';
+        };
+        // 以二进制方式打开文件
+        fileReader.readAsBinaryString(files[0]);
+    })
+</script>

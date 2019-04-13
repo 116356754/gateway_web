@@ -1,0 +1,21 @@
+[{
+        "id": 1,
+        "text": "uint16"
+    },
+    {
+        "id": 2,
+        "text": "int16"
+    },
+    {
+        "id": 3,
+        "text": "uint32"
+    },
+    {
+        "id": 4,
+        "text": "int32"
+    },
+    {
+        "id": 5,
+        "text": "float"
+    }
+]

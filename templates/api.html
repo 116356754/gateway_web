@@ -1,0 +1,166 @@
+<!doctype html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<head>
+    <link rel="shortcut icon" href="../static/favicon.ico">
+    <link rel=stylesheet href="../static/easyui/themes/bootstrap/easyui.css">
+    <link rel=stylesheet href="../static/easyui/themes/icon.css">
+    <script src="../static/easyui/jquery.min.js"></script>
+    <script src="../static/easyui/jquery.easyui.min.js"></script>
+    <script src="../static/javascript/language.js"></script>
+    <script src="../static/easyui/jquery.edatagrid.js"></script>
+    <script src="../static/easyui/jquery.easyui.validatex.js"></script>
+    <script src="../static/javascript/api.js"></script>
+    <script src="../static/resource/vue.min.js"></script>
+    <script src="../static/resource/vue-i18n.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        
+        h4,
+        p {
+            padding: 10px 0;
+        }
+        
+        #divcss1 {
+            border-left: 1px solid rgb(0, 0, 0);
+            border-top: 1px solid rgb(0, 0, 0);
+            border-bottom: 1px solid rgb(0, 0, 0);
+        }
+        
+        #divcss2 {
+            border-top: 1px solid rgb(0, 0, 0);
+            border-bottom: 1px solid rgb(0, 0, 0);
+        }
+        
+        #divcss3 {
+            border-right: 1px solid rgb(0, 0, 0);
+            border-top: 1px solid rgb(0, 0, 0);
+            border-bottom: 1px solid rgb(0, 0, 0);
+        }
+        
+        #real_spread {
+            border-left: 1px solid rgb(0, 0, 0);
+            border-right: 1px solid rgb(0, 0, 0);
+            border-bottom: 1px solid rgb(0, 0, 0);
+        }
+        
+        #history_spread {
+            border-left: 1px solid rgb(0, 0, 0);
+            border-right: 1px solid rgb(0, 0, 0);
+            border-bottom: 1px solid rgb(0, 0, 0);
+        }
+        
+        #real_parameter {
+            border: 1px solid rgb(0, 0, 0);
+            background-color: rgb(241, 248, 248);
+            width: 100%;
+            height: 50px;
+        }
+        
+        #history_parameter {
+            border: 1px solid rgb(0, 0, 0);
+            background-color: rgb(241, 248, 248);
+            width: 100%;
+            height: 50px;
+        }
+        
+        #real_back {
+            border: 1px solid rgb(0, 0, 0);
+            background-color: rgb(241, 248, 248);
+            width: 100%;
+            height: 100px;
+            resize: none;
+        }
+        
+        #history_back {
+            border: 1px solid rgb(0, 0, 0);
+            background-color: rgb(241, 248, 248);
+            width: 100%;
+            height: 100px;
+            resize: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div style="padding: 20px 50px 50px 50px;width:750px">
+        <h2 align="left">API开放接口</h2><br><br>
+        <h4 align="left">实时数据接口</h4>
+        <p id="divcss1" align="center" onclick="real_btn()" style="float:left;width:50px;background-color: gray;">GET</p>
+        <p id="divcss2" onclick="real_btn()" style="float:left;width:60%">http://192.168.1.233/API/V1/real</p>
+        <p id="divcss3" onclick="real_btn()" style="float:left;width:140px">查询设备实时数据</p><br><br>
+        <div id="real_spread" style="display:none;width:640px">
+            <div style="padding:20px">
+                <p>请求参数</p>
+                <p id="real_parameter">null</p>
+            </div>
+            <div style="padding:20px">
+                <p>返回值：JSON字符串</p>
+                <textarea id="real_back">[{"status":"Good","val":"1.00","timestamp":1548126464,"deviceCode":"Device_1","tagCode":"tag0001","description":""},{"status":"Good","val":"2.00","timestamp":1548126452,"deviceCode":"Device_1","tagCode":"tag0002","description":""}]</textarea>
+            </div>
+        </div><br><br>
+        <h4 align="left">历史数据接口</h4>
+        <p id="divcss1" align="center" onclick="history_btn()" style="float:left;width:50px;background-color: gray;">POST</p>
+        <p id="divcss2" onclick="history_btn()" style="float:left;width:60%">http://192.168.1.233/API/V1/history</p>
+        <p id="divcss3" onclick="history_btn()" style="float:left;width:140px">查询设备历史数据</p><br><br>
+        <div id="history_spread" style="display:none;width:640px">
+            <div style="padding:20px">
+                <p>请求参数</p>
+                <p id="history_parameter">{"timestamp":"2019-01-22 00:00:00"}</p>
+            </div>
+            <div style="padding:20px">
+                <p>返回值：JSON字符串</p>
+                <textarea id="history_back">[{"status":"Good","val":"1.00","timestamp":1548126464,"deviceCode":"Device_1","tagCode":"tag0001","description":""},{"status":"Good","val":"2.00","timestamp":1548126452,"deviceCode":"Device_1","tagCode":"tag0002","description":""}]</textarea>
+            </div>
+        </div><br><br>
+        <h4 align="left">HTTP在线测试</h4>
+        <label for="url">请求地址:</label>
+        <input class="easyui-textbox" id='url' style="height:25px;width:70%"><br><br>
+        <label for="type">请求方式:</label>
+        <label><input id="type" name="type" type="radio" value="post" />post</label>
+        <label><input id="type" name="type" type="radio" value="get"  checked="true">get</label><br><br>
+        <label for="parameter">请求参数:</label>
+        <input class="easyui-textbox" id='parameter' style="height:25px;width:70%"><br><br>
+
+        <label for="result">返回的数据:</label>
+        <textarea id="result" style="width: 70%;height:200px;max-width: 70%;max-height: 200px;resize: none;"></textarea><br><br>
+        <a href="#" id="httptestbtn" class="easyui-linkbutton" iconCls="icon-ok">提交</a>
+    </div>
+</body>
+
+<script>
+    function real_btn() {
+        var spread = $('#real_spread')
+        spread.slideToggle()
+    }
+
+    function history_btn() {
+        var spread = $('#history_spread')
+        spread.slideToggle()
+    }
+
+    $('#httptestbtn').click(function() {
+        url = $("#url").textbox("getValue");
+        parameter = $("#parameter").textbox("getValue");
+        if (parameter != 'null' && parameter != '') {
+            parameter = JSON.parse(parameter)
+        }
+        type = $("input[name='type']:checked").val();
+        $.ajax({
+            type: type,
+            url: url,
+            timeout: 5000,
+            data: parameter,
+            success: function(value) {
+                ele = document.getElementById("result");
+                ele.value = value;
+            },
+            error: function() {}
+        });
+    })
+</script>

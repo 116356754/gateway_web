@@ -1,0 +1,94 @@
+[{
+        "text": "+"
+    },
+    {
+        "text": "-"
+    },
+    {
+        "text": "*"
+    },
+    {
+        "text": "/"
+    },
+    {
+        "text": "%"
+    },
+    {
+        "text": "^"
+    },
+    {
+        "function": "min(,)"
+    },
+    {
+        "function": "max(,)"
+    },
+    {
+        "function": "abs()"
+    },
+    {
+        "trigonometric": "sin()"
+    },
+    {
+        "trigonometric": "cos()"
+    },
+    {
+        "trigonometric": "tan()"
+    },
+    {
+        "trigonometric": "asin()"
+    },
+    {
+        "trigonometric": "acos()"
+    },
+    {
+        "trigonometric": "atan()"
+    },
+    {
+        "trigonometric": "atan2(,)"
+    },
+    {
+        "trigonometric": "cosh()"
+    },
+    {
+        "trigonometric": "cot()"
+    },
+    {
+        "trigonometric": "csc()"
+    },
+    {
+        "trigonometric": "sec()"
+    },
+    {
+        "trigonometric": "sinh()"
+    },
+    {
+        "trigonometric": "tanh()"
+    },
+    {
+        "logical": "=="
+    },
+    {
+        "logical": "!="
+    },
+    {
+        "logical": "<"
+    },
+    {
+        "logical": "<="
+    },
+    {
+        "logical": ">"
+    },
+    {
+        "logical": ">="
+    },
+    {
+        "boolean": "&&"
+    },
+    {
+        "boolean": "||"
+    },
+    {
+        "boolean": "not()"
+    }
+]

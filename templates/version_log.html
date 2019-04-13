@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>版本说明</title>
+</head>
+
+<body>
+    <div style="margin-left: 150px;margin-top: 20px">
+        <h2 style="color:cornflowerblue;">升级记录</h2><br>
+
+        <h2 style="color:cornflowerblue;">2018-5-30(v1.1.1)</h2>
+        <hr/>
+        <h4>新增</h4>
+        <ul>
+            <li>增加BacnetIP客户端,BacnetMSTP客户端支持，需要配置网关版本(1.1.1及以上版本)</li>
+            <li>添加系统点参数 - 上传协议的状态。</li>
+            <li>LM Gateway414-M版本</li>
+        </ul>
+        <h4>改进</h4>
+        <ul>
+            <li>在数据存储页面中显示当前数据所占用的存储空间。</li>
+            <li>可以通过tag点进行数据存储的开始和停止。</li>
+        </ul>
+        <h4>变更</h4>
+        <ul>
+            <li>ip文件同时下载到网关的/mnt/yaffs2和/etc目录下</li>
+        </ul>
+        <h4>BUG</h4>
+        <ul>
+            <li>暂无</li>
+        </ul>
+
+        <br><br>
+        <h2 style="color:cornflowerblue;">2018-6-2(v1.1.2)</h2>
+        <hr/>
+        <h4>新增</h4>
+        <ul>
+            <li>下载工程时获取网关软件版本，不一致时不能下载</li>
+        </ul>
+        <h4>改进</h4>
+        <ul>
+            <li>优化通过mqtt的订阅解析配置文件</li>
+            <li>调整工程导出的json文件的结构</li>
+        </ul>
+        <h4>变更</h4>
+        <ul>
+            <li>暂无</li>
+        </ul>
+        <h4>BUG</h4>
+        <ul>
+            <li>暂无</li>
+        </ul>
+
+        <br><br>
+        <h2 style="color:cornflowerblue;">2018-6-4(v1.1.3)</h2>
+        <hr/>
+        <h4>新增</h4>
+        <ul>
+            <li>增加网关型号为LM Gateway401的程序版本</li>
+        </ul>
+        <h4>改进</h4>
+        <ul>
+            <li>优化modbus服务程序</li>
+            <li>优化数据池程序</li>
+        </ul>
+        <h4>变更</h4>
+        <ul>
+            <li>暂无</li>
+        </ul>
+        <h4>BUG</h4>
+        <ul>
+            <li>暂无</li>
+        </ul>
+
+        <br><br>
+        <h2 style="color:cornflowerblue;">2018-6-5(v1.1.4)</h2>
+        <hr/>
+        <h4>新增</h4>
+        <ul>
+            <li>添加协议服务清空表数据功能</li>
+        </ul>
+        <h4>改进</h4>
+        <ul>
+            <li>优化BacnetIP协议程序</li>
+        </ul>
+        <h4>变更</h4>
+        <ul>
+            <li>暂无</li>
+        </ul>
+        <h4>BUG修改</h4>
+        <ul>
+            <li>事件管理中数据无法存入数据库</li>
+        </ul>
+
+        <br><br>
+        <h2 style="color:cornflowerblue;">2018-6-6(v1.1.5)</h2>
+        <hr/>
+        <h4>新增</h4>
+        <ul>
+            <li>双击设备栏中的网关IP可以获取该网关的版本信息</li>
+            <li>新增BaCnet服务</li>
+        </ul>
+        <h4>改进</h4>
+        <ul>
+            <li>打开软件不弹出打开工程窗口</li>
+            <li>Modbus协议服务当中，起始添加的tag点为000001,100001,300001,400001</li>
+        </ul>
+        <h4>变更</h4>
+        <ul>
+            <li>暂无</li>
+        </ul>
+        <h4>BUG修改</h4>
+        <ul>
+            <li>BacnetIP协议、BacnetMSTP协议链路中断之后清空链路</li>
+            <li>网关程序无法解析同一节点下多个子节点</li>
+            <li>在其他协议服务页面中添加了tag点之后进入Modbus协议服务当中添加tag点，窗口中不会出现下拉框</li>
+            <li>Modbus协议在采集过程中有写操作会终止采集</li>
+        </ul>
+
+        <br><br>
+        <h2 style="color:cornflowerblue;">2018-6-14(v1.1.6)</h2>
+        <hr/>
+        <h4>新增</h4>
+        <ul>
+            <li>增加DLT645反向模拟服务页面支持</li>
+        </ul>
+        <h4>改进</h4>
+        <ul>
+            <li>BacnetMSTP协议写操作之后更新数据池</li>
+        </ul>
+        <h4>变更</h4>
+        <ul>
+            <li>暂无</li>
+        </ul>
+        <h4>BUG修改</h4>
+        <ul>
+            <li>网关程序无法解析一节点下没有子节点</li>
+        </ul>
+
+        <br><br>
+        <h2 style="color:cornflowerblue;">2018-6-16(v1.1.7)</h2>
+        <hr/>
+        <h4>新增</h4>
+        <ul>
+            <li>增加DLT645反向模拟服务</li>
+        </ul>
+        <h4>改进</h4>
+        <ul>
+            <li>重构DLT645协议</li>
+            <li>MODBUS协议服务中，0区和1区不需要验证数据类型</li>
+            <li>各项协议的串口占用验证</li>
+            <li>优化BacnetIP,BacnetMSTP协议的读写操作</li>
+        </ul>
+        <h4>变更</h4>
+        <ul>
+            <li>暂无</li>
+        </ul>
+        <h4>BUG修改</h4>
+        <ul>
+            <li>暂无</li>
+        </ul>
+
+        <br><br>
+        <h2 style="color:cornflowerblue;">2018-6-20(v1.1.8)</h2>
+        <hr/>
+        <h4>新增</h4>
+        <ul>
+            <li>三次下载工程失败之后第四次下载工程时不验证网关版本</li>
+        </ul>
+        <h4>改进</h4>
+        <ul>
+            <li>搜索设备时显示“正在搜索网关。。。”</li>
+            <li>驱动名称即为tree节点的名称</li>
+        </ul>
+        <h4>变更</h4>
+        <ul>
+            <li>暂无</li>
+        </ul>
+        <h4>BUG修改</h4>
+        <ul>
+            <li>暂无</li>
+        </ul>
+
+        <br><br>
+        <h2 style="color:cornflowerblue;">2018-6-21(v1.2.0)</h2>
+        <hr/>
+        <h4>新增</h4>
+        <ul>
+            <li>DKT645反向模拟可用</li>
+        </ul>
+        <h4>改进</h4>
+        <ul>
+            <li>暂无</li>
+        </ul>
+        <h4>变更</h4>
+        <ul>
+            <li>将上传协议制作成插件形式放在网关当中</li>
+        </ul>
+        <h4>BUG修改</h4>
+        <ul>
+            <li>cj_188反向模拟起始添加数据时没有水表表号、厂商代码和数据项名称的字段，程序出现段错误</li>
+        </ul>
+
+        <br><br>
+        <h2 style="color:cornflowerblue;">2018-6-25(v1.2.1)</h2>
+        <hr/>
+        <h4>新增</h4>
+        <ul>
+            <li>暂无</li>
+        </ul>
+        <h4>改进</h4>
+        <ul>
+            <li>优化414网关的BaCnet Service协议</li>
+            <li>jQuery双击事件与单击事件的冲突解决</li>
+        </ul>
+        <h4>变更</h4>
+        <ul>
+            <li>DLT645协议的导入配置和导出配置</li>
+        </ul>
+        <h4>BUG修改</h4>
+        <ul>
+            <li>双击设备页面中的IP弹出错误</li>
+        </ul>
+
+        <br><br>
+        <h2 style="color:cornflowerblue;">2018-6-26(v1.2.2)</h2>
+        <hr/>
+        <h4>新增</h4>
+        <ul>
+            <li>非标协议-珠海骏锐水表协议</li>
+        </ul>
+        <h4>改进</h4>
+        <ul>
+            <li>BaCnet Service协议添加“单位”字段</li>
+        </ul>
+        <h4>变更</h4>
+        <ul>
+            <li>暂无</li>
+        </ul>
+        <h4>BUG修改</h4>
+        <ul>
+            <li>暂无</li>
+        </ul>
+
+        <br><br>
+        <h2 style="color:cornflowerblue;">2018-6-28(v1.2.3)</h2>
+        <hr/>
+        <h4>新增</h4>
+        <ul>
+            <li>ModbusRTU_over_TCP协议</li>
+        </ul>
+        <h4>改进</h4>
+        <ul>
+            <li>BaCnet Service协议根据数据状态修改相应的属性</li>
+        </ul>
+        <h4>变更</h4>
+        <ul>
+            <li>在“DLT645反向模拟页面”添加“学习时间”</li>
+        </ul>
+        <h4>BUG修改</h4>
+        <ul>
+            <li>BaCnet Service协议中MSTP_slave单位属性设置</li>
+        </ul>
+
+        <br><br>
+        <h2 style="color:cornflowerblue;">2018-6-30(v1.2.4)</h2>
+        <hr/>
+        <h4>新增</h4>
+        <ul>
+            <li>暂无</li>
+        </ul>
+        <h4>改进</h4>
+        <ul>
+            <li>珠海骏锐水表协议中添加“操作类型”字段</li>
+        </ul>
+        <h4>变更</h4>
+        <ul>
+            <li>删除计算点页面中无用的下拉框</li>
+        </ul>
+        <h4>BUG修改</h4>
+        <ul>
+            <li>DLT645电表号数值溢出，超过int整数的范围</li>
+        </ul>
+
+        <br><br>
+        <h2 style="color:cornflowerblue;">2018-7-5(v1.2.5)</h2>
+        <hr/>
+        <h4>新增</h4>
+        <ul>
+            <li>在Modbus协议中添加倍率字段</li>
+        </ul>
+        <h4>改进</h4>
+        <ul>
+            <li>将数据池中val字段的长度改成50以内</li>
+            <li>同一台电脑运行两个配置工具时会提示</li>
+            <li>点击右上方关闭软件按钮是会弹出是否关闭的对话框</li>
+        </ul>
+        <h4>变更</h4>
+        <ul>
+            <li>Modbus协议中0区和1区的数据类型由bit修改成bool</li>
+            <li>Modbus服务中4个区改为选项卡，异常默认值统一填写</li>
+            <li>点击“下载工程”按钮之后选择需要下载的工程中的网关设备</li>
+            <li>mqtt上传格式中“数据项名称”改成“name”</li>
+        </ul>
+        <h4>BUG修改</h4>
+        <ul>
+            <li>DLT645协议解析报文小数位出错</li>
+        </ul>
+
+        <br><br>
+        <h2 style="color:cornflowerblue;">2018-7-10(v1.2.6)</h2>
+        <hr/>
+        <h4>新增</h4>
+        <ul>
+            <li>服务协议能够导入导出excel</li>
+        </ul>
+        <h4>改进</h4>
+        <ul>
+            <li>C# NPOI导出excel</li>
+            <li>Modbus服务添加slave_id配置项</li>
+        </ul>
+        <h4>变更</h4>
+        <ul>
+            <li>BaCnet采集协议的设备类型，设备索引号字段改成对象类型，对象索引号字段</li>
+            <li>BaCnet Service服务中设备索引号从0开始</li>
+            <li>Modbus采集协议Modbus地址改成功能码+Modbus寄存器地址</li>
+            <li>Modbus服务Modbus地址改成点类型+Modbus寄存器地址</li>
+            <li>只保留mqtt页面中的ID字段</li>
+        </ul>
+        <h4>BUG修改</h4>
+        <ul>
+            <li>modbus服务在RTU和TCP同时开启时会出错</li>
+        </ul>
+
+        <br><br>
+        <h2 style="color:cornflowerblue;">2018-7-17(v1.2.7)</h2>
+        <hr/>
+        <h4>新增</h4>
+        <ul>
+            <li>能够通过mqtt重启网关</li>
+            <li>数据存储中添加准点存储</li>
+        </ul>
+        <h4>改进</h4>
+        <ul>
+            <li>暂无</li>
+        </ul>
+        <h4>变更</h4>
+        <ul>
+            <li>暂无</li>
+        </ul>
+        <h4>BUG修改</h4>
+        <ul>
+            <li>Bacnet服务忽略UCOV通知</li>
+        </ul>
+
+        <br><br>
+        <h2 style="color:cornflowerblue;">2018-8-22(v2.0.0)</h2>
+        <hr/>
+        <h4>新增</h4>
+        <ul>
+            <li>模板窗口</li>
+            <li>DLT645服务</li>
+            <li>在采集协议中可以装载模板和保存成模板</li>
+            <li>在采集协议中添加复制设备的功能</li>
+        </ul>
+        <h4>改进</h4>
+        <ul>
+            <li>调整工程中tree的结构</li>
+            <li>把通讯地址移到设备的配置当中</li>
+            <li>把通讯地址移到设备的配置当中</li>
+        </ul>
+        <h4>变更</h4>
+        <ul>
+            <li>所有配置数据都存储在数据库当中</li>
+            <li>在新建网关设备窗口中添加网关分类</li>
+            <li>修改每个协议的字段名称</li>
+            <li>在采集协议中添加数据时会自动添加名称</li>
+        </ul>
+        <h4>BUG修改</h4>
+        <ul>
+            <li>暂无</li>
+        </ul>
+
+        <br><br>
+        <h2 style="color:cornflowerblue;">2018-8-30(v2.0.1)</h2>
+        <hr/>
+        <h4>新增</h4>
+        <ul>
+            <li>modbus服务中添加bit数据类型</li>
+            <li>modbus服务可同时开启多串口服务</li>
+            <li>mqtt协议增加主题</li>
+        </ul>
+        <h4>改进</h4>
+        <ul>
+            <li>设备名称中不能有“.”</li>
+        </ul>
+        <h4>变更</h4>
+        <ul>
+            <li>修改工具栏的样式</li>
+        </ul>
+        <h4>BUG修改</h4>
+        <ul>
+            <li>BaCnet Service中导入Excel时如果sheet页面没有数据时会导致错误</li>
+            <li>无法实现计算点</li>
+        </ul>
+
+        <br><br>
+        <h2 style="color:cornflowerblue;">2018-8-31(v2.0.1)</h2>
+        <hr/>
+        <h4>新增</h4>
+        <ul>
+            <li>暂无</li>
+        </ul>
+        <h4>改进</h4>
+        <ul>
+            <li>优化写操作</li>
+        </ul>
+        <h4>变更</h4>
+        <ul>
+            <li>暂无</li>
+        </ul>
+        <h4>BUG修改</h4>
+        <ul>
+            <li>只需要采集进程进行数据池表的清空和创建</li>
+        </ul>
+
+        <br><br>
+        <h2 style="color:cornflowerblue;">2018-9-2(v2.0.2)</h2>
+        <hr/>
+        <h4>新增</h4>
+        <ul>
+            <li>暂无</li>
+        </ul>
+        <h4>改进</h4>
+        <ul>
+            <li>暂无</li>
+        </ul>
+        <h4>变更</h4>
+        <ul>
+            <li>更换软件图标和软件名称</li>
+        </ul>
+        <h4>BUG修改</h4>
+        <ul>
+            <li>暂无</li>
+        </ul>
+
+        <br><br>
+        <h2 style="color:cornflowerblue;">2018-9-3(v2.0.3)</h2>
+        <hr/>
+        <h4>新增</h4>
+        <ul>
+            <li>暂无</li>
+        </ul>
+        <h4>改进</h4>
+        <ul>
+            <li>进一步优化写操作</li>
+        </ul>
+        <h4>变更</h4>
+        <ul>
+            <li>暂无</li>
+        </ul>
+        <h4>BUG修改</h4>
+        <ul>
+            <li>暂无</li>
+        </ul>
+
+        <br><br>
+        <h2 style="color:cornflowerblue;">2018-9-4(v2.0.4)</h2>
+        <hr/>
+        <h4>新增</h4>
+        <ul>
+            <li>http接口：获取历史数据</li>
+        </ul>
+        <h4>改进</h4>
+        <ul>
+            <li>http接口：获取实时数据</li>
+        </ul>
+        <h4>变更</h4>
+        <ul>
+            <li>暂无</li>
+        </ul>
+        <h4>BUG修改</h4>
+        <ul>
+            <li>右键“采集服务”弹出删除按钮</li>
+            <li>需要运算的采集点为Error时计算点是Good</li>
+            <li>一个协议创建两个通道只能实现一个通道的采集</li>
+        </ul>
+
+        <br><br>
+        <h2 style="color:cornflowerblue;">2018-9-11(v2.0.5)</h2>
+        <hr/>
+        <h4>新增</h4>
+        <ul>
+            <li>网口DHCP功能</li>
+        </ul>
+        <h4>改进</h4>
+        <ul>
+            <li>设置IP页面点击“应用到网关”之后即时生效</li>
+            <li>MQTT历史数据上传格式</li>
+            <li>网关解析DCC或者配置工具配置网关的json</li>
+        </ul>
+        <h4>变更</h4>
+        <ul>
+            <li>默认有几个通用模板</li>
+        </ul>
+        <h4>BUG修改</h4>
+        <ul>
+            <li>导出Excel时json没有排序</li>
+        </ul>
+
+        <br><br>
+        <h2 style="color:cornflowerblue;">2018-9-27(v2.0.6)</h2>
+        <hr/>
+        <h4>新增</h4>
+        <ul>
+            <li>执行linux命令</li>
+            <li>实时监控页面可进行写操作</li>
+        </ul>
+        <h4>改进</h4>
+        <ul>
+            <li>优化新建或修改通道选择BaCnetIP时的页面</li>
+            <li>奇偶校验的下拉框的修改</li>
+        </ul>
+        <h4>变更</h4>
+        <ul>
+            <li>暂无</li>
+        </ul>
+        <h4>BUG修改</h4>
+        <ul>
+            <li>modbus slave页面配置串口后需要重新打开页面才能点击保存</li>
+            <li>BaCnetMSTP写操作</li>
+        </ul>
+
+        <br><br>
+        <h2 style="color:cornflowerblue;">2018-10-12(v2.0.7)</h2>
+        <hr/>
+        <h4>新增</h4>
+        <ul>
+            <li>历史数据存储至TF卡</li>
+            <li>中英文切换</li>
+            <li>通过MQTT获取网关的配置</li>
+            <li>LM Gateway402-A</li>
+        </ul>
+        <h4>改进</h4>
+        <ul>
+            <li>上载工程失败时删除工程文件夹</li>
+            <li>DLT645增加负数字段</li>
+        </ul>
+        <h4>变更</h4>
+        <ul>
+            <li>重启网关改成重启程序</li>
+            <li>协议转换网关的分类</li>
+            <li>只有201网关插入TF卡之后数据自动存储在TF卡中</li>
+        </ul>
+        <h4>BUG修改</h4>
+        <ul>
+            <li>mqtt部署网关时生成数据库时没有生成视图</li>
+            <li>计算点公式中点的顺序必须和ABCD一致</li>
+            <li>modbus写0区1区出错</li>
+        </ul>
+
+        <br><br>
+        <h2 style="color:cornflowerblue;">2018-10-20(v2.0.8)</h2>
+        <hr/>
+        <h4>新增</h4>
+        <ul>
+            <li>MQTT Client添加每个主题的qos,retained,添加遗嘱</li>
+            <li>系统点</li>
+            <li>可以获取设备在线状态</li>
+        </ul>
+        <h4>改进</h4>
+        <ul>
+            <li>修改各项服务名称</li>
+            <li>OPC UA应用名称为LM Gateway OPC UA Application</li>
+        </ul>
+        <h4>变更</h4>
+        <ul>
+            <li>mqtt配置的结构</li>
+        </ul>
+        <h4>BUG修改</h4>
+        <ul>
+            <li>MODBUS服务在添加单个寄存器的数据类型时不能生成modbus寄存器地址</li>
+            <li>网关重启之后会上传上次断线时间戳之后的所有数据</li>
+        </ul>
+
+        <br><br>
+        <h2 style="color:cornflowerblue;">2018-11-20(v2.0.9)</h2>
+        <hr/>
+        <h4>新增</h4>
+        <ul>
+            <li>Modbus协议新增double ab cd ef gh和double gh ef cd ab</li>
+            <li>Siemens S7-200 PPI协议</li>
+            <li>用户点</li>
+            <li>上传/下载工程时需要验证密码</li>
+            <li>可以在配置工具中打开putty</li>
+            <li>调试模式</li>
+            <li>DLT645协议中添加“数据偏移”字段</li>
+            <li>Modbus协议中添加“int64”</li>
+        </ul>
+        <h4>改进</h4>
+        <ul>
+            <li>Modbus采集协议在新建通道时选择是否采集连续地址</li>
+            <li>BaCnetMSTP协议添加优先级和释放点</li>
+            <li>MAC地址为空时不能传输到网关</li>
+        </ul>
+        <h4>变更</h4>
+        <ul>
+            <li>工程下载成功后自动重启网关程序</li>
+            <li>“设备”页面中按钮替换成菜单</li>
+        </ul>
+        <h4>BUG修改</h4>
+        <ul>
+            <li>ModbusRTU_over_TCP协议不能修改port</li>
+            <li>BaCnetMSTP协议不能修改MAC地址</li>
+            <li>在下载时选择“Current project device”也会进入选择IP界面</li>
+        </ul>
+
+        <br><br>
+        <h2 style="color:cornflowerblue;">2018-12-17(v2.0.10)</h2>
+        <hr/>
+        <h4>新增</h4>
+        <ul>
+            <li>BACnet协议新增多态</li>
+            <li>NTP时间同步</li>
+            <li>全功能网关</li>
+        </ul>
+        <h4>改进</h4>
+        <ul>
+            <li>实时监控界面自动排序</li>
+            <li>调试页面的textarea在有800行时自动清空</li>
+            <li>通道页面文本框改成数字输入框</li>
+        </ul>
+        <h4>变更</h4>
+        <ul>
+            <li>Modbus协议将“采集数据类型”改为“数据类型”和“字节排序”两个字段</li>
+            <li>BACnetMSTP协议去除优先级和释放点的配置</li>
+        </ul>
+        <h4>BUG修改</h4>
+        <ul>
+            <li>Modbus协议中int16、int32负数，写操作</li>
+            <li>更改数据库结构导致MQTT配置网关时出错</li>
+            <li>Modbus协议在TCP通讯过程中拔掉通讯网线，之后插上会过很长时间才能采集成功</li>
+            <li>Modbus协议在TCP通讯过程中拔掉通讯网线，实时数据的时间戳会变成0</li>
+            <li>数据存储中选择“准点存储”时maxcount不会计算</li>
+        </ul>
+
+        <h2 style="color:cornflowerblue;">2018-12-18(v2.0.10.1)</h2>
+        <hr/>
+        <h4>新增</h4>
+        <ul>
+            <li>暂无</li>
+        </ul>
+        <h4>改进</h4>
+        <ul>
+            <li>DLT表dataOffset默认为0</li>
+        </ul>
+        <h4>变更</h4>
+        <ul>
+            <li>暂无</li>
+        </ul>
+        <h4>BUG修改</h4>
+        <ul>
+            <li>通过MQTT配置网关时新建的数据库中DLT表不完整</li>
+        </ul>
+
+        <h2 style="color:cornflowerblue;">2018-12-26(v2.0.11)</h2>
+        <hr/>
+        <h4>新增</h4>
+        <ul>
+            <li>BACnetMSTP采集添加设备时选是否通过MAC地址采集</li>
+        </ul>
+        <h4>改进</h4>
+        <ul>
+            <li>mqtt协议记录每次上传的时间戳用于上传离线数据</li>
+            <li>新增通道、新增和复制设备时名称会自动叠加</li>
+            <li>密码不能为空格</li>
+            <li>Modbus协议中“数据类型”和“字节序”校验逻辑</li>
+        </ul>
+        <h4>变更</h4>
+        <ul>
+            <li>Modbus采集协议保存6位小数</li>
+            <li>DLT645协议中“自定义的数据项名称”改为“插入”按钮</li>
+        </ul>
+        <h4>BUG修改</h4>
+        <ul>
+            <li>历史数据查询界面查询不到除采集点之外的其他点</li>
+            <li>Modbus服务界面不能详细配置com口</li>
+            <li>复制设备出错</li>
+            <li>mqtt把上传的时间戳记录在单个文件当中，在每次上线后离线数据传完之后才能记录</li>
+        </ul>
+
+        <h2 style="color:cornflowerblue;">2019-01-11(v2.1.1)</h2>
+        <hr/>
+        <h4>新增</h4>
+        <ul>
+            <li>配置工具可通过http接口将工程文件上传到云端</li>
+            <li>mqtt页面新增罗米云，只需要配置ip和clientid</li>
+            <li>网关中mqtt接收工程文件来配置网关的接口</li>
+            <li>重启网关的接口</li>
+            <li>BACnetMSTP通道可配置重试次数</li>
+        </ul>
+        <h4>改进</h4>
+        <ul>
+            <li>打开配置工具时如检测到没有管理员权限则打开失败</li>
+            <li>罗米云中默认设置遗嘱</li>
+        </ul>
+        <h4>变更</h4>
+        <ul>
+            <li>dcc通过传输工程文件来配置网关</li>
+            <li>去除网关中通过网页配置ip的接口</li>
+            <li>去除配置工具中打开putty的接口</li>
+        </ul>
+        <h4>BUG修改</h4>
+        <ul>
+            <li>暂无</li>
+        </ul>
+
+        <h2 style="color:cornflowerblue;">2019-01-14(v2.1.1.1)</h2>
+        <hr/>
+        <h4>新增</h4>
+        <ul>
+            <li>S7-200中添加bool类型</li>
+            <li>新增LM Gateway203-MQTT</li>
+        </ul>
+        <h4>改进</h4>
+        <ul>
+            <li>暂无</li>
+        </ul>
+        <h4>变更</h4>
+        <ul>
+            <li>暂无</li>
+        </ul>
+        <h4>BUG修改</h4>
+        <ul>
+            <li>Bacnet service表中名称和描述字段不能为null</li>
+        </ul>
+
+        <h2 style="color:cornflowerblue;">2019-01-22(v2.1.2)</h2>
+        <hr/>
+        <h4>新增</h4>
+        <ul>
+            <li>新增Modbus服务中DTU模式</li>
+            <li>oem.js</li>
+        </ul>
+        <h4>改进</h4>
+        <ul>
+            <li>在打开工程时判断语言，语言不一致时需要切换语言之后才能打开工程</li>
+        </ul>
+        <h4>变更</h4>
+        <ul>
+            <li>罗米云做成一个服务</li>
+            <li>在不包含mqtt协议的工程中去除数据存储的功能</li>
+        </ul>
+        <h4>BUG修改</h4>
+        <ul>
+            <li>DLT协议中导入出错</li>
+        </ul>
+    </div>
+</body>
+
+</html>

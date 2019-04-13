@@ -1,0 +1,11 @@
+[{
+    "id": "N",
+    "text": "N(None)"
+}, {
+    "id": "O",
+    "text": "O(Odd)"
+
+}, {
+    "id": "E",
+    "text": "E(Even)"
+}]

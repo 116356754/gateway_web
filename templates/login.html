@@ -1,0 +1,80 @@
+<!doctype html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="shortcut icon" href="../static/favicon.ico">
+    <link rel=stylesheet href="../static/easyui/themes/bootstrap/easyui.css">
+    <link rel=stylesheet href="../static/easyui/themes/icon.css">
+    <script src="../static/easyui/jquery.min.js"></script>
+    <script src="../static/easyui/jquery.easyui.min.js"></script>
+    <script src="../static/resource/vue.min.js"></script>
+    <script src="../static/resource/vue-i18n.min.js"></script>
+    <script src="../static/javascript/language.js"></script>
+    <script src="../static/javascript/login.js"></script>
+    <script src="../static/javascript/api.js"></script>
+</head>
+
+
+<div id='app' style="position:absolute; width:100%;height:100%;left:0;top:0">
+    <div id="login" style="width:300px;height:150px;padding:10px;display:none">
+        <!-- <input class="easyui-textbox" id='username' v-bind:label="username" labelWidth="70px" required="true" style="height:25px;width:160px"><br><br>
+        <input class="easyui-textbox" id='password' v-bind:label="password" labelWidth="70px" required="true" style="height:25px;width:160px"><br><br> -->
+        <select v-model="locale" style="position:absolute;top:25px; right:100px;">
+                <option value="en-US">英文</option>
+                <option value="zh-CN">中文</option>
+              </select>
+    </div>
+</div>
+
+<script>
+    cn_json = readFileSync('locales/zh-CN.json')
+    cn_json_object = JSON.parse(cn_json)
+    us_json = readFileSync('locales/en-US.json')
+    us_json_object = JSON.parse(us_json)
+    var messages = {
+        'zh-CN': cn_json_object,
+        'en-US': us_json_object
+    }
+    Vue.use(VueI18n)
+
+    var initial = 'en-US'
+    var i18n = new VueI18n({
+        locale: initial,
+        messages: messages
+    })
+
+    var vm = new Vue({
+        i18n: i18n,
+        data: {
+            locale: initial,
+            username: "用户名",
+            password: "密码"
+        },
+        watch: {
+            locale: function(val) {
+                this.$i18n.locale = val
+            }
+        }
+    }).$mount('#app')
+
+    $('#login').dialog({
+        title: '登录',
+        closable: false,
+        draggable: false,
+        modal: true,
+        buttons: [{
+            text: messages[initial]['common']['ok'],
+            iconCls: 'icon-ok',
+            handler: function() {
+
+            }
+        }, {
+            text: messages[initial]['common']['cancel'],
+            iconCls: 'icon-cancel',
+            handler: function() {
+                $('#login').dialog('close')
+            }
+        }]
+    });
+</script>

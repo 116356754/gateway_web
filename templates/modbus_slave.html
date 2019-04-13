@@ -1,0 +1,605 @@
+<!doctype html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="shortcut icon" href="../static/favicon.ico">
+    <link rel=stylesheet href="../static/easyui/themes/bootstrap/easyui.css">
+    <link rel=stylesheet href="../static/easyui/themes/icon.css">
+    <script src="../static/easyui/jquery.min.js"></script>
+    <script src="../static/easyui/jquery.easyui.min.js"></script>
+    <script src="../static/javascript/language.js"></script>
+    <script src="../static/easyui/jquery.edatagrid.js"></script>
+    <script src="../static/easyui/jquery.easyui.validatex.js"></script>
+    <script src="../static/javascript/api.js"></script>
+    <script src="../static/resource/vue.min.js"></script>
+    <script src="../static/resource/vue-i18n.min.js"></script>
+    <script src="../static/resource/xlsx.core.min.js"></script>
+    <script src="../static/javascript/modbus_slave.js"></script>
+    <script src="../static/javascript/base-loading.js"></script>
+</head>
+
+<body>
+    <div id='app' style="position:absolute; width:100%;height:100%;left:0;top:0">
+        <div class="easyui-layout" data-options="fit:true">
+            <div id="modbus_config" data-options="region:'north',split:true,collapsible:true" style="height:260px; overflow:hidden">
+                <form id="querytb" method="post" style="padding:10px;" accept-charset="UTF-8">
+                    <div id="rtu_div" style="width:550px;height:300px;padding:10px;display:none">
+                        <label style="display:inline-block;width:85px">串口号</label>
+                        <label style="display:inline-block;width:85px">波特率</label>
+                        <label style="display:inline-block;width:85px">数据位</label>
+                        <label style="display:inline-block;width:85px">停止位</label>
+                        <label style="display:inline-block;width:85px">奇偶校验</label>
+                        <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick='addcom()'></a>
+                        <table id="tb">
+                        </table>
+                    </div>
+
+                    <div id="config" style="width:350px;height:260px;padding:10px;display:none">
+                        <input class="easyui-combobox" id='serial_baud' v-bind:label="baud" value="9600" labelWidth="70px" required="true" data-options="editable:false" style="height:25px;width:200px"><br><br>
+                        <input class="easyui-combobox" id='serial_data' v-bind:label="databit" value="8" labelWidth="70px" required="true" data-options="editable:false" style="height:25px;width:200px"><br><br>
+                        <input class="easyui-combobox" id='serial_stop' v-bind:label="stopbit" value="1" labelWidth="70px" required="true" data-options="editable:false" style="height:25px;width:200px"><br><br>
+                        <input class="easyui-combobox" id='serial_parity' v-bind:label="parity" value="N" labelWidth="70px" required="true" data-options="editable:false" style="height:25px;width:200px">
+                    </div>
+                    <!-- <div>
+                        <input id="slave_id" v-bind:label="slave_id" labelWidth="60px" class="easyui-numberspinner" style="width:150px;" required="required" data-options="min:1,max:255,editable:false"><br><br>
+                        <label style="font-size:12px;">{{ $t('modbus_slave.exception_deal') }}</label><br>
+                        <input class="easyui-combobox" id='lastValue' labelWidth="70px" required="true" data-options="editable:false" style="height:25px;width:200px">
+                        <a id="btnSearch" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-ok'" onclick="doSearch()">{{ $t('common.save') }}</a>
+                    </div> -->
+                    <input id="slave_id" v-bind:label="slave_id" labelWidth="60px" class="easyui-numberspinner" style="width:110px;" required="required" data-options="min:1,max:255,editable:false"><br><br>
+                    <label class="my_protocol" style="font-size:14px;"><input id="TCP_check" class="input_agreement_protocol" type="checkbox"><span></span>Modbus TCP</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input class="easyui-textbox" id='port' v-bind:label="port" labelWidth="60px" style="width:110px" validType="eqmaxLength[5]"><br><br>
+
+                    <label class="my_protocol" style="font-size:14px;"><input id="RTU_check" class="input_agreement_protocol" type="checkbox"><span></span>Modbus RTU</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a id="rtu_config" href="#" onclick="display_rtu()" class="easyui-linkbutton" data-options="iconCls:'icon-set'">{{ $t('modbus_slave.config') }}</a>
+                    <br><br>
+                    <label class="my_protocol" style="font-size:14px;"><input id="DTU_check" class="input_agreement_protocol" type="checkbox"><span></span>{{ $t('modbus_slave.DTU') }}</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label style="font-size:12px;">{{ $t('modbus_slave.messageFormat') }}</label>
+                    <input class="easyui-combobox" id='messageFormat' labelWidth="70px" required="true" data-options="editable:false" style="height:25px;width:60px">&nbsp;&nbsp;&nbsp;
+                    <label style="font-size:12px;">{{ $t('modbus_slave.heartbeatId') }}</label>
+                    <input class="easyui-numberbox" id='heartbeatId' labelWidth="60px" required="true" style="width:80px" validType="eqmaxLength[8]">&nbsp;&nbsp;&nbsp;
+                    <label class="my_protocol" style="font-size:12px;"><input id="heartbeatOnce" class="input_agreement_protocol" type="checkbox"><span></span></label>
+                    <label style="font-size:12px;">{{ $t('modbus_slave.heartbeatInterval') }}</label>
+                    <input class="easyui-numberbox" id='heartbeatInterval' disabled="disabled" labelWidth="60px" required="true" style="width:50px" validType="eqmaxLength[5]">&nbsp;&nbsp;&nbsp;
+                    <label style="font-size:12px;">{{ $t('modbus_slave.remoteIp') }}</label>
+                    <input class="easyui-textbox" id='remoteIp' labelWidth="60px" required="true" validType="ip" style="width:110px">&nbsp;&nbsp;&nbsp;
+                    <label style="font-size:12px;">{{ $t('modbus_slave.remotePort') }}</label>
+                    <input class="easyui-numberbox" id='remotePort' labelWidth="60px" required="true" style="width:50px"><br><br>
+
+                    <label style="font-size:12px;">{{ $t('modbus_slave.exception_deal') }}</label>
+                    <input class="easyui-combobox" id='lastValue' labelWidth="70px" required="true" data-options="editable:false" style="height:25px;width:200px"><br><br>
+                    <a id="btnSearch" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-ok'" onclick="doSearch()">{{ $t('common.save') }}</a>
+                </form>
+            </div>
+
+            <div id="excel_title" data-options="region:'center',split:false">
+                <div id='mrx' title="导入Excel配置" style="display:none;width:300px;height:100px">
+                    <input type=file id="excel-file" accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="padding:20px;">
+                </div>
+                <table id="modsv_xls_config" style="width:100%;height:100%;" scrolling="auto" singleSelect="true" class="easyui-datagrid" data-options="fit:true,fitColumns:true,rownumbers:true,pagination:false">
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    window.onload = function() {  
+        if (self.parent.vm.$i18n.locale == 'zh-CN') {
+            $.getScript("../static/easyui/locale/easyui-lang-zh_CN.js"); 
+            $("#lastValue").combobox({
+                url: "../static/json/exception.json",
+                valueField: 'id',
+                textField: 'text',
+                method: "GET",
+                panelHeight: 'auto'
+            });
+        } else {   
+            $.getScript("../static/easyui/locale/easyui-lang-en.js"); 
+            $("#lastValue").combobox({
+                url: "../static/json/exception_english.json",
+                valueField: 'id',
+                textField: 'text',
+                method: "GET",
+                panelHeight: 'auto'
+            });
+        }
+    }
+
+    Vue.use(VueI18n)
+
+    var initial = self.parent.vm.$i18n.locale
+    var i18n = new VueI18n({
+        locale: initial,
+        messages: self.parent.messages
+    })
+    var vm = new Vue({
+        i18n: i18n,
+        data: {
+            locale: initial,
+            modbus_config: self.parent.messages[initial]['modbus_slave']['modbus_config'],
+            port: self.parent.messages[initial]['modbus_slave']['port'],
+            baud: self.parent.messages[initial]['index']['baud'],
+            databit: self.parent.messages[initial]['index']['databit'],
+            stopbit: self.parent.messages[initial]['index']['stopbit'],
+            parity: self.parent.messages[initial]['index']['parity'],
+            slave_id: self.parent.messages[initial]['modbus_slave']['slave_id'],
+            point_table: self.parent.messages[initial]['modbus_slave']['point_table']
+        },
+        watch: {
+            locale: function(val) {
+                this.$i18n.locale = val
+            }
+        }
+    }).$mount('#app')
+
+    // 显示RTU串口配置窗口
+    function display_rtu() {
+        $("#tb").empty();
+        content = selectsql(feature_path, "select conf from feature where protocol='Modbus_RTU'");
+        content_object = JSON.parse(content);
+        rtu_conf = JSON.parse(content_object[0]['conf']);
+        console.log(rtu_conf['used']);
+        rtu_conf['used'].forEach(function(com) {
+            addcom();
+            $('#' + "number" + (tcount - 1)).combobox('setValue', com);
+            $('#' + "baud" + (tcount - 1)).combobox('setValue', rtu_conf[com]['baud']);
+            $('#' + "data" + (tcount - 1)).combobox('setValue', rtu_conf[com]['data']);
+            $('#' + "stop" + (tcount - 1)).combobox('setValue', rtu_conf[com]['stop']);
+            $('#' + "parity" + (tcount - 1)).combobox('setValue', rtu_conf[com]['parity']);
+        });
+        $('#rtu_div').dialog({
+            title: self.parent.messages[initial]['modbus_slave']['config_serial'],
+            closable: false,
+            draggable: false,
+            modal: true,
+            buttons: [{
+                text: self.parent.messages[initial]['common']['save'],
+                iconCls: 'icon-ok',
+                handler: function() {
+                    save_com();
+                }
+            }, {
+                text: self.parent.messages[initial]['common']['cancel'],
+                iconCls: 'icon-cancel',
+                handler: function() {
+                    $("#rtu_div").dialog('close');
+                }
+            }]
+        });
+    }
+
+    tcount = 0;
+
+    // 添加串口
+    function addcom() {
+        var row, cell, str;
+        row = document.getElementById("tb").insertRow();
+        if (row != null) {
+            cell = row.insertCell();
+            cell.innerHTML = "<input id=\"number" + tcount + "\" class=\"easyui-combobox\" data-options=\"panelHeight:'auto',editable:false\" required=\"true\" value=\"com1\" style=\"width:64px\">&#12288;&#12288;<input id=\"baud" + tcount + "\" class=\"easyui-combobox\" required=\"true\" data-options=\"panelHeight:'auto',editable:false\" value=\"9600\" style=\"width:64px\">&#12288;&#12288;<input id=\"data" + tcount + "\" class=\"easyui-combobox\" data-options=\"panelHeight:'auto',editable:false\" required=\"true\" value=\"8\" style=\"width:64px\">&#12288;&#12288;<input id=\"stop" + tcount + "\" class=\"easyui-combobox\" data-options=\"panelHeight:'auto',editable:false\" required=\"true\" value=\"1\" style=\"width:64px\">&#12288;&#12288;<input id=\"parity" + tcount + "\" class=\"easyui-combobox\" data-options=\"panelHeight:'auto',editable:false\" required=\"true\" value=\"N\" style=\"width:64px\">&#12288;&#12288;<a href=\"#\" class=\"easyui-linkbutton\" onclick=\"deletecom(this)\">删除</a>"
+            $.parser.parse(cell);
+            com_data = parent2.feature[1];
+            $('#number' + tcount).combobox({
+                valueField: 'text',
+                textField: 'text',
+                data: com_data
+            });
+            $('#baud' + tcount).combobox({
+                url: "../static/json/baudrate.json",
+                valueField: 'text',
+                textField: 'text',
+                method: "GET",
+                panelHeight: 'auto'
+            });
+            $('#data' + tcount).combobox({
+                url: "../static/json/databit.json",
+                valueField: 'text',
+                textField: 'text',
+                method: "GET",
+                panelHeight: 'auto'
+            });
+            $('#stop' + tcount).combobox({
+                url: "../static/json/stopbit.json",
+                valueField: 'text',
+                textField: 'text',
+                method: "GET",
+                panelHeight: 'auto'
+            });
+            $('#parity' + tcount).combobox({
+                url: "../static/json/parity.json",
+                valueField: 'id',
+                textField: 'text',
+                method: "GET",
+                panelHeight: 'auto'
+            });
+            tcount++;
+        }
+    }
+
+    // 删除串口
+    function deletecom(obj) {
+        var curRow = obj.parentNode.parentNode;
+        tb.deleteRow(curRow.rowIndex);
+    }
+
+    // 获取RTU串口窗口中动态添加的下拉框的数据
+    function getsub() {
+        var re = {};
+        for (var i = 0; i < tcount; i++) {
+            if (document.getElementById("number" + i)) {
+                comport = $('#' + "number" + i).combobox('getValue');
+                baud = $('#' + "baud" + i).combobox('getValue');
+                data = $('#' + "data" + i).combobox('getValue');
+                stop = $('#' + "stop" + i).combobox('getValue');
+                parity = $('#' + "parity" + i).combobox('getValue');
+                re[comport] = { // 重复的com口会以最后一个配置为最终配置
+                    "baud": baud,
+                    "data": data,
+                    "stop": stop,
+                    "parity": parity
+                };
+            }
+        }
+        return re;
+    }
+
+    function com_check(com) { // 检测com口是否被占用
+        result = selectsql(feature_path, "select * from serialport where com='{0}'".format(com));
+        if (result != '[]') {
+            return false;
+        } else {
+            bacnet_com = selectsql(feature_path, "select * from feature where com='{0}' and protocol!='Modbus_RTU'".format(com));
+            if (bacnet_com != '[]') {
+                return false;
+            } else {
+                return true;
+            }
+        }
+    }
+
+    function save_com() {
+        re = getsub();
+        console.log(re);
+        com_list = Object.keys(re);
+        com_repeat = false;
+        com_list.forEach(function(com) {
+            com_status = com_check(com);
+            if (!com_status) {
+                $.messager.alert(self.parent.messages[initial]['common']['system_hint'], self.parent.messages[initial]['index_tree']['serialport_already'].format(com), "info")
+                com_repeat = true;
+            }
+        });
+        if (!com_repeat) {
+            slave_id = $('#slave_id').numberspinner('getValue');
+            lastValue = $('#lastValue').combobox('getValue');
+            re['slave_id'] = slave_id;
+            re['lastValue'] = lastValue;
+            re['base_addr'] = "1";
+            re['used'] = com_list;
+            rtu_sql = "update feature SET com=nullif('{0}','[]'),conf='{1}' where protocol='Modbus_RTU'".format(JSON.stringify(re['used']), JSON.stringify(re));
+            result = updatesql(feature_path, rtu_sql);
+            if (result == 'true') {
+                $("#rtu_div").dialog('close');
+                self.parent.insert_info(self.parent.messages[initial]['modbus_slave']['server_config_success']);
+            } else {
+                $.messager.alert(result);
+                self.parent.insert_info(self.parent.messages[initial]['modbus_slave']['server_config_fail'])
+            }
+        }
+    }
+
+    var dir = self.parent.$('#text').textbox('getText'); // 选中的文件夹名称
+    var feature_path = 'Project/' + dir + '/Gateway';
+
+    function set_value(modbus_tcp_data, modbus_rtu_data, modbus_dtu_data) { // 设置textbox和combobox中的值
+        $('#port').textbox('setValue', modbus_tcp_data.port);
+        $('#slave_id').numberspinner('setValue', modbus_tcp_data.slave_id);
+        if (modbus_tcp_data.lastValue) {
+            $('#lastValue').combobox({
+                value: "2"
+            });
+        } else {
+            $('#lastValue').combobox({
+                value: "1"
+            });
+        };
+        $('#messageFormat').combobox('setValue', modbus_dtu_data.messageFormat);
+        $('#heartbeatId').numberbox('setValue', modbus_dtu_data.heartbeatId);
+        $("#heartbeatOnce").prop("checked", !modbus_dtu_data.heartbeatOnce);
+        $('#heartbeatInterval').numberbox('setValue', modbus_dtu_data.heartbeatInterval);
+        $('#remoteIp').textbox('setValue', modbus_dtu_data.remoteIp);
+        $('#remotePort').numberbox('setValue', modbus_dtu_data.remotePort);
+
+    }
+
+    function rtu_disable(status) {
+        if (!status) {
+            $('#rtu_config').linkbutton('disable');
+        } else {
+            $('#rtu_config').linkbutton('enable');
+        }
+    }
+
+    function dtu_disable(status) {
+        if (!status) {
+            $("#messageFormat").combobox("disable");
+            $("#heartbeatId").numberbox("disable");
+            $("#heartbeatOnce").attr("disabled", "disabled");
+            $("#heartbeatInterval").numberbox("disable");
+            $("#remoteIp").textbox("disable");
+            $("#remotePort").numberbox("disable");
+        } else {
+            $("#messageFormat").combobox("enable");
+            $("#heartbeatId").numberbox("enable");
+            $("#heartbeatOnce").removeAttr("disabled");
+            oncestatus = $("#heartbeatOnce").is(":checked");
+            if (oncestatus) {
+                $("#heartbeatInterval").numberbox("enable");
+            }
+            $("#remoteIp").textbox("enable");
+            $("#remotePort").numberbox("enable");
+        }
+    }
+
+    $("#RTU_check").change(function() {
+        var status = $("#RTU_check").is(":checked");
+        rtu_disable(status)
+    });
+
+    $("#DTU_check").change(function() {
+        var status = $("#DTU_check").is(":checked");
+        dtu_disable(status)
+    });
+
+    $("#heartbeatOnce").change(function() {
+        var status = $("#heartbeatOnce").is(":checked");
+        if (status) {
+            $("#heartbeatInterval").numberbox("enable");
+        } else {
+            $("#heartbeatInterval").numberbox("disable");
+        }
+    });
+
+    $(function() {
+        $("#messageFormat").combobox({
+
+            valueField: 'text',
+            textField: 'text',
+            data: [{
+                "text": "RTU",
+                "selected": true
+            }, {
+                "text": "TCP"
+            }],
+            panelHeight: 'auto'
+        });
+        content = selectsql(feature_path, "select * from feature where protocol='Modbus_TCP' or protocol='Modbus_RTU' or protocol='Modbus_DTU'");
+        content_object = JSON.parse(content);
+        modbus_tcp_data = JSON.parse(content_object[2]['conf']);
+        modbus_rtu_data = JSON.parse(content_object[1]['conf']);
+        modbus_dtu_data = JSON.parse(content_object[0]['conf']);
+
+        // 上传服务器的选择
+        $("#TCP_check").change(function() {
+            var status = $("#TCP_check").is(":checked");
+            if (!status) {
+                $('#port').textbox({
+                    disabled: true
+                });
+            } else {
+                $('#port').textbox({
+                    disabled: false
+                });
+            }
+            set_value(modbus_tcp_data, modbus_rtu_data, modbus_dtu_data);
+        });
+        if (content_object[1]['com'] == '[]') {
+            rtu_disable(false)
+        } else {
+            $("#RTU_check").prop("checked", true);
+            rtu_disable(true)
+        }
+        set_value(modbus_tcp_data, modbus_rtu_data, modbus_dtu_data);
+        if (modbus_dtu_data.used) {
+            dtu_disable(true);
+            $("#DTU_check").prop("checked", true);
+        } else {
+            dtu_disable(false)
+        }
+        if (modbus_tcp_data.used) {
+            $("#TCP_check").prop("checked", true);
+            $('#port').textbox({
+                disabled: false
+            });
+        } else {
+            $("#TCP_check").prop("checked", false);
+            $('#port').textbox({
+                disabled: true
+            });
+        }
+
+        modbus_rtu_data['used'].forEach(function(com) {
+            $("#" + com).prop("checked", true);
+        })
+    });
+
+    function doSearch() {
+        var a = $('#querytb').form('enableValidation').form('validate');
+        if (!a) {
+            return false
+        } else {
+            slave_id = $('#slave_id').numberspinner('getValue');
+            lastValue = $('#lastValue').combobox('getValue');
+            if (lastValue == 1) {
+                lastValue = false
+            } else {
+                lastValue = true
+            };
+
+            content = selectsql(feature_path, "select * from feature where protocol='Modbus_TCP' or protocol='Modbus_RTU' or protocol='Modbus_DTU'");
+            content_object = JSON.parse(content);
+            modbus_tcp_data = JSON.parse(content_object[2]['conf']);
+            modbus_rtu_data = JSON.parse(content_object[1]['conf']);
+            modbus_dtu_data = JSON.parse(content_object[0]['conf']);
+
+            modbus_tcp_data['used'] = $("#TCP_check").is(":checked");
+            modbus_tcp_data['port'] = $('#port').textbox('getValue');
+            modbus_tcp_data['slave_id'] = slave_id;
+            modbus_tcp_data['lastValue'] = lastValue;
+
+            if (!$("#RTU_check").is(":checked")) {
+                modbus_rtu_changedata = {};
+                modbus_rtu_changedata['used'] = [];
+                modbus_rtu_changedata['slave_id'] = slave_id;
+                modbus_rtu_changedata['lastValue'] = lastValue;
+                modbus_rtu_changedata['base_addr'] = "1";
+                modbus_rtu_data = modbus_rtu_changedata;
+            } else {
+                modbus_rtu_data['slave_id'] = slave_id;
+                modbus_rtu_data['lastValue'] = lastValue;
+            }
+
+            modbus_dtu_data['used'] = $("#DTU_check").is(":checked");
+            modbus_dtu_data['messageFormat'] = $('#messageFormat').combobox('getValue');
+            modbus_dtu_data['heartbeatId'] = parseInt($('#heartbeatId').numberbox('getValue'));
+            modbus_dtu_data['heartbeatOnce'] = !$("#heartbeatOnce").is(":checked");
+            modbus_dtu_data['heartbeatInterval'] = parseInt($('#heartbeatInterval').numberbox('getValue'));
+            modbus_dtu_data['remoteIp'] = $('#remoteIp').textbox('getValue');
+            modbus_dtu_data['remotePort'] = parseInt($('#remotePort').numberbox('getValue'));
+            modbus_dtu_data['slave_id'] = slave_id;
+            modbus_dtu_data['lastValue'] = lastValue;
+
+            if (JSON.stringify(modbus_rtu_data['used']) != '[]') { // RTU服务器是否启用
+                var status = 'true';
+                for (var i = 0; i < modbus_rtu_data['used'].length; i++) {
+                    status = com_check(modbus_rtu_data['used'][i]); // 串口检验
+                    if (!status) {
+                        $.messager.alert(self.parent.messages[initial]['common']['system_hint'], self.parent.messages[initial]['index_tree']['serialport_already'].format(modbus_rtu_data['used'][i]), "info")
+                        break
+                    }
+                }
+                if (status) { // 串口没有被占用
+                    if (modbus_tcp_data['used']) {
+                        tcp_sql = "update feature SET port='{0}',conf='{1}' where protocol='Modbus_TCP'".format(modbus_tcp_data['port'], JSON.stringify(modbus_tcp_data));
+                    } else {
+                        tcp_sql = "update feature SET port=nullif('',''),conf='{0}' where protocol='Modbus_TCP'".format(JSON.stringify(modbus_tcp_data));
+                    }
+                    rtu_sql = "update feature SET com='{0}',conf='{1}' where protocol='Modbus_RTU'".format(JSON.stringify(modbus_rtu_data['used']), JSON.stringify(modbus_rtu_data));
+                    console.log(rtu_sql)
+                    console.log(modbus_rtu_data['used'])
+                    dtu_sql = "update feature SET port=nullif('',''),conf='{0}' where protocol='Modbus_DTU'".format(JSON.stringify(modbus_dtu_data));
+                    result = updatesql(feature_path, tcp_sql);
+                    result = updatesql(feature_path, rtu_sql);
+                    result = updatesql(feature_path, dtu_sql);
+                    if (result == 'true') {
+                        self.parent.insert_info(self.parent.messages[initial]['modbus_slave']['server_config_success']);
+                        //$('#cc').layout('collapse', 'north') // 保存成功后折叠Modbus上传服务器设置面板
+                    } else {
+                        $.messager.alert(result);
+                        self.parent.insert_info(self.parent.messages[initial]['modbus_slave']['server_config_fail'])
+                    }
+                }
+            } else {
+                if (modbus_tcp_data['used']) {
+                    tcp_sql = "update feature SET port='{0}',conf='{1}' where protocol='Modbus_TCP'".format(modbus_tcp_data['port'], JSON.stringify(modbus_tcp_data));
+                } else {
+                    tcp_sql = "update feature SET port=nullif('',''),conf='{0}' where protocol='Modbus_TCP'".format(JSON.stringify(modbus_tcp_data));
+                }
+                rtu_sql = "update feature SET com='[]',conf='{0}' where protocol='Modbus_RTU'".format(JSON.stringify(modbus_rtu_data));
+                dtu_sql = "update feature SET port=nullif('',''),conf='{0}' where protocol='Modbus_DTU'".format(JSON.stringify(modbus_dtu_data));
+                result = updatesql(feature_path, tcp_sql);
+                result = updatesql(feature_path, rtu_sql);
+                result = updatesql(feature_path, dtu_sql);
+                if (result == 'true') {
+                    self.parent.insert_info(self.parent.messages[initial]['modbus_slave']['server_config_success']);
+                } else {
+                    $.messager.alert(result);
+                    self.parent.insert_info(self.parent.messages[initial]['modbus_slave']['server_config_fail'])
+                }
+            }
+        }
+    }
+
+    $('#excel-file').change(function(e) {
+        var files = e.target.files;
+
+        var fileReader = new FileReader();
+        fileReader.onload = function(ev) {
+            try {
+                var data = ev.target.result,
+                    workbook = XLSX.read(data, {
+                        type: 'binary'
+                    }), // 以二进制流方式读取得到整份excel表格对象
+                    persons = []; // 存储获取到的数据
+            } catch (e) {
+                $.messager.alert(self.parent.messages[initial]['common']['system_hint'], self.parent.messages[initial]['common']['File_type_is_incorrect'], "info");
+                return;
+            }
+
+            // 表格的表格范围，可用于判断表头是否数量是否正确
+            var fromTo = '';
+            // 遍历每张表读取
+            for (var sheet in workbook.Sheets) {
+                if (workbook.Sheets.hasOwnProperty(sheet)) {
+                    fromTo = workbook.Sheets[sheet]['!ref'];
+                    console.log(fromTo);
+                    if (fromTo.slice(0, 4) != 'A1:F') {
+                        document.getElementById('excel-file').value = '';
+                        $.messager.alert(self.parent.messages[initial]['common']['system_hint'], self.parent.messages[initial]['common']['corresponding_excel'], "info");
+                        return;
+                    }
+                    column_list = ['A1', 'B1', 'C1', 'D1', 'E1', 'F1'];
+                    content = readFileSync('TemplateJson/columnchange.json');
+                    content_object = JSON.parse(content);
+                    column_list.forEach(function(column) {
+                        for (var r in content_object['Modbus_Service']) {
+                            if (content_object['Modbus_Service'][r] == workbook.Sheets[sheet][column].w) {
+                                workbook.Sheets[sheet][column].w = r
+                            }
+                        }
+                    })
+                    persons = persons.concat(XLSX.utils.sheet_to_json(workbook.Sheets[sheet]));
+                    break; // 如果只取第一张表，就取消注释这行
+                }
+            }
+            // console.log(persons)
+            if (JSON.stringify(persons) != '[]') {
+                var headStr = 'id,pointType,address,dataType,exceptionDefault';
+                // if (Object.keys(persons[0]).join(',') == headStr) {
+                for (person in persons) {
+                    persons[person] = create_modbusaddr(persons[person]);
+                }
+                var dir = self.parent.$('#text').textbox('getText'); // 选中的文件夹Name
+                sql = "DELETE FROM Modbus_Service";
+                result = truncatesql('Project/' + dir + '/Gateway', sql, 'VACUUM');
+
+                content = JSON.stringify({
+                    "Modbus_Service": persons
+                })
+                result = bulk_insert('Project/' + dir + '/Gateway', content);
+                if (result == "true") {
+                    $("#modsv_xls_config").edatagrid('reload');
+                    self.parent.insert_info(self.parent.messages[initial]['common']['load_success']);
+                } else {
+                    if (result.indexOf('NOT NULL') != -1) {
+                        $.messager.alert(self.parent.messages[initial]['common']['system_hint'], 'Excel中“名称”、“点类型”、“Modbus寄存器地址”、“Modbus数据类型”和“异常默认值”不能为空！', "info")
+                    } else if (result.indexOf('UNIQUE') != -1) {
+                        $.messager.alert(self.parent.messages[initial]['common']['system_hint'], self.parent.messages[initial]['common']['duplicate_name'], "info")
+                    } else {
+                        $.messager.alert(self.parent.messages[initial]['common']['system_hint'], result, "info")
+                    }
+                }
+                // } else {
+                //     $.messager.alert(self.parent.messages[initial]['common']['system_hint'], '请导入与当前协议相应的Excel!', "info")
+                // }
+            } else {
+                $.messager.alert(self.parent.messages[initial]['common']['system_hint'], self.parent.messages[initial]['common']['excel_null'], "info")
+            }
+            document.getElementById('excel-file').value = '';
+        };
+        // 以二进制方式打开文件
+        fileReader.readAsBinaryString(files[0]);
+    })
+</script>

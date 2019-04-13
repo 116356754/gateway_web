@@ -1,0 +1,153 @@
+<!doctype html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<style type="text/css">
+    .input_container {
+        margin-bottom: 32px;
+    }
+</style>
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="shortcut icon" href="../static/favicon.ico">
+    <link rel=stylesheet href="../static/easyui/themes/bootstrap/easyui.css">
+    <link rel=stylesheet href="../static/easyui/themes/icon.css">
+    <script src="../static/easyui/jquery.min.js"></script>
+    <script src="../static/easyui/jquery.easyui.min.js"></script>
+    <script src="../static/easyui/jquery.edatagrid.js"></script>
+    <script src="../static/easyui/jquery.easyui.validatex.js"></script>
+    <script src="../static/javascript/api.js"></script>
+    <script src="../static/resource/vue.min.js"></script>
+    <script src="../static/resource/vue-i18n.min.js"></script>
+</head>
+
+<body>
+    <div id='app' style="position:absolute; width:100%;height:100%;left:0;top:0">
+        <div class="easyui-layout" data-options="fit:true">
+            <div id="storage_title" class="table-responsive table2excel" data-options="region:'center',split:false">
+                <div style="position:absolute;top:20%;left:5%">
+                    <label class="my_protocol" style="font-size:15px;"><input id="ntp_check" type="checkbox" class="input_agreement_protocol"><span></span></label>
+                    <label style="font-size:15px" for="ntp_server">{{ $t('ntp.with_server') }}</label>
+                    <input class="easyui-textbox" id='ntp_server' value="time.windows.com" style="height:25px;width:250px">
+                    <label style="font-size:15px">{{ $t('ntp.synchronization') }}</label><input class="easyui-numberbox" id='cycle' value="60" style="height:25px;width:40px">
+                    <label style="font-size:15px">{{ $t('ntp.one') }}</label><br><br>
+                    <label class="my_protocol" style="font-size:15px;"><input id="server_used" type="checkbox" class="input_agreement_protocol"><span></span>{{ $t('ntp.server_used') }}</label><br><br>
+                    <div style="text-align:right;margin-top:40px ">
+                        <a href="# " class="easyui-linkbutton " iconCls="icon-set-ntp" onclick="pc_ntp()">{{ $t('ntp.sync_with_pc') }}</a>
+                        <a href="# " class="easyui-linkbutton " iconCls="icon-ok" onclick="save_ntp()">{{ $t('ntp.set_gateway') }}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+    window.onload = function() {  
+        if (self.parent.initial == 'zh-CN') {
+            $.getScript("../static/easyui/locale/easyui-lang-zh_CN.js"); 
+        } else {   
+            $.getScript("../static/easyui/locale/easyui-lang-en.js"); 
+        }
+    }
+
+    Vue.use(VueI18n)
+
+    var initial = self.parent.initial
+    var i18n = new VueI18n({
+        locale: initial,
+        messages: self.parent.messages
+    })
+    var vm = new Vue({
+        i18n: i18n,
+        data: {
+            locale: initial,
+            NTP_time_synchronization: self.parent.messages[initial]['ntp']['NTP_time_synchronization']
+        },
+        watch: {
+            locale: function(val) {
+                this.$i18n.locale = val
+            }
+        }
+    }).$mount('#app')
+
+    function pc_ntp() {
+        initial = self.parent.initial;
+        value = get_baseurl();
+        $.messager.confirm(self.parent.messages[initial]['common']['system_hint'], self.parent.messages[initial]['index']['ntp'].format(value), function(r) {
+            if (r) {
+                var now = new Date()
+                $.ajax({
+                    type: 'post',
+                    url: 'http://' + value + '/gw_ntp',
+                    timeout: 5000,
+                    data: {
+                        "time": now.getTime()
+                    },
+                    success: function(data) {
+                        if (data.status = true) {
+                            self.parent.insert_info(self.parent.messages[initial]['index']['ntp_success'])
+                        };
+                    },
+                    error: function() {
+                        $.messager.alert(self.parent.messages[initial]['common']['system_hint'], self.parent.messages[initial]['index']['connectip_fail'].format(value), "info");
+                    }
+                });
+            }
+        });
+    };
+
+    function save_ntp() {
+        initial = self.parent.initial;
+        ntp_check = $("#ntp_check").is(":checked");
+        ntp_server = $("#ntp_server").textbox("getValue");
+        cycle = $("#cycle").numberbox("getValue");
+        server_used = $("#server_used").is(":checked");
+        value = get_baseurl();
+        data = {
+            "ntp_check": ntp_check,
+            "ntp_server": ntp_server,
+            "server_used": server_used,
+            "cycle": cycle
+        }
+        $.ajax({
+            type: 'post',
+            url: 'http://' + value + '/save_ntp',
+            timeout: 5000,
+            data: {
+                'ntpdata': JSON.stringify(data)
+            },
+            success: function(data) {
+                if (data.status = true) {
+                    self.parent.insert_info(self.parent.messages[initial]['ntp']['set_success'])
+                };
+            },
+            error: function() {
+                $.messager.alert(self.parent.messages[initial]['common']['system_hint'], self.parent.messages[initial]['index']['connectip_fail'].format(value), "info");
+            }
+        });
+    }
+
+    $(function() {
+        value = get_baseurl();
+        $.ajax({
+            type: 'get',
+            url: 'http://' + value + '/get_ntpconf',
+            timeout: 5000,
+            success: function(data) {
+                data = JSON.parse(data);
+                if (data['ntp_check']) {
+                    $("#ntp_check").prop("checked", true);
+                }
+                $("#ntp_server").textbox("setValue", data['ntp_server']);
+                $("#cycle").numberbox("setValue", data['cycle']);
+                if (data['server_used']) {
+                    $("#server_used").prop("checked", true);
+                }
+            },
+            error: function() {
+                $.messager.alert(self.parent.messages[initial]['common']['system_hint'], self.parent.messages[initial]['index']['connectip_fail'].format(value), "info");
+            }
+        });
+    });
+</script>

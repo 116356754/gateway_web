@@ -1,0 +1,75 @@
+<!doctype html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN""http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="shortcut icon" href="../static/favicon.ico">
+    <link rel=stylesheet href="../static/easyui/themes/bootstrap/easyui.css">
+    <link rel=stylesheet href="../static/easyui/themes/icon.css">
+    <script src="../static/easyui/jquery.min.js"></script>
+    <script src="../static/easyui/jquery.easyui.min.js"></script>
+    <script src="../static/easyui/locale/easyui-lang-zh_CN.js"></script>
+    <script src="../static/javascript/language.js"></script>
+    <script src="../static/easyui/jquery.edatagrid.js"></script>
+    <script src="../static/easyui/jquery.easyui.validatex.js"></script>
+    <script src="../static/javascript/api.js"></script>
+    <script src="../static/resource/vue.min.js"></script>
+    <script src="../static/resource/vue-i18n.min.js"></script>
+    <script src="../static/javascript/event.js"></script>
+    <script src="../static/resource/xlsx.core.min.js"></script>
+    <script src="../static/resource/jquery.table2excel.js"></script>
+</head>
+
+<body>
+    <div id='app' style="position:absolute; width:100%;height:100%;left:0;top:0">
+        <div class="easyui-layout" data-options="fit:true">
+            <div id="master_title" data-options="region:'center',split:false">
+                <div id='mrx' title="导入Excel配置" style="display:none;width:300px;height:100px">
+                    <input type=file id="excel-file" accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="padding:20px;">
+                </div>
+                <div id='templete_dialog' v-bind:title="load_template" style="display:none;width:300px;height:160px;padding:20px;">
+                    <label for="template_name" style="padding-right: 10px">{{ $t('common.template_name') }}</label>
+                    <input class="easyui-combobox" id='template_name' data-options="editable:false" style="width:130px;">
+                </div>
+                <div id='templete_save_dialog' v-bind:title="saveto_template" style="display:none;width:300px;height:160px;padding:20px;">
+                    <label for="template_save" style="padding-right: 10px">{{ $t('common.template_name') }}</label>
+                    <input class="easyui-textbox" id='template_save' style="width:130px;">
+                </div>
+                <table id="event_config" style="width:100%;height:100%;" scrolling="auto" singleSelect="true" class="easyui-datagrid" data-options="fit:true,fitColumns:true,rownumbers:true,pagination:false">
+
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    window.onload = function() {  
+        contextPath = '../static/easyui/locale/'
+        if (self.parent.vm.$i18n.locale == 'zh-CN') {
+            $.getScript("../static/easyui/locale/easyui-lang-zh_CN.js"); 
+        } else {   
+            $.getScript("../static/easyui/locale/easyui-lang-en.js"); 
+        }
+    }
+
+    Vue.use(VueI18n)
+
+    var initial = self.parent.vm.$i18n.locale
+    var i18n = new VueI18n({
+        locale: initial,
+        messages: self.parent.messages
+    })
+    var vm = new Vue({
+        i18n: i18n,
+        data: {
+            locale: initial,
+            load_template: self.parent.messages[initial]['common']['load_template'],
+            saveto_template: self.parent.messages[initial]['common']['saveto_template']
+        },
+        watch: {
+            locale: function(val) {
+                this.$i18n.locale = val
+            }
+        }
+    }).$mount('#app')
+</script>

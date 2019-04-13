@@ -1,0 +1,105 @@
+<!doctype html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<style type="text/css">
+    .input_container {
+        margin-bottom: 13px;
+    }
+</style>
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="shortcut icon" href="../static/favicon.ico">
+    <link rel=stylesheet href="../static/easyui/themes/bootstrap/easyui.css">
+    <link rel=stylesheet href="../static/easyui/themes/icon.css">
+    <script src="../static/easyui/jquery.min.js"></script>
+    <script src="../static/easyui/jquery.easyui.min.js"></script>
+    <script src="../static/easyui/jquery.easyui.validatex.js"></script>
+    <script src="../static/javascript/api.js"></script>
+    <script src="../static/resource/vue.min.js"></script>
+    <script src="../static/resource/vue-i18n.min.js"></script>
+    <script src="../static/javascript/system.js"></script>
+</head>
+
+
+<div id='app'>
+    <div class="easyui-panel" id="i18n_data" style="padding:20px 60px;width:450px">
+        <form class="main_form" id="ip_form">
+            <div class="input_container">
+                <label for="dhcp" style="padding-right: 10px">{{ $t('system.dhcp') }}</label>
+                <input class="easyui-switchbutton" id='dhcp' name="dhcp" data-options="onText:'Yes',offText:'No'" unchecked>
+            </div>
+            <div class="input_container">
+                <input class="easyui-combobox" id='eh' v-bind:label="eh" labelWidth="90px" data-options="editable:false" name="eth" style="height:25px;width:300px">
+            </div>
+            <div class="input_container">
+                <input class="easyui-textbox" id='ip' v-bind:label="ip" validType="ip" labelWidth="90px" required="true" name="IPADDR" style="height:25px;width:300px">
+            </div>
+            <div class="input_container">
+                <input class="easyui-textbox" id='netmask' v-bind:label="netmask" validType="ip" labelWidth="90px" required="true" name="NETMASK" style="height:25px;width:300px">
+            </div>
+            <div class="input_container">
+                <input class="easyui-textbox" id='gwy' v-bind:label="gwy" validType="ip" labelWidth="90px" required="true" name="GATEWAY" style="height:25px;width:300px">
+            </div>
+            <div class="input_container">
+                <input class="easyui-textbox" id='dns1' v-bind:label="dns1" validType="ip" labelWidth="90px" required="true" name="dns1" style="height:25px;width:300px">
+            </div>
+            <div class="input_container">
+                <input class="easyui-textbox" id='dns2' v-bind:label="dns2" validType="ip" labelWidth="90px" required="true" name="dns2" style="height:25px;width:300px">
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+<script>
+    window.onload = function() {  
+        contextPath = '../static/easyui/locale/'
+        if (self.parent.initial == 'zh-CN') {
+            $.getScript("../static/easyui/locale/easyui-lang-zh_CN.js"); 
+        } else {   
+            $.getScript("../static/easyui/locale/easyui-lang-en.js"); 
+        }
+    }
+
+    Vue.use(VueI18n)
+
+    var initial = self.parent.initial
+    var i18n = new VueI18n({
+        locale: initial,
+        messages: self.parent.messages
+    })
+    var vm = new Vue({
+        i18n: i18n,
+        data: {
+            locale: initial,
+            eh: self.parent.messages[initial]['system']['eh'],
+            ip: self.parent.messages[initial]['system']['ip'],
+            netmask: self.parent.messages[initial]['system']['netmask'],
+            gwy: self.parent.messages[initial]['system']['gwy'],
+            dns1: self.parent.messages[initial]['system']['dns1'],
+            dns2: self.parent.messages[initial]['system']['dns2'],
+            eh: self.parent.messages[initial]['system']['eh']
+        },
+        watch: {
+            locale: function(val) {
+                this.$i18n.locale = val
+            }
+        }
+    }).$mount('#app')
+
+    $("#i18n_data").dialog({
+        title: self.parent.messages[initial]['system']['ip_config'],
+        closable: false,
+        draggable: false,
+        shadow: false,
+        buttons: [{
+            text: self.parent.messages[initial]['system']['Apply_to_gateway'],
+            iconCls: 'icon-ok',
+            handler: function() {
+                ip_ftp();
+            }
+        }]
+    });
+</script>

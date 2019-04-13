@@ -1,0 +1,84 @@
+<head>
+    <meta charset="UTF-8" />
+    <link rel="shortcut icon" href="../static/favicon.ico">
+    <link rel=stylesheet href="../static/easyui/themes/bootstrap/easyui.css">
+    <link rel=stylesheet href="../static/easyui/themes/icon.css">
+    <script src="../static/easyui/jquery.min.js"></script>
+    <script src="../static/easyui/jquery.easyui.min.js"></script>
+    <script src="../static/easyui/locale/easyui-lang-zh_CN.js"></script>
+    <script src="../static/javascript/api.js"></script>
+    <link rel=stylesheet href="../static/css/log.css">
+    <script src="../static/resource/handlebars-v4.0.11.js"></script>
+</head>
+
+<div class="table-container">
+    <table id="customers">
+        <tr>
+            <th>
+                文件名
+            </th>
+            <th>
+                大小
+            </th>
+            <th>
+                修改时间
+            </th>
+            <th>
+                下载
+            </th>
+        </tr>
+        <tbody id="tableList">
+
+        </tbody>
+    </table>
+</div>
+
+<!--Handlebars.js模版-->
+<!--Handlebars.js模版放在script标签中，保留了html原有层次结构,模版中要写一些操作语句-->
+<!--id可以用来唯一确定一个模版,type是模版固定的写法-->
+<script id="table-template" type="text/x-handlebars-template">
+    {{#programme}}
+    <tr>
+        <td>
+            <!-- <img src='../static/images/folder.png' width="20" alt="icon"><a href="#" onclick="read_logfile(this.innerHTML)">{{Name}}</a> -->
+            <img src='../static/images/folder.png' width="20" alt="icon"><a href="../../collector/bin/Release/log/{{Name}}">{{Name}}</a>
+        </td>
+        <td>
+            {{Length}}B
+        </td>
+        <td>
+            <span class="label label-primary">{{LastTime}}</span>
+        </td>
+        <td>
+            <a href="../../collector/bin/Release/log/{{Name}}" download="{{Name}}"> Download</a>
+        </td>
+    </tr>
+    {{/programme}}
+</script>
+
+<script>
+    function read_logfile(filename) {
+        location.href = 'log_view.html?filename=' + filename; // 将点击的log文件名传递到log_view.html
+    }
+
+    var item = new Array();
+    $(function() {
+        gw_path = '/home/web/logs/'
+        cfxApi.downloadFolderFtp(gw_path, log_path, function(status) {
+            if (status) {
+                var content = scanDir(log_path);
+                var obj = JSON.parse(content);
+                var item = new Array();
+                console.log(obj)
+                item['programme'] = obj // 搭建数据模板 {'programme':[{Name:a,Length:b,LastTime:c}]}
+
+                //注册一个Handlebars模版，通过id找到某一个模版，获取模版的html框架
+                //$("#table-template").html()是jquery的语法
+                var myTemplate = Handlebars.compile($("#table-template").html());
+
+                //将json对象用刚刚注册的Handlebars模版封装，得到最终的html，插入到基础table中。
+                $('#tableList').html(myTemplate(item));
+            }
+        });
+    });
+</script>

@@ -1,0 +1,50 @@
+[{
+        "id": 1,
+        "text": "bool"
+    },
+    {
+        "id": 2,
+        "text": "bit"
+    },
+    {
+        "id": 3,
+        "text": "int8h"
+    },
+    {
+        "id": 4,
+        "text": "int8l"
+    },
+    {
+        "id": 5,
+        "text": "uint16"
+    },
+    {
+        "id": 6,
+        "text": "int16"
+    },
+    {
+        "id": 7,
+        "text": "uint32"
+    },
+    {
+        "id": 8,
+        "text": "int32"
+    },
+    {
+        "id": 9,
+        "text": "float"
+    },
+
+    {
+        "id": 10,
+        "text": "double"
+    },
+    {
+        "id": 11,
+        "text": "uint64"
+    },
+    {
+        "id": 12,
+        "text": "int64"
+    }
+]

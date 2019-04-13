@@ -1,0 +1,226 @@
+<!doctype html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="shortcut icon" href="../static/favicon.ico">
+    <link rel=stylesheet href="../static/easyui/themes/bootstrap/easyui.css">
+    <link rel=stylesheet href="../static/easyui/themes/icon.css">
+    <script src="../static/easyui/jquery.min.js"></script>
+    <script src="../static/easyui/jquery.easyui.min.js"></script>
+    <script src="../static/javascript/language.js"></script>
+    <script src="../static/easyui/jquery.edatagrid.js"></script>
+    <script src="../static/easyui/jquery.easyui.validatex.js"></script>
+    <script src="../static/javascript/api.js"></script>
+    <script src="../static/resource/vue.min.js"></script>
+    <script src="../static/resource/vue-i18n.min.js"></script>
+    <script src="../static/javascript/dlt.js"></script>
+    <script src="../static/resource/xlsx.core.min.js"></script>
+    <script src="../static/resource/jquery.table2excel.js"></script>
+</head>
+
+<body>
+    <div id='app' style="position:absolute; width:100%;height:100%;left:0;top:0">
+        <div class="easyui-layout" data-options="fit:true">
+            <div id="excel_title" data-options="region:'center',split:false">
+                <div id='mrx' title="导入Excel配置" style="display:none;width:300px;height:100px">
+                    <input type=file id="excel-file" accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="padding:20px;">
+                </div>
+                <div id='templete_dialog' v-bind:title="load_template" style="display:none;width:300px;height:160px;padding:20px;">
+                    <label for="template_name" style="padding-right: 10px">{{ $t('common.template_name') }}</label>
+                    <input class="easyui-combobox" id='template_name' data-options="editable:false" style="width:130px;">
+                </div>
+                <div id='templete_save_dialog' v-bind:title="saveto_template" style="display:none;width:300px;height:160px;padding:20px;">
+                    <label for="template_save" style="padding-right: 10px">{{ $t('common.template_name') }}</label>
+                    <input class="easyui-textbox" id='template_save' style="width:130px;">
+                </div>
+                <div id='insert_dialog' v-bind:title="saveto_template" style="display:none;width:380px;height:420px;padding:20px;">
+                    <form id="insert_form">
+                        <input class="easyui-textbox" id='dialog_tagcode' required="true" v-bind:label="name" labelWidth="110px" style="width:250px;"><br><br>
+                        <input class="easyui-textbox" id='dialog_description' v-bind:label="description" labelWidth="110px" style="width:250px;"><br><br>
+                        <input class="easyui-combobox" id='dialog_protocol_type' required="true" v-bind:label="protocol_type" labelWidth="110px" style="width:250px;"><br><br>
+                        <input class="easyui-textbox" id='dialog_dataItem' required="true" v-bind:label="dataItem" labelWidth="110px" value="自定义数据项名称" style="width:250px;"><br><br>
+                        <input class="easyui-textbox" id='dialog_dataID' required="true" v-bind:label="dataID" labelWidth="110px" style="width:250px;"><br><br>
+                        <input class="easyui-textbox" id='dialog_dataFormat' required="true" v-bind:label="dataFormat" labelWidth="110px" style="width:250px;"><br><br>
+                        <input class="easyui-numberbox" id='dialog_dataOffset' required="true" v-bind:label="dataOffset" value="0" labelWidth="110px" style="width:250px;"><br><br>
+                        <input class="easyui-textbox" id='dialog_rate' precision="2" required="true" v-bind:label="rate" value="1" labelWidth="110px" style="width:250px;">
+                    </form>
+                </div>
+                <table id="dlt_xls_config" style="width:100%;height:100%;" scrolling="auto" singleSelect="true" class="easyui-datagrid" data-options="fit:true,fitColumns:true,rownumbers:true,pagination:false">
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    window.onload = function() {  
+        contextPath = '../static/easyui/locale/'
+        if (self.parent.vm.$i18n.locale == 'zh-CN') {
+            $.getScript("../static/easyui/locale/easyui-lang-zh_CN.js"); 
+        } else {   
+            $.getScript("../static/easyui/locale/easyui-lang-en.js"); 
+        }
+    }
+
+    Vue.use(VueI18n)
+
+    var initial = self.parent.vm.$i18n.locale
+    var i18n = new VueI18n({
+        locale: initial,
+        messages: self.parent.messages
+    })
+    var vm = new Vue({
+        i18n: i18n,
+        data: {
+            locale: initial,
+            dlt_config: self.parent.messages[initial]['dlt645']['dlt_config'],
+            load_template: self.parent.messages[initial]['common']['load_template'],
+            saveto_template: self.parent.messages[initial]['common']['saveto_template'],
+            name: self.parent.messages[initial]['common']['name'] + ':',
+            description: self.parent.messages[initial]['common']['description'] + ':',
+            protocol_type: self.parent.messages[initial]['dlt645']['protocol_type'] + ':',
+            dataItem: self.parent.messages[initial]['dlt645']['dataItem'] + ':',
+            dataID: self.parent.messages[initial]['dlt645']['dataID'] + ':',
+            dataFormat: self.parent.messages[initial]['dlt645']['dataFormat'] + ':',
+            dataOffset: self.parent.messages[initial]['dlt645']['dataOffset'] + ':',
+            rate: self.parent.messages[initial]['dlt645']['rate'] + ':'
+        },
+        watch: {
+            locale: function(val) {
+                this.$i18n.locale = val
+            }
+        }
+    }).$mount('#app')
+
+    $("#dialog_dataFormat").combobox({
+        url: "../static/json/dlt07_format.json",
+        valueField: 'text',
+        textField: 'text',
+        method: "GET",
+        panelHeight: 'auto',
+        editable: false,
+        onChange: function(newValue, oldValue) {
+            protocol_type_value = $('#dialog_protocol_type').combobox('getValue');
+            if (protocol_type_value == '' && newValue != '') {
+                $('#dialog_dataFormat').combobox('setValue', '');
+                $.messager.alert(self.parent.messages[initial]['common']['system_hint'], '请选择协议类型后再选择数据格式', "info")
+            }
+        }
+    });
+
+    $("#dialog_protocol_type").combobox({
+        url: "../static/json/agreement_type.json",
+        valueField: 'text',
+        textField: 'text',
+        method: "GET",
+        panelHeight: 'auto',
+        editable: false,
+        onChange: function(newValue, oldValue) {
+            if (newValue == 'DLT645-1997') {
+                $.getJSON("../static/json/dlt97_format.json", function(json) {
+                    $("#dialog_dataFormat").combobox("loadData", json);
+                });
+            } else {
+                $.getJSON("../static/json/dlt07_format.json", function(json) {
+                    $("#dialog_dataFormat").combobox("loadData", json);
+                });
+            }
+        }
+    });
+
+    function bulk_operate(persons) {
+        var obj = get_select();
+        sql = "delete from DLT645 where deviceCode='{0}'".format(obj.select.text);
+        result = deletesql(obj.path, sql);
+        content = JSON.stringify({
+            "DLT645": persons
+        })
+        result = bulk_insert(obj.path, content);
+        return result;
+    };
+
+    function save_template(persons) {
+        content = JSON.stringify({
+            "DLT645": persons
+        });
+        result = bulk_insert('Template/Template', content);
+        return result;
+    };
+
+    $('#excel-file').change(function(e) {
+        var files = e.target.files;
+
+        var fileReader = new FileReader();
+        fileReader.onload = function(ev) {
+            try {
+                var data = ev.target.result,
+                    workbook = XLSX.read(data, {
+                        type: 'binary'
+                    }), // 以二进制流方式读取得到整份excel表格对象
+                    persons = []; // 存储获取到的数据
+            } catch (e) {
+                $.messager.alert(self.parent.messages[initial]['common']['system_hint'], self.parent.messages[initial]['common']['File_type_is_incorrect'], "info");
+                return;
+            }
+
+            // 表格的表格范围，可用于判断表头是否数量是否正确
+            var fromTo = '';
+            // 遍历每张表读取
+            for (var sheet in workbook.Sheets) {
+                if (workbook.Sheets.hasOwnProperty(sheet)) {
+                    fromTo = workbook.Sheets[sheet]['!ref'];
+                    console.log(fromTo);
+                    if (fromTo.slice(0, 4) != 'A1:H') {
+                        $.messager.alert(self.parent.messages[initial]['common']['system_hint'], self.parent.messages[initial]['common']['corresponding_excel'], "info");
+                        document.getElementById('excel-file').value = '';
+                        return;
+                    }
+                    column_list = ['A1', 'B1', 'C1', 'D1', 'E1', 'F1', 'G1', 'H1'];
+                    content = readFileSync('TemplateJson/columnchange.json');
+                    content_object = JSON.parse(content);
+                    column_list.forEach(function(column) {
+                        for (var r in content_object['DLT645']) {
+                            if (content_object['DLT645'][r] == workbook.Sheets[sheet][column].w) {
+                                workbook.Sheets[sheet][column].w = r
+                            }
+                        }
+                    })
+                    persons = persons.concat(XLSX.utils.sheet_to_json(workbook.Sheets[sheet]));
+                    break; // 如果只取第一张表，就取消注释这行
+                }
+            }
+            // console.log(persons)
+            if (JSON.stringify(persons) != '[]') {
+                var headStr = 'tagCode,description,protocolType,dataItem,dataID,dataFormat,rate';
+                // if (Object.keys(persons[0]).join(',') == headStr) {
+                var obj = get_select();
+                for (person in persons) {
+                    persons[person]['deviceCode'] = obj.select.text;
+                    persons[person]['objectType'] = 'AI';
+                }
+                result = bulk_operate(persons);
+                if (result == "true") {
+                    $("#dlt_xls_config").edatagrid('reload');
+                    self.parent.insert_info(self.parent.messages[initial]['common']['load_success']);
+                } else {
+                    if (result.indexOf('NOT NULL') != -1) {
+                        $.messager.alert(self.parent.messages[initial]['common']['system_hint'], 'Excel中“名称”、“协议类型”、“数据项类型”、“数据标识”、“数据格式”和“倍率”不能为空！', "info")
+                    } else if (result.indexOf('UNIQUE') != -1) {
+                        $.messager.alert(self.parent.messages[initial]['common']['system_hint'], self.parent.messages[initial]['common']['duplicate_name'], "info")
+                    } else {
+                        $.messager.alert(self.parent.messages[initial]['common']['system_hint'], result, "info")
+                    }
+                    $("#dlt_xls_config").edatagrid('reload');
+                }
+                // } else {
+                //     $.messager.alert(self.parent.messages[initial]['common']['system_hint'], '请导入与当前协议相应的Excel!', "info")
+                // }
+            } else {
+                $.messager.alert(self.parent.messages[initial]['common']['system_hint'], self.parent.messages[initial]['common']['excel_null'], "info")
+            }
+            document.getElementById('excel-file').value = '';
+        };
+        // 以二进制方式打开文件
+        fileReader.readAsBinaryString(files[0]);
+    })
+</script>

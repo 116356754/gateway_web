@@ -1,0 +1,99 @@
+[{
+        "id": 1,
+        "parentId": 0,
+        "url": "javascript:void(0)",
+        "text": "数据监控",
+        "checked": false,
+        "state": "open",
+        "children": [{
+                "id": 2,
+                "parentId": 1,
+                "url": "real_data.html",
+                "iconCls": "icon-monitor-data",
+                "text": "实时监控",
+                "checked": false,
+                "state": null,
+                "children": []
+            },
+            {
+                "id": 3,
+                "parentId": 1,
+                "url": "offline_data.html",
+                "iconCls": "icon-history-data",
+                "text": "历史上传",
+                "checked": false,
+                "state": null,
+                "children": []
+            }
+        ]
+    },
+    {
+        "id": 11,
+        "parentId": 0,
+        "url": "javascript:void(0)",
+        "text": "系统设置",
+        "checked": false,
+        "state": "open",
+        "children": [{
+                "id": 12,
+                "parentId": 11,
+                "url": "ip.html",
+                "iconCls": "icon-set-ip",
+                "text": "设置IP",
+                "checked": false,
+                "state": null,
+                "children": []
+            },
+            {
+                "id": 13,
+                "parentId": 11,
+                "url": "upload_project.html",
+                "iconCls": "icon-gw-upload",
+                "text": "上载工程",
+                "checked": false,
+                "state": null,
+                "children": []
+            },
+            {
+                "id": 14,
+                "parentId": 11,
+                "url": "passwd_set.html",
+                "iconCls": "icon-set-passwd",
+                "text": "密码设定",
+                "checked": false,
+                "state": null,
+                "children": []
+            },
+            {
+                "id": 15,
+                "parentId": 11,
+                "url": "ntp.html",
+                "iconCls": "icon-set-ntp",
+                "text": "网关校时",
+                "checked": false,
+                "state": null,
+                "children": []
+            },
+            {
+                "id": 17,
+                "parentId": 11,
+                "url": "gw_reboot.html",
+                "iconCls": "icon-set-reboot",
+                "text": "重启网关",
+                "checked": false,
+                "state": null,
+                "children": []
+            },
+            {
+                "id": 18,
+                "parentId": 11,
+                "url": "gw_update.html",
+                "iconCls": "icon-update",
+                "text": "网关升级",
+                "checked": false,
+                "state": null,
+                "children": []
+            }
+        ]
+    }
+]

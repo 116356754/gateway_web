@@ -1,0 +1,99 @@
+[{
+        "id": 1,
+        "parentId": 0,
+        "url": "javascript:void(0)",
+        "text": "Data monitoring",
+        "checked": false,
+        "state": "open",
+        "children": [{
+                "id": 2,
+                "parentId": 1,
+                "url": "real_data.html",
+                "iconCls": "icon-monitor-data",
+                "text": "real-time monitoring",
+                "checked": false,
+                "state": null,
+                "children": []
+            },
+            {
+                "id": 3,
+                "parentId": 1,
+                "url": "offline_data.html",
+                "iconCls": "icon-history-data",
+                "text": "Historical Upload",
+                "checked": false,
+                "state": null,
+                "children": []
+            }
+        ]
+    },
+    {
+        "id": 11,
+        "parentId": 0,
+        "url": "javascript:void(0)",
+        "text": "System settings",
+        "checked": false,
+        "state": "open",
+        "children": [{
+                "id": 12,
+                "parentId": 11,
+                "url": "ip.html",
+                "iconCls": "icon-set-ip",
+                "text": "Set IP",
+                "checked": false,
+                "state": null,
+                "children": []
+            },
+            {
+                "id": 13,
+                "parentId": 11,
+                "url": "upload_project.html",
+                "iconCls": "icon-gw-upload",
+                "text": "Upload project",
+                "checked": false,
+                "state": null,
+                "children": []
+            },
+            {
+                "id": 14,
+                "parentId": 11,
+                "url": "passwd_set.html",
+                "iconCls": "icon-set-passwd",
+                "text": "Password setting",
+                "checked": false,
+                "state": null,
+                "children": []
+            },
+            {
+                "id": 15,
+                "parentId": 11,
+                "url": "ntp.html",
+                "iconCls": "icon-set-ntp",
+                "text": "Gateway ntp",
+                "checked": false,
+                "state": null,
+                "children": []
+            },
+            {
+                "id": 17,
+                "parentId": 11,
+                "url": "gw_reboot.html",
+                "iconCls": "icon-set-reboot",
+                "text": "Restart gateway",
+                "checked": false,
+                "state": null,
+                "children": []
+            },
+            {
+                "id": 18,
+                "parentId": 11,
+                "url": "gw_update.html",
+                "iconCls": "icon-update",
+                "text": "Gateway Update",
+                "checked": false,
+                "state": null,
+                "children": []
+            }
+        ]
+    }
+]

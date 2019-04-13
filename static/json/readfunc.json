@@ -1,0 +1,17 @@
+[{
+        "id": 1,
+        "text": "0X (Coil Status)"
+    },
+    {
+        "id": 2,
+        "text": "1X (Input Status)"
+    },
+    {
+        "id": 3,
+        "text": "3X (Input Registers)"
+    },
+    {
+        "id": 4,
+        "text": "4X (Holding Register)"
+    }
+]

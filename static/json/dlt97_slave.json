@@ -1,0 +1,103 @@
+{
+    "正向有功总电量": {
+        "parser": "XXXXXX. XX",
+        "request": "BaseRequest",
+        "tag": "9010"
+    },
+    "正向无功总电量": {
+        "parser": "XXXXXX. XX",
+        "request": "BaseRequest",
+        "tag": "9110"
+    },
+    "反向有功总电量": {
+        "parser": "XXXXXX. XX",
+        "request": "BaseRequest",
+        "tag": "9020"
+    },
+    "反向无功总电量": {
+        "parser": "XXXXXX. XX",
+        "request": "BaseRequest",
+        "tag": "9120"
+    },
+    "A相电流": {
+        "parser": "XX. XX",
+        "request": "BaseRequest",
+        "tag": "B621"
+    },
+    "B相电流": {
+        "parser": "XX. XX",
+        "request": "BaseRequest",
+        "tag": "B622"
+    },
+    "C相电流": {
+        "parser": "XX. XX",
+        "request": "BaseRequest",
+        "tag": "B623"
+    },
+    "A相电压": {
+        "parser": "XXX",
+        "request": "BaseRequest",
+        "tag": "B611"
+    },
+    "B相电压": {
+        "parser": "XXX",
+        "request": "BaseRequest",
+        "tag": "B612"
+    },
+    "C相电压": {
+        "parser": "XXX",
+        "request": "BaseRequest",
+        "tag": "B613"
+    },
+    "正向有功尖": {
+        "parser": "XXXXXX. XX",
+        "request": "BaseRequest",
+        "tag": "9011"
+    },
+    "正向有功峰": {
+        "parser": "XXXXXX. XX",
+        "request": "BaseRequest",
+        "tag": "9012"
+    },
+    "正向有功平": {
+        "parser": "XXXXXX. XX",
+        "request": "BaseRequest",
+        "tag": "9013"
+    },
+    "正向有功谷": {
+        "parser": "XXXXXX. XX",
+        "request": "BaseRequest",
+        "tag": "9014"
+    },
+    "A相功率因数": {
+        "parser": "X. XXX",
+        "request": "BaseRequest",
+        "tag": "B651"
+    },
+    "B相功率因数": {
+        "parser": "X. XXX",
+        "request": "BaseRequest",
+        "tag": "B652"
+    },
+    "C相功率因数": {
+        "parser": "X. XXX",
+        "request": "BaseRequest",
+        "tag": "B653"
+    },
+
+    "总功率因数": {
+        "parser": "X. XXX",
+        "request": "BaseRequest",
+        "tag": "B650"
+    },
+    "总瞬时有功功率": {
+        "parser": "XX. XXXX",
+        "request": "BaseRequest",
+        "tag": "B630"
+    },
+    "总瞬时无功功率": {
+        "parser": "XX. XX",
+        "request": "BaseRequest",
+        "tag": "B640"
+    }
+}

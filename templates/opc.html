@@ -1,0 +1,129 @@
+{% extends "base.html" %} {% block title %}OPC配置{% endblock %} {% block head %} {{ super() }}
+<script src="../static/javascript/language.js"></script>
+<script src="../static/javascript/opc.js"></script>
+{% endblock %} {% block content %}
+
+<div id="opc_consider" data-options="region:'west'" style="width:200px;">
+    1.每次对左边的树状表格进行一系列操作之后需要点击表格下方的“保存”按钮才能存入系统当中；<br> <br> 2.每次添加或者删除IP时需要先点击要修改的树节点，之后右键点击相应的操作； 只有item节点才能进行编辑“名称”的右键操作，编辑之后点击其他节点， 之后点击表格下方的“保存”按钮存入系统当中；
+    <br><br> 3.双击ID项可以搜索该节点下面的子节点，之后点击表格下方的“保存”按钮存入系统当中。
+</div>
+<div id="opc_title" data-options="region:'center',split:false">
+
+    <form class="ipform" id="ipadd" style="display:none">
+        <br><label>server名称：</label><input class="easyui-validatebox" required="true" type="text" id="ipvalue" name="ip_value">
+        <a href="#" class="easyui-linkbutton" id="addipbtn" iconCls="icon-ok" style="width:30%;height:32px">保存</a>
+    </form>
+
+    <table id="tg" style="width:100%;height:80%" data-options="
+				iconCls: 'icon-ok',
+				rownumbers: true,
+				animate: true,
+				collapsible: true,
+				fitColumns: true,
+				url: '/opc/get',
+				method: 'get',
+				idField: 'id',
+				treeField: 'name',
+                showFooter: true,
+                checkbox: true
+            ">
+        <div id="root_row" class="easyui-menu" style="width:120px;">
+            <div onclick="add()" data-options="iconCls:'icon-add'">新增</div>
+            <div onclick="cancel()" data-options="iconCls:'icon-cancel'">取消</div>
+        </div>
+        <div id="item_row" class="easyui-menu" style="width:120px;">
+            <div onclick="edit()" data-options="iconCls:'icon-remove'">编辑</div>
+            <div onclick="cancel()" data-options="iconCls:'icon-cancel'">取消</div>
+        </div>
+        <div id="children_row" class="easyui-menu" style="width:120px;">
+            <div onclick="remove()" data-options="iconCls:'icon-remove'">移除</div>
+            <div onclick="cancel()" data-options="iconCls:'icon-cancel'">取消</div>
+        </div>
+    </table><br>
+    <a href="#" class="easyui-linkbutton" id="savebtn" iconCls="icon-ok" style="width:120px;float:right;margin:10px">保存</a>
+</div>
+
+
+<script type="text/javascript">
+    var editingId;
+
+    function add() {
+        $('#ipadd').dialog();
+    }
+
+    function edit() {
+        row = $('#tg').treegrid('getSelected');
+        editingId = row.id
+        $('#tg').treegrid('beginEdit', editingId);
+    }
+
+
+
+    function remove() {
+        var node = $('#tg').treegrid('getSelected');
+        info = window.confirm("确定要移除该节点吗？");
+        if (info == true) {
+            if (node == null) {
+                $.messager.show({
+                    title: '错误提示',
+                    msg: "没有选中节点",
+                    timeout: 5000,
+                    showType: 'slide'
+                });
+            } else {
+                $.ajax({
+                    type: 'post',
+                    url: '/opc/ip_remove',
+                    data: {
+                        'value': node.name
+                    },
+                    success: function(data) {
+                        if (data.status == true) {
+                            $('#tg').treegrid('reload');
+                        } else {
+                            $.messager.show({
+                                title: i18next.t('total.Error_message'),
+                                msg: i18next.t('total.Error'),
+                                timeout: 5000,
+                                showType: 'slide'
+                            });
+                        }
+                    }
+                })
+            }
+        }
+
+    }
+
+    $('#addipbtn').click(function() {
+        var a = $('#ipform').form('validate')
+        if (!a) {
+            return false
+        } else {
+            var ip = document.getElementById('ipvalue').value;
+            var re = /^(\d+)\.(\d+)\.(\d+)\.(\d+)$/; //正则表达式     
+            if (re.test(ip)) {
+                if (RegExp.$1 < 256 && RegExp.$2 < 256 && RegExp.$3 < 256 && RegExp.$4 < 256) {
+                    $.ajax({
+                        type: 'post',
+                        url: '/opc/ip_add',
+                        data: $("form").serialize(),
+                        success: function(data) {
+                            $('#ipadd').dialog('close');
+                            $('#tg').treegrid('reload');
+                        }
+                    });
+                };
+            } else {
+                $.messager.show({
+                    title: '错误提示',
+                    msg: "IP输入错误",
+                    timeout: 5000,
+                    showType: 'slide'
+                });
+            }
+        }
+    })
+</script>
+
+{% endblock %}

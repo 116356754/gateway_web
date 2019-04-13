@@ -1,0 +1,1134 @@
+<!doctype html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <script src="../static/easyui/jquery.min.js"></script>
+    <link rel="shortcut icon" href="../static/favicon.ico">
+    <link rel=stylesheet href="../static/easyui/themes/bootstrap/easyui.css">
+    <link rel=stylesheet href="../static/easyui/themes/icon.css">
+    <script src="../static/easyui/jquery.easyui.min.js"></script>
+    <script src="../static/javascript/language.js"></script>
+    <script src="../static/easyui/jquery.edatagrid.js"></script>
+    <script src="../static/easyui/jquery.easyui.validatex.js"></script>
+    <script src="../static/javascript/api.js"></script>
+    <script src="../static/resource/vue.min.js"></script>
+    <script src="../static/resource/vue-i18n.min.js"></script>
+    <script src="../static/javascript/mqtt.js"></script>
+    <style type="text/css">
+        body {
+            opacity: 0;
+            transition: opacity 0.2s
+        }
+        
+        body.active {
+            opacity: 1
+        }
+    </style>
+</head>
+
+<body>
+    <div id='app' style="position:absolute; width:100%;height:100%;left:0;top:0">
+        <div id="ssl_verity" style="width:350px;height:300px;padding:10px;display:none">
+            <div style="margin-left: 20px;margin-top: 20px">
+                <select id="ssl_type" class="easyui-combobox" v-bind:label="identifying" data-options="editable:false,panelHeight: 'auto'" style="width:200px;height: 25px">
+                        </select><br><br>
+                <input class="easyui-combobox" label="CA File:" id='ca' labelWidth="80px" data-options="editable:false" style="height:25px;width:220px">
+                <a id="ca_load" href="#" class="easyui-linkbutton" onclick="ssldialog('ca')">Load</a><br><br>
+                <input class="easyui-combobox" label="Cert  File:" id='cert' labelWidth="80px" data-options="editable:false" style="height:25px;width:220px">
+                <a id="Cert_load" href="#" class="easyui-linkbutton" onclick="ssldialog('cert')">Load</a><br><br>
+                <input class="easyui-combobox" label="Key  File:" id='key' labelWidth="80px" data-options="editable:false" style="height:25px;width:220px">
+                <a id="Key_load" href="#" class="easyui-linkbutton" onclick="ssldialog('key')">Load</a><br><br>
+            </div>
+        </div>
+        <div id="last_will" style="width:460px;height:300px;padding:10px;display:none">
+            <div style="margin-left: 15px;margin-top: 20px">
+                <label for="lastwilltopic" style="padding-right: 10px">{{ $t('mqtt.lastwilltopic') }}</label>
+                <input id='lastwilltopic' class="easyui-textbox" style="width:150px;height:20px">
+                <select id="lastwillqos" class="easyui-combobox" data-options="editable:false,panelHeight: 'auto'" style="width:60px;height: 20px">
+                                <option>qos 0</option>
+                                <option>qos 1</option>
+                                <option>qos 2</option>
+                            </select>
+                <label for="lastwillretain" style="padding-left: 5px">retained:</label>
+                <input id="lastwillretain" class="easyui-switchbutton" labelWidth="100px" data-options="onText:'Yes',offText:'No'" style="height:20px;width:50px"><br><br>
+                <textarea id="lastwillmessage" style="width: 400px;height:120px;max-width: 400px;max-height: 120px;resize: none;"></textarea>
+            </div>
+        </div>
+        <div id='add_realtopic_div' title='添加实时数据主题' style="display:none;width:400px;height:350px;padding:20px;">
+            <form id='newtopic_form'>
+                <label for="newtopic" style="padding-right: 10px">实时数据主题：</label>
+                <input class="easyui-textbox" id='newtopic' required='true' style="width:130px;"><br><br>
+                <input class="easyui-combobox" id='newtopicqos' data-options="editable:false,panelHeight: 'auto'" style="width:60px;height: 20px">
+                <label for="newtopicretain" style="padding-left: 5px">retained:</label>
+                <input id="newtopicretain" class="easyui-switchbutton" labelWidth="100px" data-options="onText:'Yes',offText:'No'" style="height:20px;width:50px">
+                <label for="newfreq" style="padding-right: 10px">上传周期：</label>
+                <input class="easyui-numberbox" id='newfreq' required='true' style="width:80px;">
+                <div style="margin-top:20px">
+                    <div>{{ $t('mqtt.filter') }}</div>
+                    <div style="border:1px solid #000;width:40%;padding:10px;">
+                        <label class="my_protocol" style="font-size:12px;"><input id="newvalChange" type="checkbox" class="input_agreement_protocol"><span></span>{{ $t('mqtt.valChange') }}</label><br>
+                        <label class="my_protocol" style="font-size:12px;"><input id="newstatusGood" type="checkbox" class="input_agreement_protocol"><span></span>{{ $t('mqtt.statusGood') }}</label><br>
+                        <label class="my_protocol" style="font-size:12px;"><input id="newtimestampChange" type="checkbox" class="input_agreement_protocol"><span></span>{{ $t('mqtt.timestampChange') }}</label>
+                    </div>
+                </div>
+                <div style="margin-top:20px">
+                    <div>{{ $t('mqtt.mustache') }}</div>
+                    <input id='newmustache_combo' class="easyui-combobox" data-options="editable:false,panelHeight: 'auto'" required="true" style="width:150px;height:20px">
+                </div>
+            </form>
+        </div>
+        <div id='expandtopic_div' title='拓展主题' style="display:none;width:500px;height:250px;">
+            <form id='expandtopic_form' style="height:100%">
+                <div class="easyui-tabs" style="width:100%;height:100%">
+                    <div title="离线">
+                        <div style="padding:20px">
+                            <div>{{ $t('mqtt.historytopic') }}</div>
+                            <input id='historytopic' class="easyui-textbox" style="width:180px;height:20px">
+                            <input class="easyui-combobox" id='historyqos' data-options="editable:false,panelHeight: 'auto'" style="width:60px;height: 20px">
+                            <label for="historyretain" style="padding-left: 5px">retained:</label>
+                            <input id="historyretain" class="easyui-switchbutton" labelWidth="100px" data-options="onText:'Yes',offText:'No'" style="height:20px;width:50px">
+                        </div>
+                    </div>
+                    <div title="查询">
+                        <div style="padding:20px">
+                            <div>查询数据发布的主题:</div>
+                            <input id='inquireResponsetopic' class="easyui-textbox" style="width:180px;height:20px">
+                            <input class="easyui-combobox" id='inquireResponseqos' data-options="editable:false,panelHeight: 'auto'" style="width:60px;height: 20px">
+                            <label for="inquireResponseretain" style="padding-left: 5px">retained:</label>
+                            <input id="inquireResponseretain" class="easyui-switchbutton" labelWidth="100px" data-options="onText:'Yes',offText:'No'" style="height:20px;width:50px">
+                            <br><br>
+                            <div>查询数据订阅的主题:</div>
+                            <input id='inquiretopic' class="easyui-textbox" style="width:180px;height:20px">
+                            <input class="easyui-combobox" id='inquireqos' data-options="editable:false,panelHeight: 'auto'" style="width:60px;height: 20px">
+                            <label for="inquireretain" style="padding-left: 5px">retained:</label>
+                            <input id="inquireretain" class="easyui-switchbutton" labelWidth="100px" data-options="onText:'Yes',offText:'No'" style="height:20px;width:50px">
+                        </div>
+                    </div>
+                    <div title="控制">
+                        <div style="padding:20px">
+                            <div>控制订阅的主题:</div>
+                            <input id='writetopic' class="easyui-textbox" style="width:180px;height:20px">
+                            <input class="easyui-combobox" id='writeqos' data-options="editable:false,panelHeight: 'auto'" style="width:60px;height: 20px">
+                            <label for="writeretain" style="padding-left: 5px">retained:</label>
+                            <input id="writeretain" class="easyui-switchbutton" labelWidth="100px" data-options="onText:'Yes',offText:'No'" style="height:20px;width:50px">
+                            <br><br>
+                            <div>控制响应发布的主题:</div>
+                            <input id='writeResponsetopic' class="easyui-textbox" style="width:180px;height:20px">
+                            <input class="easyui-combobox" id='writeResponseqos' data-options="editable:false,panelHeight: 'auto'" style="width:60px;height: 20px">
+                            <label for="writeResponseretain" style="padding-left: 5px">retained:</label>
+                            <input id="writeResponseretain" class="easyui-switchbutton" labelWidth="100px" data-options="onText:'Yes',offText:'No'" style="height:20px;width:50px">
+                        </div>
+                    </div>
+                    <div title="重启">
+                        <div style="padding:20px">
+                            <div>重启订阅的主题:</div>
+                            <input id='reboottopic' class="easyui-textbox" style="width:180px;height:20px">
+                            <input class="easyui-combobox" id='rebootqos' data-options="editable:false,panelHeight: 'auto'" style="width:60px;height: 20px">
+                            <label for="rebootretain" style="padding-left: 5px">retained:</label>
+                            <input id="rebootretain" class="easyui-switchbutton" labelWidth="100px" data-options="onText:'Yes',offText:'No'" style="height:20px;width:50px">
+                            <br><br>
+                            <div>重启响应发布的主题:</div>
+                            <input id='rebootResponsetopic' class="easyui-textbox" style="width:180px;height:20px">
+                            <input class="easyui-combobox" id='rebootResponseqos' data-options="editable:false,panelHeight: 'auto'" style="width:60px;height: 20px">
+                            <label for="rebootResponseretain" style="padding-left: 5px">retained:</label>
+                            <input id="rebootResponseretain" class="easyui-switchbutton" labelWidth="100px" data-options="onText:'Yes',offText:'No'" style="height:20px;width:50px">
+                        </div>
+                    </div>
+                    <div title="配置">
+                        <div style="padding:20px">
+                            <div>网关配置订阅的主题:</div>
+                            <input id='configtopic' class="easyui-textbox" style="width:180px;height:20px">
+                            <input class="easyui-combobox" id='configqos' data-options="editable:false,panelHeight: 'auto'" style="width:60px;height: 20px">
+                            <label for="configretain" style="padding-left: 5px">retained:</label>
+                            <input id="configretain" class="easyui-switchbutton" labelWidth="100px" data-options="onText:'Yes',offText:'No'" style="height:20px;width:50px">
+                            <br><br>
+                            <div>网关配置发布的主题:</div>
+                            <input id='getconfigtopic' class="easyui-textbox" style="width:180px;height:20px">
+                            <input class="easyui-combobox" id='getconfigqos' data-options="editable:false,panelHeight: 'auto'" style="width:60px;height: 20px">
+                            <label for="getconfigretain" style="padding-left: 5px">retained:</label>
+                            <input id="getconfigretain" class="easyui-switchbutton" labelWidth="100px" data-options="onText:'Yes',offText:'No'" style="height:20px;width:50px">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="easyui-layout" data-options="fit:true">
+            <div data-options="region:'west'" style="width:470px">
+                <div class="container">
+                    <form method=POST enctype=multipart/form-data id='mrx' title="导入Excel配置" action="/mqtt/excelload" style="display:none;width:300px;height:150px">
+                        <input type=file name=the_file accept="application/vnd.ms-excel">
+                        <input type=submit style='position:absolute;right:120px;top:100px;width:60px'>
+                    </form>
+                    <div class="container" style="width:440px;margin-left:auto;margin-right:auto;">
+                        <form id="querytb">
+                            <div class="easyui-panel" style="width:440px;padding:20px 40px;" title="  ">
+                                <div style="margin-bottom: 10px;">
+                                    <label class="my_protocol" style="font-size:16px;"><input id="mqtt_check" class="input_agreement_protocol" type="checkbox"><span></span>{{ $t('mqtt.used') }}</label>
+                                </div>
+                                <div style="margin-bottom:10px">
+                                    <div>{{ $t('mqtt.ipaddr') }}</div>
+                                    <input id='ip' class="easyui-textbox" required="true" style="width:200px;height:20px">
+                                </div>
+                                <div style="margin-bottom:10px">
+                                    <div>{{ $t('mqtt.port') }}</div>
+                                    <input id='port' class="easyui-textbox" required="true" style="width:200px;height:20px">
+                                </div>
+                                <div style="margin-bottom:10px">
+                                    <div>{{ $t('mqtt.clientid') }}</div>
+                                    <input id='clientid' class="easyui-textbox" required="true" style="width:200px;height:20px">
+                                </div>
+
+                                <div class="easyui-tabs" data-options="border:true,plain:true,pill:true" style="width:390px;height:200px;">
+                                    <div title="Gerenal" style="padding:20px;display:none;">
+                                        <div style="margin-bottom:10px">
+                                            <div>Keep Alive(s):</div>
+                                            <input id='keep_alive' class="easyui-numberbox" required="true" style="width:200px;height:20px">
+                                        </div>
+                                        <div style="margin-bottom:10px">
+                                            <div>Timeout(s):</div>
+                                            <input id='timeout' class="easyui-numberbox" required="true" style="width:200px;height:20px">
+                                        </div>
+                                        <div style="margin-bottom:10px">
+                                            <label for="clean_session" style="padding-right: 10px">Clean Session:</label>
+                                            <input id="clean_session" class="easyui-switchbutton" labelWidth="110px" data-options="onText:'Yes',offText:'No'">
+                                        </div>
+                                    </div>
+                                    <div title="User Credentials" style="padding:20px;">
+                                        <div style="margin-bottom:10px">
+                                            <div>{{ $t('mqtt.username') }}</div>
+                                            <input id='username' class="easyui-textbox" style="width:200px;height:20px">
+                                        </div>
+                                        <div style="margin-bottom:10px">
+                                            <div>{{ $t('mqtt.password') }}</div>
+                                            <input id='password' class="easyui-textbox" style="width:200px;height:20px">
+                                        </div>
+                                    </div>
+                                    <div title="SSL/TLS" style="padding:20px;display:none;">
+                                        <div style="margin-bottom:20px">
+                                            <label for="ssl" style="padding-right: 10px">{{ $t('mqtt.enablessl') }}</label>
+                                            <input id="ssl" class="easyui-switchbutton" labelWidth="110px" data-options="onText:'Yes',offText:'No'">
+                                            <a id="ssl_check" href="#" class="easyui-linkbutton">...</a>
+                                        </div>
+                                    </div>
+                                    <div title="Last Will and Testament" style="padding:20px;display:none;">
+                                        <div style="margin-bottom:20px">
+                                            <label for="lastwillenable" style="padding-right: 7px">{{ $t('mqtt.enablelastwill') }}</label>
+                                            <input id="lastwillenable" class="easyui-switchbutton" labelWidth="110px" data-options="onText:'Yes',offText:'No'">
+                                            <a id="last_will_button" href="#" class="easyui-linkbutton">...</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div style="border:1px solid #000;width:100%;padding:10px;">
+                                    <div style="margin-bottom:10px">
+                                        <div>{{ $t('mqtt.realtopic') }}</div>
+                                        <input id='realtopic' class="easyui-combobox" value="aaa" data-options="editable:false,panelHeight: 'auto'" required="true" style="width:150px;height:20px">
+                                        <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick='add_realtopic()'>Add</a>
+                                        <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove'" onclick='remove_realtopic()'>Remove</a>
+                                        <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-pencil'" onclick='edit_realtopic()'>Edit</a><br><br>
+                                        <input class="easyui-combobox" id='realqos' readonly="readonly" data-options="editable:false,panelHeight: 'auto'" style="width:60px;height: 20px">
+                                        <label for="realretain" style="padding-left: 5px">retained:</label>
+                                        <input id="realretain" class="easyui-switchbutton" readonly="readonly" labelWidth="100px" data-options="onText:'Yes',offText:'No'" style="height:20px;width:50px">
+                                        <label for="freq" style="padding-left: 5px">{{ $t('mqtt.freq') }}</label>
+                                        <input id='freq' class="easyui-textbox" readonly="readonly" required="true" editable='false' style="width:60px;height:20px">
+                                    </div>
+                                    <div style="margin-bottom:20px">
+                                        <div>{{ $t('mqtt.filter') }}</div>
+                                        <div style="border:1px solid #000;width:40%;padding:10px;">
+                                            <label class="my_protocol" style="font-size:12px;"><input id="valChange" type="checkbox" class="input_agreement_protocol" disabled="disabled"><span></span>{{ $t('mqtt.valChange') }}</label><br>
+                                            <label class="my_protocol" style="font-size:12px;"><input id="statusGood" type="checkbox" class="input_agreement_protocol" disabled="disabled"><span></span>{{ $t('mqtt.statusGood') }}</label><br>
+                                            <label class="my_protocol" style="font-size:12px;"><input id="timestampChange" type="checkbox" class="input_agreement_protocol" disabled="disabled"><span></span>{{ $t('mqtt.timestampChange') }}</label>
+                                        </div>
+                                    </div>
+                                    <div style="margin-bottom:20px">
+                                        <div>{{ $t('mqtt.mustache') }}</div>
+                                        <input id='mustache_combo' class="easyui-combobox" readonly="readonly" data-options="editable:false,panelHeight: 'auto'" required="true" style="width:150px;height:20px">
+                                    </div>
+                                </div><br>
+                                <div style="margin-bottom:20px">
+                                    <label for="topic_check" style="padding-right: 10px">拓展主题:</label>
+                                    <a id="topic_check" href="#" class="easyui-linkbutton">...</a>
+                                </div>
+                                <a style="float:right" id="changemqttbtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">{{ $t('common.save') }}</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div data-options="region:'center'">
+                <table id="mqtt_json_config" style="width:100%;height:100%;" scrolling="auto" singleSelect="true" class="easyui-datagrid" data-options="fit:true,fitColumns:true,rownumbers:true,pagination:false">
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+    window.onload = function() {  
+        contextPath = '../static/easyui/locale/'
+        if (self.parent.vm.$i18n.locale == 'zh-CN') {
+            $.getScript("../static/easyui/locale/easyui-lang-zh_CN.js"); 
+        } else {   
+            $.getScript("../static/easyui/locale/easyui-lang-en.js"); 
+        }
+    }
+
+    Vue.use(VueI18n)
+
+    var initial = self.parent.vm.$i18n.locale
+    var i18n = new VueI18n({
+        locale: initial,
+        messages: self.parent.messages
+    })
+    var vm = new Vue({
+        i18n: i18n,
+        data: {
+            locale: initial,
+            mqtt_config: self.parent.messages[initial]['mqtt']['mqtt_config'],
+            point_table: self.parent.messages[initial]['mqtt']['point_table'],
+            identifying: self.parent.messages[initial]['mqtt']['identifying']
+        },
+        watch: {
+            locale: function(val) {
+                this.$i18n.locale = val
+            }
+        }
+    }).$mount('#app')
+
+    $('body').addClass('active');
+
+    qos_list = ["realqos", "newtopicqos", "historyqos", "inquireResponseqos", "writeResponseqos", "rebootResponseqos", "lastwillqos", "getconfigqos", "inquireqos", "writeqos", "rebootqos", "configqos"];
+    qos_list.forEach(function(oneqos) {
+        $("#" + oneqos).combobox({
+            url: "../static/json/simplify_qos.json",
+            valueField: 'id',
+            textField: 'text',
+            method: "GET"
+        });
+    })
+
+    var dir = self.parent.$('#text').textbox('getText'); // 选中的文件夹名称
+    feature_path = 'Project/' + dir + '/Gateway';
+
+
+    function topicdiv_none() { // 将所有拓展主题的div隐藏
+        document.getElementById("history_div").style.display = 'none';
+        document.getElementById("inquireresponse_div").style.display = 'none';
+        document.getElementById("inquire_div").style.display = 'none';
+        document.getElementById("writeresponse_div").style.display = 'none';
+        document.getElementById("write_div").style.display = 'none';
+        document.getElementById("rebootresponse_div").style.display = 'none';
+        document.getElementById("reboot_div").style.display = 'none';
+        document.getElementById("config_div").style.display = 'none';
+        document.getElementById("getconfig_div").style.display = 'none';
+    }
+
+    $('#historybtn').bind('click', function() {
+        topicdiv_none();
+        document.getElementById("history_div").style.display = '';
+    });
+
+    $('#inquirebtn').bind('click', function() {
+        topicdiv_none();
+        document.getElementById("inquire_div").style.display = '';
+        document.getElementById("inquireresponse_div").style.display = '';
+    });
+
+    $('#writebtn').bind('click', function() {
+        topicdiv_none();
+        document.getElementById("writeresponse_div").style.display = '';
+        document.getElementById("write_div").style.display = '';
+    });
+
+    $('#rebootbtn').bind('click', function() {
+        topicdiv_none();
+        document.getElementById("rebootresponse_div").style.display = '';
+        document.getElementById("reboot_div").style.display = '';
+    });
+
+    $('#configbtn').bind('click', function() {
+        topicdiv_none();
+        document.getElementById("config_div").style.display = '';
+        document.getElementById("getconfig_div").style.display = '';
+    });
+
+    mustaches = JSON.parse(scanFile(cfxApi.getCurrentDirectory() + '\\mqtt\\template'));
+    mustaches_object = new Array();
+    mustaches.forEach(function(oneMustache) {
+        if (oneMustache != 'mqtt.conf') {
+            mustaches_object.push({
+                'text': oneMustache
+            })
+        }
+    })
+    $("#newmustache_combo").combobox({
+        valueField: 'text',
+        textField: 'text',
+        data: mustaches_object,
+        panelHeight: 'auto'
+    });
+    if (self.parent.vm.$i18n.locale == 'zh-CN') {
+        $("#ssl_type").combobox({
+            url: "../static/json/ssl_type.json",
+            valueField: 'id',
+            textField: 'text',
+            method: "GET",
+            panelHeight: 'auto'
+        });
+    } else {   
+        $("#ssl_type").combobox({
+            url: "../static/json/ssl_type_english.json",
+            valueField: 'id',
+            textField: 'text',
+            method: "GET",
+            panelHeight: 'auto'
+        });
+    }
+    $('#ssl').switchbutton({
+        onChange: function(checked) {
+            if (checked == true) {
+                document.getElementById('ssl_check').style.display = '';
+            }
+            if (checked == false) {
+                document.getElementById('ssl_check').style.display = 'none';
+            }
+        }
+    });
+    $('#lastwillenable').switchbutton({
+        onChange: function(checked) {
+            if (checked == true) {
+                document.getElementById('last_will_button').style.display = '';
+            }
+            if (checked == false) {
+                document.getElementById('last_will_button').style.display = 'none';
+            }
+        }
+    });
+    $('#ssl_type').combobox({
+        onChange: function(newValue, oldValue) {
+            if (newValue == '0') {
+                $('#ca').textbox({
+                    disabled: false
+                });
+                $('#cert').textbox({
+                    disabled: true
+                });
+                $('#key').textbox({
+                    disabled: true
+                });
+                document.getElementById('ca_load').style.display = '';
+                document.getElementById('Cert_load').style.display = 'none';
+                document.getElementById('Key_load').style.display = 'none';
+            } else if (newValue == '1') {
+                $('#ca').textbox({
+                    disabled: false
+                });
+                $('#cert').textbox({
+                    disabled: false
+                });
+                $('#key').textbox({
+                    disabled: false
+                });
+                document.getElementById('ca_load').style.display = '';
+                document.getElementById('Cert_load').style.display = '';
+                document.getElementById('Key_load').style.display = '';
+            }
+        }
+    });
+
+    function base_set(obj, used) {
+        if (used) {
+            $("#mqtt_check").prop("checked", true);
+        };
+        $('#ip').textbox({
+            value: obj['base'].ip
+        });
+        $('#port').textbox({
+            value: obj['base'].port
+        });
+        $('#keep_alive').numberbox({
+            value: obj['base'].keep_alive
+        });
+        $('#timeout').numberbox({
+            value: obj['base'].timeout
+        });
+        if (obj['base'].clean_session) {
+            $('#clean_session').switchbutton('check');
+        }
+        $('#username').textbox({
+            value: obj['base'].username
+        });
+        $('#password').textbox({
+            value: obj['base'].password
+        });
+        $('#clientid').textbox({
+            value: obj['base'].clientid
+        });
+        if (obj['base']['lastwill']) {
+            $('#lastwillenable').switchbutton('check');
+            document.getElementById('last_will_button').style.display = '';
+        } else {
+            $('#lastwillenable').switchbutton('uncheck');
+            document.getElementById('last_will_button').style.display = 'none';
+        }
+    }
+
+    function ssl_set(obj) {
+        if (obj.ssl) {
+            if (obj['ssl']['ca']) {
+                if (obj['ssl']['cert']) {
+                    $('#ssl_type').combobox({
+                        value: 1
+                    });
+                } else {
+                    $('#ssl_type').combobox({
+                        value: 0
+                    });
+                }
+            }
+            $('#ssl').switchbutton('check');
+            document.getElementById('ssl_check').style.display = '';
+        } else {
+            $('#ssl_type').combobox('setValue', 0);
+            $('#ssl').switchbutton('uncheck');
+            document.getElementById('ssl_check').style.display = 'none';
+        }
+    }
+
+    function set_realtopic(oneTopic) {
+        $("#realqos").combobox('setValue', oneTopic['qos']);
+        $('#newtopicqos').combobox('setValue', oneTopic['qos']);
+        $("#freq").textbox('setValue', oneTopic['freq']);
+        $('#newfreq').numberbox('setValue', parseInt(oneTopic['freq']));
+        if (oneTopic['retain']) {
+            $('#realretain').switchbutton('check');
+            $('#newtopicretain').switchbutton('check');
+        } else {
+            $('#realretain').switchbutton('uncheck');
+            $('#newtopicretain').switchbutton('uncheck');
+        }
+        filter_object = oneTopic['filter'];
+        if (filter_object.indexOf("valueChanged") != -1) {
+            $("#valChange").prop("checked", true);
+            $("#newvalChange").prop("checked", true);
+        } else {
+            $("#valChange").prop("checked", false);
+            $("#newvalChange").prop("checked", false);
+        }
+        if (filter_object.indexOf("statusGood") != -1) {
+            $("#statusGood").prop("checked", true);
+            $("#newstatusGood").prop("checked", true);
+        } else {
+            $("#statusGood").prop("checked", false);
+            $("#newstatusGood").prop("checked", false);
+        }
+        if (filter_object.indexOf("timestampChanged") != -1) {
+            $("#timestampChange").prop("checked", true);
+            $("#newtimestampChange").prop("checked", true);
+        } else {
+            $("#timestampChange").prop("checked", false);
+            $("#newtimestampChange").prop("checked", false);
+        }
+        $("#mustache_combo").combobox('setValue', oneTopic['format']);
+        $("#newmustache_combo").combobox('setValue', oneTopic['format']);
+    }
+
+    function topic_set(obj) {
+        $("#realtopic").combobox({
+            valueField: 'topic',
+            textField: 'topic',
+            data: obj['publish']['realtime'],
+            panelHeight: 'auto',
+            onChange: function(newValue, oldValue) {
+                content = selectsql(feature_path, "select config from iot where name='MQTT'");
+                content_object = JSON.parse(content);
+                obj = JSON.parse(content_object[0]['config'])
+                $("#mqtt_json_config").datagrid('reload');
+                obj['publish']['realtime'].forEach(function(oneTopic) {
+                    if (oneTopic['topic'] == newValue) {
+                        $('#newtopic').textbox('setValue', oneTopic['topic']);
+                        set_realtopic(oneTopic);
+                    }
+                });
+            }
+        });
+        $('#realtopic').combobox({
+            value: obj['publish']['realtime'][0].topic
+        });
+        $('#newtopic').textbox('setValue', obj['publish']['realtime'][0].topic);
+        set_realtopic(obj['publish']['realtime'][0]);
+
+        if (obj['publish']['history']) {
+            $('#historytopic').textbox('setValue', obj['publish']['history'].topic);
+            $('#historyqos').combobox('setValue', obj['publish']['history'].qos);
+            if (obj['publish']['history'].retain) {
+                $('#historyretain').switchbutton('check');
+            } else {
+                $('#historyretain').switchbutton('uncheck');
+            }
+        }
+        if (obj['publish']['inquireResponse']) {
+            $('#inquireResponsetopic').textbox('setValue', obj['publish']['inquireResponse'].topic);
+            $('#inquireResponseqos').combobox('setValue', obj['publish']['inquireResponse'].qos);
+            if (obj['publish']['inquireResponse'].retain) {
+                $('#inquireResponseretain').switchbutton('check');
+            } else {
+                $('#inquireResponseretain').switchbutton('uncheck');
+            }
+        }
+        if (obj['publish']['rebootResponse']) {
+            $('#rebootResponsetopic').textbox('setValue', obj['publish']['rebootResponse'].topic);
+            $('#rebootResponseqos').combobox('setValue', obj['publish']['rebootResponse'].qos);
+            if (obj['publish']['rebootResponse'].retain) {
+                $('#rebootResponseretain').switchbutton('check');
+            } else {
+                $('#rebootResponseretain').switchbutton('uncheck');
+            }
+        }
+        if (obj['publish']['writeResponse']) {
+            $('#writeResponsetopic').textbox('setValue', obj['publish']['writeResponse'].topic);
+            $('#writeResponseqos').combobox('setValue', obj['publish']['writeResponse'].qos);
+            if (obj['publish']['writeResponse'].retain) {
+                $('#writeResponseretain').switchbutton('check');
+            } else {
+                $('#writeResponseretain').switchbutton('uncheck');
+            }
+        }
+
+        if (obj['subscribe']['inquire']) {
+            $('#inquiretopic').textbox('setValue', obj['subscribe']['inquire'].topic);
+            $('#inquireqos').combobox('setValue', obj['subscribe']['inquire'].qos);
+            if (obj['subscribe']['inquire'].retain) {
+                $('#inquireretain').switchbutton('check');
+            } else {
+                $('#inquireretain').switchbutton('uncheck');
+            }
+        }
+        if (obj['subscribe']['reboot']) {
+            $('#reboottopic').textbox('setValue', obj['subscribe']['reboot'].topic);
+            $('#rebootqos').combobox('setValue', obj['subscribe']['reboot'].qos);
+            if (obj['subscribe']['reboot'].retain) {
+                $('#rebootretain').switchbutton('check');
+            } else {
+                $('#rebootretain').switchbutton('uncheck');
+            }
+        }
+        if (obj['subscribe']['write']) {
+            $('#writetopic').textbox('setValue', obj['subscribe']['write'].topic);
+            $('#writeqos').combobox('setValue', obj['subscribe']['write'].qos);
+            if (obj['subscribe']['write'].retain) {
+                $('#writeretain').switchbutton('check');
+            } else {
+                $('#writeretain').switchbutton('uncheck');
+            }
+        }
+        if (obj['subscribe']['config']) {
+            $('#configtopic').textbox('setValue', obj['subscribe']['config'].topic);
+            $('#configqos').combobox('setValue', obj['subscribe']['config'].qos);
+            if (obj['subscribe']['config'].retain) {
+                $('#configretain').switchbutton('check');
+            } else {
+                $('#configretain').switchbutton('uncheck');
+            }
+        }
+    }
+
+    $(function() {
+        content = selectsql(feature_path, "select used,config from iot where name='MQTT'");
+        content_object = JSON.parse(content);
+        obj = JSON.parse(content_object[0]['config']);
+        used = JSON.parse(content_object[0]['used']);
+
+        base_set(obj, used);
+        topic_set(obj);
+        ssl_set(obj['base']);
+    });
+
+    // ssl按钮
+    $('#ssl_check').click(function() {
+        content = selectsql(feature_path, "select config from iot where name='MQTT'");
+        content_object = JSON.parse(content);
+        obj = JSON.parse(content_object[0]['config']);
+        if (obj['ssl'] && obj['ssl']['ca'] && !obj['ssl']['cert']) {
+            $('#ssl_type').combobox('setValue', 0);
+            $('#ca').textbox({
+                disabled: false,
+                value: obj["ssl"].ca
+            });
+            $('#cert').textbox({
+                disabled: true
+            });
+            $('#key').textbox({
+                disabled: true
+            });
+            document.getElementById('ca_load').style.display = '';
+            document.getElementById('Cert_load').style.display = 'none';
+            document.getElementById('Key_load').style.display = 'none';
+        } else if (obj['ssl'] && obj['ssl']['ca'] && obj['ssl']['cert']) {
+            $('#ssl_type').combobox('setValue', 1);
+            $('#ca').textbox({
+                disabled: false
+            });
+            $('#cert').textbox({
+                disabled: false,
+                value: obj.cert
+            });
+            $('#key').textbox({
+                disabled: false,
+                value: obj.key
+            });
+            document.getElementById('ca_load').style.display = '';
+            document.getElementById('Cert_load').style.display = '';
+            document.getElementById('Key_load').style.display = '';
+        }
+        $('#ssl_verity').dialog({
+            closable: false,
+            draggable: false,
+            title: self.parent.messages[initial]['mqtt']['Ssl_verification_method'],
+            modal: true,
+            buttons: [{
+                text: self.parent.messages[initial]['common']['ok'],
+                iconCls: 'icon-ok',
+                handler: function() {
+                    ssl_type = $("#ssl_type").combobox('getValue');
+                    ca = $("#ca").combobox('getText');
+                    cert = $("#cert").combobox('getText');
+                    key = $("#key").combobox('getText');
+                    if (ssl_type == '0') {
+                        if (ca == '') {
+                            $.messager.alert(self.parent.messages[initial]['common']['system_hint'], self.parent.messages[initial]['mqtt']['import_CA'], "info");
+                        } else {
+                            oldcontent = selectsql(feature_path, "select config from iot where name='MQTT'");
+                            oldcontent_object = JSON.parse(oldcontent);
+                            old = JSON.parse(oldcontent_object[0]['config']);
+                            old['ssl'] = {};
+                            old['ssl']['ca'] = ca;
+                            result = updatesql(feature_path, "update iot SET config='{0}' where name='MQTT'".format(JSON.stringify(old)));
+                            $("#ssl_verity").dialog('close');
+                        }
+                    } else {
+                        if (ca == '' || cert == '' || key == '') {
+                            $.messager.alert(self.parent.messages[initial]['common']['system_hint'], self.parent.messages[initial]['mqtt']['import_Cert_key'], "info");
+                        } else {
+                            oldcontent = selectsql(feature_path, "select config from iot where name='MQTT'");
+                            oldcontent_object = JSON.parse(oldcontent);
+                            old = JSON.parse(oldcontent_object[0]['config']);
+                            old['ssl'] = {};
+                            old['ssl']['ca'] = ca;
+                            old['ssl']['cert'] = cert;
+                            old['ssl']['key'] = key;
+                            console.log(old)
+                            result = updatesql(feature_path, "update iot SET config='{0}' where name='MQTT'".format(JSON.stringify(old)));
+                            $("#ssl_verity").dialog('close');
+                        }
+                    }
+                }
+            }, {
+                text: self.parent.messages[initial]['common']['cancel'],
+                iconCls: 'icon-cancel',
+                handler: function() {
+                    $("#ssl_verity").dialog('close');
+                }
+            }]
+        });
+        $("#ssl_verity").dialog('open'); //必须先显示，再弹出
+    });
+
+    function save_expandtopic() {
+        expandtopic = {
+            "publish": {},
+            "subscribe": {}
+        }
+        current_historytopic = $("#historytopic").textbox('getValue');
+        if (current_historytopic != "") {
+            expandtopic["publish"]["history"] = {
+                topic: document.getElementById('historytopic').value,
+                qos: parseInt($("#historyqos").combobox('getValue')),
+                retain: $("#historyretain").switchbutton("options").checked
+            }
+        };
+        current_inquiretopic = $("#inquiretopic").textbox('getValue');
+        if (current_inquiretopic != "") {
+            expandtopic["publish"]["inquireResponse"] = {
+                topic: document.getElementById('inquireResponsetopic').value,
+                qos: parseInt($("#inquireResponseqos").combobox('getValue')),
+                retain: $("#inquireResponseretain").switchbutton("options").checked
+            };
+            expandtopic["subscribe"]["inquire"] = {
+                topic: document.getElementById('inquiretopic').value,
+                qos: parseInt($("#inquireqos").combobox('getValue')),
+                retain: $("#inquireretain").switchbutton("options").checked
+            }
+        };
+        current_writetopic = $("#writetopic").textbox('getValue');
+        if (current_writetopic != "") {
+            expandtopic["publish"]["writeResponse"] = {
+                topic: document.getElementById('writeResponsetopic').value,
+                qos: parseInt($("#writeResponseqos").combobox('getValue')),
+                retain: $("#writeResponseretain").switchbutton("options").checked
+            };
+            expandtopic["subscribe"]["write"] = {
+                topic: document.getElementById('writetopic').value,
+                qos: parseInt($("#writeqos").combobox('getValue')),
+                retain: $("#writeretain").switchbutton("options").checked
+            }
+        };
+        current_reboottopic = $("#reboottopic").textbox('getValue');
+        if (current_reboottopic != "") {
+            expandtopic["publish"]["rebootResponse"] = {
+                topic: document.getElementById('rebootResponsetopic').value,
+                qos: parseInt($("#rebootResponseqos").combobox('getValue')),
+                retain: $("#rebootResponseretain").switchbutton("options").checked
+            };
+            expandtopic["subscribe"]["reboot"] = {
+                topic: document.getElementById('reboottopic').value,
+                qos: parseInt($("#rebootqos").combobox('getValue')),
+                retain: $("#rebootretain").switchbutton("options").checked
+            }
+        };
+        current_configtopic = $("#configtopic").textbox('getValue');
+        if (current_configtopic != "") {
+            expandtopic["publish"]["getconfig"] = {
+                topic: document.getElementById('getconfigtopic').value,
+                qos: parseInt($("#getconfigqos").combobox('getValue')),
+                retain: $("#getconfigretain").switchbutton("options").checked
+            };
+            expandtopic["subscribe"]["config"] = {
+                topic: document.getElementById('configtopic').value,
+                qos: parseInt($("#configqos").combobox('getValue')),
+                retain: $("#configretain").switchbutton("options").checked
+            }
+        };
+        oldcontent = selectsql(feature_path, "select config from iot where name='MQTT'");
+        oldcontent_object = JSON.parse(oldcontent);
+        oldobj = JSON.parse(oldcontent_object[0]['config']);
+        expandtopic["publish"]["realtime"] = oldobj["publish"]["realtime"];
+        oldobj["publish"] = expandtopic["publish"];
+        oldobj["subscribe"] = expandtopic["subscribe"];
+        result = updatesql(feature_path, "update iot SET config='{0}' where name='MQTT'".format(JSON.stringify(oldobj)));
+        if (result == 'true') {
+            self.parent.insert_info(self.parent.messages[initial]['mqtt']['config_save_success']);
+            $("#expandtopic_div").dialog('close');
+        } else {
+            $.messager.alert(result);
+            self.parent.insert_info(self.parent.messages[initial]['mqtt']['config_save_fail'])
+        }
+    }
+
+    // topic按钮
+    $('#topic_check').click(function() {
+        content = selectsql(feature_path, "select config from iot where name='MQTT'");
+        content_object = JSON.parse(content);
+        obj = JSON.parse(content_object[0]['config'])
+
+        // topic_set(obj);
+
+        $('#expandtopic_div').dialog({
+            closable: false,
+            draggable: false,
+            modal: true,
+            buttons: [{
+                text: self.parent.messages[initial]['common']['ok'],
+                iconCls: 'icon-ok',
+                handler: function() {
+                    save_expandtopic();
+                }
+            }, {
+                text: self.parent.messages[initial]['common']['cancel'],
+                iconCls: 'icon-cancel',
+                handler: function() {
+                    $("#expandtopic_div").dialog('close');
+                }
+            }]
+        });
+    })
+
+    // 遗嘱按钮
+    $('#last_will_button').click(function() {
+        content = selectsql(feature_path, "select config from iot where name='MQTT'");
+        content_object = JSON.parse(content);
+        obj = JSON.parse(content_object[0]['config']);
+        if (obj['base']['lastwill']) {
+            $('#lastwilltopic').textbox({
+                value: obj['base']['lastwill'].topic
+            });
+            $('#lastwillqos').combobox({
+                value: obj['base']['lastwill'].qos
+            });
+            if (obj['base']['lastwill'].retain) {
+                $('#lastwillretain').switchbutton('check');
+            }
+            document.getElementById('lastwillmessage').value = obj['base']['lastwill'].message;
+        }
+        $('#last_will').dialog({
+            closable: false,
+            draggable: false,
+            title: self.parent.messages[initial]['mqtt']['lastwillconfig'],
+            modal: true,
+            buttons: [{
+                text: self.parent.messages[initial]['common']['ok'],
+                iconCls: 'icon-ok',
+                handler: function() {
+                    oldcontent = selectsql(feature_path, "select config from iot where name='MQTT'");
+                    oldcontent_object = JSON.parse(oldcontent);
+                    old = JSON.parse(oldcontent_object[0]['config']);
+                    current_lastwilltopic = $("#lastwilltopic").textbox('getValue')
+                    if (current_lastwilltopic != '') {
+                        old['base']['lastwill'] = {};
+                        old['base']['lastwill']['topic'] = current_lastwilltopic;
+                        old['base']['lastwill']['qos'] = parseInt($("#lastwillqos").combobox('getValue'));
+                        old['base']['lastwill']['retain'] = $("#lastwillretain").switchbutton("options").checked;
+                        old['base']['lastwill']['message'] = document.getElementById('lastwillmessage').value;
+                        result = updatesql(feature_path, "update iot SET config='{0}' where name='MQTT'".format(JSON.stringify(old)));
+                        $("#last_will").dialog('close');
+                    } else {
+                        if (old['base']['lastwill']) {
+                            console.log("aaaa")
+                            delete old['base']['lastwill'];
+                            updatesql(feature_path, "update iot SET config='{0}' where name='MQTT'".format(JSON.stringify(old)));
+                        }
+                        $("#last_will").dialog('close');
+                    }
+                }
+            }, {
+                text: self.parent.messages[initial]['common']['cancel'],
+                iconCls: 'icon-cancel',
+                handler: function() {
+                    $("#last_will").dialog('close');
+                }
+            }]
+        });
+        $("#last_will").dialog('open'); //必须先显示，再弹出
+    });
+
+    $('#changemqttbtn').click(function() {
+        var a = $('#querytb').form('enableValidation').form('validate');
+        if (!a) {
+            return false
+        } else {
+            used = $("#mqtt_check").is(":checked");
+            ssl = $("#ssl").switchbutton("options").checked;
+            lastwillenable = $("#lastwillenable").switchbutton("options").checked;
+            oldcontent = selectsql(feature_path, "select config from iot where name='MQTT'");
+            oldcontent_object = JSON.parse(oldcontent);
+            old = JSON.parse(oldcontent_object[0]['config']);
+            old["base"]["ip"] = document.getElementById('ip').value;
+            old["base"]["port"] = parseInt(document.getElementById('port').value);
+            old["base"]["keep_alive"] = parseInt(document.getElementById('keep_alive').value);
+            old["base"]["timeout"] = parseInt(document.getElementById('timeout').value);
+            old["base"]["clean_session"] = $("#clean_session").switchbutton("options").checked;
+            old["base"]["username"] = document.getElementById('username').value;
+            old["base"]["password"] = document.getElementById('password').value;
+            old["base"]["clientid"] = document.getElementById('clientid').value;
+            if (!ssl) {
+                if (old["base"]['ssl']) {
+                    delete old["base"]['ssl'];
+                }
+            };
+            if (!lastwillenable) {
+                if (old["base"]['lastwill']) {
+                    delete old["base"]['lastwill'];
+                }
+            }
+            update_mqttconf(feature_path, used, old)
+        }
+    });
+
+    // 添加实时数据的主题
+    function add_realtopic() {
+        $("#add_realtopic_div").dialog({
+            closable: false,
+            draggable: false,
+            modal: true,
+            buttons: [{
+                text: self.parent.messages[initial]['common']['ok'],
+                iconCls: 'icon-ok',
+                handler: function() { // 新建工程
+                    var a = $('#newtopic_form').form('enableValidation').form('validate');
+                    if (a) {
+                        newtopicmessage = {};
+                        newtopicmessage.topic = $('#newtopic').textbox('getValue');
+                        newtopicmessage.qos = parseInt($('#newtopicqos').combobox('getValue'));
+                        newtopicmessage.retain = $("#newtopicretain").switchbutton("options").checked
+                        newtopicmessage.freq = parseInt($('#newfreq').numberbox('getValue'));
+                        newtopicmessage.filter = new Array();
+                        if ($("#newvalChange").is(":checked")) {
+                            newtopicmessage["filter"].push('valueChanged')
+                        }
+                        if ($("#newstatusGood").is(":checked")) {
+                            newtopicmessage["filter"].push('statusGood')
+                        }
+                        if ($("#newtimestampChange").is(":checked")) {
+                            newtopicmessage["filter"].push('timestampChanged')
+                        }
+                        newtopicmessage.format = $('#newmustache_combo').combobox('getValue');
+                        content = selectsql(feature_path, "select config from iot where name='MQTT'");
+                        content_object = JSON.parse(content);
+                        obj = JSON.parse(content_object[0]['config']);
+                        topicrepeat = true;
+                        obj['publish']['realtime'].forEach(function(onetopic) {
+                            if (onetopic['topic'] == newtopicmessage.topic) {
+                                topicrepeat = false;
+                            }
+                        })
+                        if (topicrepeat) {
+                            obj['publish']['realtime'].push(newtopicmessage);
+                            result = updatesql(feature_path, "update iot SET config='{0}' where name='MQTT'".format(JSON.stringify(obj)));
+                            if (result == 'true') {
+                                $("#realtopic").combobox({
+                                    valueField: 'topic',
+                                    textField: 'topic',
+                                    data: obj['publish']['realtime'],
+                                    panelHeight: 'auto'
+                                });
+                            }
+                            $("#realtopic").combobox('setValues', newtopicmessage.topic);
+                            set_realtopic(newtopicmessage);
+                            $("#add_realtopic_div").dialog('close');
+                        } else {
+                            $.messager.alert(self.parent.messages[initial]['common']['system_hint'], '实时主题列表中已有当前主题，不可重复添加', "info")
+                        }
+                    }
+                }
+            }, {
+                text: self.parent.messages[initial]['common']['cancel'],
+                iconCls: 'icon-cancel',
+                handler: function() {
+                    $("#add_realtopic_div").dialog('close');
+                }
+            }]
+        })
+    }
+
+    // 删除实时数据的主题
+    function remove_realtopic() {
+        content = selectsql(feature_path, "select config from iot where name='MQTT'");
+        content_object = JSON.parse(content);
+        obj = JSON.parse(content_object[0]['config']);
+        current_topic = $('#realtopic').combobox('getValue');
+        $.messager.confirm(self.parent.messages[initial]['common']['system_hint'], self.parent.messages[initial]['mqtt']['if_remove'].format(current_topic), function(r) {
+            if (r) {
+                if (obj['publish']['realtime'].length == 1) {
+                    $.messager.alert(self.parent.messages[initial]['common']['system_hint'], self.parent.messages[initial]['mqtt']['onetopic'], "info");
+                } else {
+                    new_topicList = new Array();
+                    obj['publish']['realtime'].forEach(function(oneTopic) {
+                        if (oneTopic['topic'] != current_topic) {
+                            new_topicList.push(oneTopic)
+                        } else {
+                            sql = "delete from mqtt where topic='{0}' and name='MQTT'".format(current_topic);
+                            status = deletesql(feature_path, sql);
+                        }
+                    });
+                    obj['publish']['realtime'] = new_topicList;
+                    result = updatesql(feature_path, "update iot SET config='{0}' where name='MQTT'".format(JSON.stringify(obj)));
+                    if (result == 'true') {
+                        $("#realtopic").combobox({
+                            valueField: 'topic',
+                            textField: 'topic',
+                            data: obj['publish']['realtime'],
+                            panelHeight: 'auto'
+                        });
+                    }
+                    $("#realtopic").combobox('setValues', obj['publish']['realtime'][0]['topic']);
+                    set_realtopic(obj['publish']['realtime'][0]);
+                    $("#mqtt_json_config").datagrid('reload');
+                }
+            }
+        });
+    }
+
+    // 修改当前实时数据的主题
+    function edit_realtopic() {
+        $("#add_realtopic_div").dialog({
+            closable: false,
+            draggable: false,
+            modal: true,
+            buttons: [{
+                text: self.parent.messages[initial]['common']['ok'],
+                iconCls: 'icon-ok',
+                handler: function() { // 新建工程
+                    var a = $('#newtopic_form').form('enableValidation').form('validate');
+                    if (a) {
+                        current_topic = $('#realtopic').textbox('getValue');
+                        newtopicmessage = {};
+                        newtopicmessage.topic = $('#newtopic').textbox('getValue');
+                        newtopicmessage.qos = parseInt($('#newtopicqos').combobox('getValue'));
+                        newtopicmessage.retain = $("#newtopicretain").switchbutton("options").checked
+                        newtopicmessage.freq = parseInt($('#newfreq').numberbox('getValue'));
+                        newtopicmessage.filter = new Array();
+                        if ($("#newvalChange").is(":checked")) {
+                            newtopicmessage["filter"].push('valueChanged')
+                        }
+                        if ($("#newstatusGood").is(":checked")) {
+                            newtopicmessage["filter"].push('statusGood')
+                        }
+                        if ($("#newtimestampChange").is(":checked")) {
+                            newtopicmessage["filter"].push('timestampChanged')
+                        }
+                        newtopicmessage.format = $('#newmustache_combo').combobox('getValue');
+                        content = selectsql(feature_path, "select config from iot where name='MQTT'");
+                        content_object = JSON.parse(content);
+                        obj = JSON.parse(content_object[0]['config']);
+                        topicrepeat = true;
+                        obj['publish']['realtime'].forEach(function(onetopic) {
+                            if (onetopic['topic'] == newtopicmessage.topic) {
+                                topicrepeat = false;
+                            }
+                        })
+                        if (topicrepeat) {
+                            new_topicList = [];
+                            obj['publish']['realtime'].forEach(function(oneTopic) {
+                                if (oneTopic['topic'] != current_topic) {
+                                    new_topicList.push(oneTopic)
+                                } else {
+                                    new_topicList.push(newtopicmessage);
+                                    // 更新mqtt表中的主题
+                                    sql = "update mqtt set topic='{0}' where topic='{1}' and name='MQTT'".format(newtopicmessage.topic, current_topic);
+                                    updatesql(feature_path, sql);
+                                }
+                            });
+                            obj['publish']['realtime'] = new_topicList;
+                            result = updatesql(feature_path, "update iot SET config='{0}' where name='MQTT'".format(JSON.stringify(obj)));
+                            if (result == 'true') {
+                                $("#realtopic").combobox({
+                                    valueField: 'topic',
+                                    textField: 'topic',
+                                    data: obj['publish']['realtime'],
+                                    panelHeight: 'auto'
+                                });
+                            }
+                            $("#realtopic").combobox('setValues', newtopicmessage.topic);
+                            set_realtopic(newtopicmessage);
+                            $("#add_realtopic_div").dialog('close');
+                        } else {
+                            $.messager.alert(self.parent.messages[initial]['common']['system_hint'], '实时主题列表中已有当前主题，不可重复添加', "info")
+                        }
+                    }
+                }
+            }, {
+                text: self.parent.messages[initial]['common']['cancel'],
+                iconCls: 'icon-cancel',
+                handler: function() {
+                    $("#add_realtopic_div").dialog('close');
+                }
+            }]
+        })
+    }
+
+    function update_mqttconf(feature_path, used, content) {
+        enable = 0;
+        if (used) {
+            enable = 1
+        }
+        result = updatesql(feature_path, "update iot SET used={0}, config='{1}' where name='MQTT'".format(enable, JSON.stringify(content)));
+        if (result == 'true') {
+            self.parent.insert_info(self.parent.messages[initial]['mqtt']['config_save_success']);
+        } else {
+            $.messager.alert(result);
+            self.parent.insert_info(self.parent.messages[initial]['mqtt']['config_save_fail'])
+        }
+    }
+</script>

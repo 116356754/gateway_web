@@ -1,0 +1,20 @@
+[{
+        "id": 1,
+        "text": "Null"
+    }, {
+        "id": 2,
+        "text": "Big-endian"
+    },
+    {
+        "id": 3,
+        "text": "Little-endian"
+    },
+    {
+        "id": 4,
+        "text": "Big-endian byte swap"
+    },
+    {
+        "id": 5,
+        "text": "Little-endian byte swap"
+    }
+]

@@ -1,0 +1,10 @@
+[
+    { "text": "Modbus", "id": "Modbus" },
+    { "text": "DL/T 645", "id": "DLT645" },
+    { "text": "CJ188", "id": "CJ188" },
+    { "text": "BACnet", "id": "BACnet" },
+    { "text": "Siemens S7-200 PPI", "id": "S7_200_PPI" },
+    { "text": "Siemens S7-200 Network", "id": "S7_200_Network" },
+    { "text": "Siemens S7-1200 Network", "id": "S7_1200_Network" },
+    { "text": "MBus_EnergyMeter", "id": "MBus_EnergyMeter" }
+]

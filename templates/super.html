@@ -1,0 +1,99 @@
+{% extends "base.html" %} {% block title %}DLT645配置{% endblock %} {% block head %} {{ super() }}
+<html>
+<style>
+    label {
+        font-size: 20px;
+        cursor: pointer;
+    }
+    
+    label i {
+        font-size: 12px;
+        font-style: normal;
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        text-align: center;
+        line-height: 12px;
+        color: #fff;
+        vertical-align: middle;
+        margin: -2px 2px 1px 0px;
+        border: #2489c5 1px solid;
+    }
+    
+    input[type="checkbox"],
+    input[type="radio"] {
+        display: none;
+    }
+    
+    input[type="radio"]+i {
+        border-radius: 7px;
+    }
+    
+    input[type="checkbox"]:checked+i,
+    input[type="radio"]:checked+i {
+        background: #2489c5;
+    }
+    
+    input[type="checkbox"]:disabled+i,
+    input[type="radio"]:disabled+i {
+        border-color: #ccc;
+    }
+    
+    input[type="checkbox"]:checked:disabled+i,
+    input[type="radio"]:checked:disabled+i {
+        background: #ccc;
+    }
+</style>
+{% endblock %} {% block content %}
+
+<body>
+    <div style="position:absolute;top:30%;left:40%">
+        <form id="select_plugin">
+            <h2>采集协议</h2>
+            <label style="font-size:20px;"><input type="checkbox" name="dlt"><i>✓</i>dlt</label>
+            <label><input type="checkbox" name="modbus_master"><i>✓</i>modbus_master</label>
+            <label><input type="checkbox" name="opc"><i>✓</i>opc</label><br>
+            <h2>上传协议</h2>
+            <label><input type="checkbox" name="modbus_slave"><i>✓</i>modbus_slave</label>
+            <label><input type="checkbox" name="mqtt"><i>✓</i>mqtt</label><br><br>
+            <a href="#" class="easyui-linkbutton" id="changepluginbtn" iconCls="icon-ok" style="width:80px;height:32px">保存</a>
+    </div>
+    </form>
+</body>
+
+</html>
+<script>
+    $('#changepluginbtn').click(function() {
+        var a = $('#select_plugin').form('enableValidation').form('validate')
+        if (!a) {
+            return false
+        } else {
+            $.ajax({
+                type: 'post',
+                url: '/ajax/select',
+                data: $("form").serialize(),
+                timeout: 5000,
+                success: function(data) {
+                    console.log(data);
+                    if (data.status == true) {
+                        $.messager.show({
+                            title: '成功提示',
+                            msg: "修改成功",
+                            timeout: 5000,
+                            showType: 'slide'
+                        });
+                    } else {
+                        $.messager.show({
+                            title: '错误提示',
+                            msg: data.msg,
+                            timeout: 5000,
+                            showType: 'slide'
+                        });
+                    }
+                }
+            });
+        }
+
+    })
+</script>
+{% endblock %}

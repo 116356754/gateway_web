@@ -1,0 +1,8 @@
+{
+    "AI": { "zh-CN": "只读", "en-US": "Read Only" },
+    "AO": { "zh-CN": "只写", "en-US": "Write Only" },
+    "AV": { "zh-CN": "读写", "en-US": "Read And Write" },
+    "BI": { "zh-CN": "只读", "en-US": "Read Only" },
+    "BO": { "zh-CN": "只写", "en-US": "Write Only" },
+    "BV": { "zh-CN": "读写", "en-US": "Read And Write" }
+}

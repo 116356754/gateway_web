@@ -1,0 +1,14 @@
+[{
+    "id": "GPRMC",
+    "text": "NMAE0183协议"
+}, {
+    "id": "ZIBOMAT3000",
+    "text": "新华规约MAT3000协议"
+
+}, {
+    "id": "KEHUI",
+    "text": "山东科汇协议"
+}, {
+    "id": "KEWEIKEJI",
+    "text": "成都可为科技协议"
+}]

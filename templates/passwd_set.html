@@ -1,0 +1,130 @@
+<!doctype html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<style type="text/css">
+    .input_container {
+        margin-bottom: 32px;
+    }
+</style>
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="shortcut icon" href="../static/favicon.ico">
+    <link rel=stylesheet href="../static/easyui/themes/bootstrap/easyui.css">
+    <link rel=stylesheet href="../static/easyui/themes/icon.css">
+    <script src="../static/easyui/jquery.min.js"></script>
+    <script src="../static/easyui/jquery.easyui.min.js"></script>
+    <script src="../static/javascript/api.js"></script>
+    <script src="../static/resource/vue.min.js"></script>
+    <script src="../static/resource/vue-i18n.min.js"></script>
+</head>
+
+<body>
+    <div id='app'>
+        <!-- 密码设定窗口 -->
+        <div id="passwd_dialog" style="width:320px;height:200px;padding:10px;display:none">
+            <input class="easyui-textbox" type="password" v-bind:label="oldPasswd" labelWidth="100px" required="true" id='oldPasswd' style="height:25px;width:240px"><br><br>
+            <input class="easyui-textbox" type="password" v-bind:label="newPasswd" labelWidth="100px" required="true" id='newPasswd' style="height:25px;width:240px"><br><br>
+            <input class="easyui-textbox" type="password" v-bind:label="confirmPasswd" labelWidth="100px" required="true" id='confirmPasswd' style="height:25px;width:240px">
+        </div>
+    </div>
+</body>
+
+<script>
+    window.onload = function() {  
+        contextPath = '../static/easyui/locale/'
+        if (self.parent.initial == 'zh-CN') {
+            $.getScript("../static/easyui/locale/easyui-lang-zh_CN.js"); 
+        } else {   
+            $.getScript("../static/easyui/locale/easyui-lang-en.js"); 
+        }
+    }
+
+    Vue.use(VueI18n)
+
+    var initial = self.parent.initial
+    var i18n = new VueI18n({
+        locale: initial,
+        messages: self.parent.messages
+    })
+    var vm = new Vue({
+        i18n: i18n,
+        data: {
+            locale: initial,
+            oldPasswd: self.parent.messages[initial]['index']['oldPasswd'],
+            newPasswd: self.parent.messages[initial]['index']['newPasswd'],
+            confirmPasswd: self.parent.messages[initial]['index']['confirmPasswd']
+        },
+        watch: {
+            locale: function(val) {
+                this.$i18n.locale = val
+            }
+        }
+    }).$mount('#app')
+
+    $(function() {
+        initial = self.parent.initial;
+        messages = self.parent.messages;
+        $('#passwd_dialog').dialog({
+            title: messages[initial]['index']['passwd'],
+            closable: true,
+            draggable: false,
+            modal: true,
+            buttons: [{
+                text: messages[initial]['common']['ok'],
+                iconCls: 'icon-ok',
+                handler: function() {
+                    set_passwd();
+                }
+            }, {
+                text: messages[initial]['common']['cancel'],
+                iconCls: 'icon-cancel',
+                handler: function() {
+                    $('#passwd_dialog').dialog('close')
+                }
+            }]
+
+        });
+    });
+
+    //设置密码
+    function set_passwd() {
+        value = get_baseurl();
+        oldPasswd = $('#oldPasswd').textbox('getValue');
+        newPasswd = $('#newPasswd').textbox('getValue');
+        confirmPasswd = $('#confirmPasswd').textbox('getValue');
+        if (newPasswd.indexOf(' ') == -1) {
+            if (oldPasswd != '' && newPasswd != '' && confirmPasswd != '') {
+                if (newPasswd == confirmPasswd) {
+                    $.ajax({
+                        type: 'post',
+                        url: 'http://' + value + '/passwdSet',
+                        data: {
+                            "oldPasswd": oldPasswd,
+                            "newPasswd": newPasswd
+                        },
+                        timeout: 5000,
+                        success: function(data) {
+                            if (data['result']) {
+                                $.messager.alert(messages[initial]['common']['system_hint'], messages[initial]['index']['passwd_success'], "info")
+                                $('#passwd_dialog').dialog('close')
+                            } else {
+                                $.messager.alert(messages[initial]['common']['system_hint'], data['msg'], "info")
+                            }
+                        },
+                        error: function() {
+                            $.messager.alert(messages[initial]['common']['system_hint'], self.parent.messages[initial]['index']['connectip_fail'].format(value), "info");
+                        }
+                    });
+                } else {
+                    $.messager.alert(messages[initial]['common']['system_hint'], messages[initial]['index']['confirm'], "info")
+                }
+            } else {
+                $.messager.alert(messages[initial]['common']['system_hint'], messages[initial]['index']['passwdEmpty'], "info")
+            }
+        } else {
+            $.messager.alert(messages[initial]['common']['system_hint'], messages[initial]['index']['noSqace'], "info")
+        }
+
+    }
+</script>

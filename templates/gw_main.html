@@ -1,0 +1,208 @@
+<!doctype html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="shortcut icon" href="../static/favicon.ico">
+    <link rel=stylesheet href="../static/easyui/themes/bootstrap/easyui.css">
+    <link rel=stylesheet href="../static/easyui/themes/icon.css">
+    <script src="../static/easyui/jquery.min.js"></script>
+    <script src="../static/easyui/jquery.easyui.min.js"></script>
+    <script src="../static/javascript/language.js"></script>
+    <script src="../static/easyui/jquery.edatagrid.js"></script>
+    <script src="../static/easyui/jquery.easyui.validatex.js"></script>
+    <script src="../static/javascript/api.js"></script>
+    <script src="../static/resource/vue.min.js"></script>
+    <script src="../static/resource/vue-i18n.min.js"></script>
+    <script src="../static/resource/datetime.js"></script>
+    <script src='../static/resource/echarts.min.js'></script>
+    <script src="../static/javascript/base-loading.js"></script>
+
+</head>
+
+<style type="text/css">
+    body {
+        padding: 0;
+        margin: 0;
+    }
+    
+    table {
+        border: #95b8e7 1px solid;
+        border-collapse: collapse;
+        border-spacing: 0;
+        text-align: center;
+        font: normal 12px "\5FAE\8F6F\96C5\9ED1";
+        color: #444;
+    }
+    
+    table th {
+        height: 28px;
+        line-height: 28px;
+        background: -webkit-linear-gradient(#eff5fe, #e0ecff);
+        background: -moz-linear-gradient(#eff5fe, #e0ecff);
+        background: -o-linear-gradient(#eff5fe, #e0ecff);
+        background: linear-gradient(#eff5fe, #e0ecff);
+        filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#eff5fe', endColorstr='#e0ecff', GradientType=0);
+        border-bottom: #95b8e7 1px solid;
+        border-right: #95b8e7 1px dotted;
+    }
+    
+    table td {
+        height: 28px;
+        line-height: 28px;
+        border: #95b8e7 1px dotted;
+        padding: 0px;
+    }
+    
+    table tr:nth-child(odd) {
+        background: #F4F4F4;
+    }
+    
+    table tr:hover {
+        background: #e2edff;
+    }
+</style>
+
+
+<body>
+    <div id='app' style="position:absolute; width:100%;height:100%;left:0;top:0">
+        <div class="easyui-layout" data-options="fit:true">
+            <div data-options="region:'west',title:'',split:true" style="width:200px;">
+                <div class="easyui-layout" data-options="fit:true">
+                    <div id="menuAccordion"></div>
+                </div>
+            </div>
+            <div id="mainfunction" region="center" split="true" style="background: #eee; overflow-y:hidden">
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    initial = self.parent.vm.$i18n.locale;
+    messages = self.parent.messages;
+    $(function() {
+        // 初始化
+        $('#menuAccordion').accordion({
+            fillSpace: true,
+            fit: true,
+            border: false,
+            animate: false
+        });
+
+        if (initial == 'zh-CN') { // 选中中文时加载中文json
+            path = '../static/json/func_menu.json'
+        } else {
+            path = '../static/json/func_menu_english.json'
+        }
+
+        $.post(path, {
+            type: 1
+        }, function(data) {
+            if (data) {
+
+                $.each(data, function(index, item) {
+                    var selected = false;
+                    if (index == 0) {
+                        selected = true;
+                    }
+                    // Accordion 折叠面板
+                    $('#menuAccordion').accordion('add', {
+                        title: item.text,
+                        content: "<ul id='menu_tree_" + item.id + "'></ul>",
+                        selected: selected
+                    });
+                    // 树形菜单
+                    $('#menu_tree_' + item.id).tree({
+                        data: item.children,
+                        onClick: function(node) {
+                            if (node.children.length != 0) {
+                                return;
+                            }
+                            // 添加选项卡
+                            if (node.text == '历史上传' || node.text == 'Historical Upload') {
+                                upload_history();
+                            } else {
+                                addTab('tabs', node.text, node.url);
+                            }
+                        }
+                    });
+                });
+            }
+        }, 'json');
+    });
+
+    /**
+     * 添加标签页面板
+     * @param tabsId 标签页 ID
+     * @param title 标签页面板的标题文字
+     * @param url 加载远程内容来填充标签页面板的 URL
+     */
+    function addTab(tabsId, title, url) {
+        document.getElementById('mainfunction').innerHTML = '<iframe src=' + "../templates/" + url + ' style="width:99%;height:100%;background:#fafafa;"></iframe>'
+            // var $tabs = $('#' + tabsId);
+            // if ($tabs.tabs('exists', title)) {
+            //     $tabs.tabs('close', title);
+            // }
+            // $tabs.tabs('add', {
+            //     title: title,
+            //     href: url,
+            //     closable: true
+            // })
+    };
+
+    function insert_info(information) {
+        self.parent.insert_info(information)
+    }
+
+    // 历史数据库上传
+    function upload_history() {
+        value = get_baseurl()
+        $.messager.confirm(self.parent.messages[initial]['common']['system_hint'], self.parent.messages[initial]['index']['if_upload_history'].format(value), function(r) {
+            if (r) {
+                filefolder = cfxApi.download_cycledata('storage');
+                console.log(filefolder)
+                if (filefolder != '') {
+                    cfxApi.downloadFolderFtp('/mnt/sd/history/', filefolder, function(status) {
+                        if (status) {
+                            $.messager.alert(self.parent.messages[initial]['common']['system_hint'], self.parent.messages[initial]['gwonline']['history_upload_success'], "info")
+                        } else {
+                            $.messager.alert(self.parent.messages[initial]['common']['system_hint'], self.parent.messages[initial]['gwonline']['history_upload_fail'], "info")
+                        }
+                    })
+                }
+            }
+        });
+    }
+
+    // 备份网关工程
+    function project_new(dir) {
+        if (dir) {
+            var content = scanPro(project_path);
+            if (content.indexOf(dir) == '-1') { // 不存在重名工程
+                createdir(project_path + dir);
+                cfxApi.downloadFileFtp('/home', 'lm.db', project_path + dir + '', function(status) {
+                    if (status) {
+                        sql = "select gwName from gw";
+                        content = selectsql(project_path + dir + '\\lm', sql)
+                        content = JSON.parse(content);
+                        moveFile(project_path + dir + '\\lm.db', project_path + dir + '\\' + content[0]['gwName'] + '.db')
+                        self.parent.insert_info(messages[initial]['index']['Backup_success'])
+                        self.parent.load_proname();
+                        self.parent.$('#text').textbox('setText', dir);
+                        self.parent.project_open('Backup');
+                    } else { // 上载工程失败时删除工程文件夹
+                        self.parent.project_open('Backup');
+                        self.parent.insert_info(messages[initial]['index']['Backup_fail']);
+                        $.messager.alert(messages[initial]['common']['system_hint'], messages[initial]['index']['Backup_fail']);
+                        deletedir(project_path + dir)
+                    }
+                });
+            } else {
+                $.messager.alert(messages[initial]['common']['system_hint'], messages[initial]['index']['pro_already'].format(dir));
+            }
+        } else {
+            $.messager.alert(messages[initial]['common']['system_hint'], messages[initial]['index']['no_proname']);
+        }
+    }
+</script>

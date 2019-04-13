@@ -1,0 +1,983 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="../static/css/font-awesome.css" rel="stylesheet">
+    <link rel="shortcut icon" href="../static/favicon.ico">
+    <!-- 载入EasyUI -->
+    <link rel=stylesheet href="../static/easyui/themes/bootstrap/easyui.css">
+    <link rel=stylesheet href="../static/css/default.css">
+    <link rel=stylesheet href="../static/easyui/themes/icon.css">
+    <link rel="stylesheet" href="../static/css/style.css" media="screen" type="text/css" />
+    <script src="../static/easyui/jquery.min.js"></script>
+    <script src="../static/easyui/jquery.easyui.min.js"></script>
+    <script src="../static/easyui/jquery.edatagrid.js"></script>
+    <script src="../static/easyui/jquery.easyui.validatex.js"></script>
+    <script src="../static/javascript/api.js"></script>
+    <script src="../static/resource/datetime.js"></script>
+    <script src="../static/resource/vue.min.js"></script>
+    <script src="../static/resource/vue-i18n.min.js"></script>
+    <script type="text/javascript" src="../static/resource/sql.js"></script>
+    <script src="../static/javascript/login.js"></script>
+    <script src="../static/javascript/gwonline.js"></script>
+    <script src="../static/resource/FileSaver.min.js"></script>
+
+    <script src="../static/javascript/template.js"></script>
+    <script src="../static/javascript/gw_echarts.js"></script>
+    <script src="../static/javascript/gw_http.js"></script>
+    <script src="../static/javascript/gw_ftp.js"></script>
+    <script src="../static/javascript/exportJson.js"></script>
+    <script src="../static/javascript/mqttws31.js"></script>
+
+    <script src="../static/javascript/device.js"></script>
+    <script src="../static/javascript/channel.js"></script>
+
+    <script src="../static/javascript/oem.js"></script>
+    <script src="../static/javascript/index.js"></script>
+    <script src="../static/javascript/index_tree.js"></script>
+    <script src="../static/javascript/all_excel.js"></script>
+    <script src="../static/javascript/callback.js"></script>
+    <script type="text/javascript" src="../js/titleButton.js"></script>
+    <script src="../static/resource/jquery.table2excel.js"></script>
+    <script src="../static/javascript/tag_tree.js"></script>
+    <script src='../static/resource/echarts.min.js'></script>
+    <script src="../static/javascript/js_dialog.js"></script>
+    <title>Index - LM Gateway</title>
+</head>
+
+<style type="text/css">
+    .input_container {
+        margin-bottom: 10px;
+    }
+    
+    * {
+        margin: 0;
+        padding: 0;
+    }
+    
+    #container {
+        width: 430px;
+        height: auto;
+        margin: 10px auto;
+    }
+    
+    #ull {
+        width: 430px;
+        height: auto;
+        list-style: none;
+    }
+    
+    #ull a,
+    #ull a {
+        width: 80px;
+        height: 80px;
+        border: 2px solid white;
+        float: left;
+        text-align: center;
+        word-break: break-all;
+        white-space: pre-wrap;
+        text-decoration: none
+    }
+    
+    #ull a:hover {
+        color: black
+    }
+    
+    #ull .active {
+        background: #8DB2E3;
+        color: black;
+    }
+    
+    #help :hover {
+        color: black;
+    }
+    
+    div .btn-separator {
+        float: left;
+        height: 24px;
+        border-left: 1px solid LightGrey;
+        border-right: 0px solid LightGrey;
+        margin: 1px 1px;
+    }
+</style>
+
+
+<noscript>
+    <div style=" position:absolute; z-index:100000; height:2046px;top:0px;left:0px; width:100%; background:white; text-align:center;">
+        <img src="../static/images/noscript.gif" alt='抱歉，请开启脚本支持！'/>
+    </div>
+</noscript>
+
+<div id="loading-mask" style="position:absolute;top:0px; left:0px; width:100%; height:100%; background:#D2E0F2; z-index:20000">
+    <div id="pageloading" style="position:absolute; top:50%; left:50%; margin:-120px 0px 0px -120px; text-align:center;  border:2px solid #8DB2E3; width:200px; height:60px;  font-size:14px;padding:10px; font-weight:bold; background:#fff; color:#15428B;">
+        <img src="../static/images/loading.gif" align="absmiddle" /> loading...
+    </div>
+</div>
+
+<body>
+    <!-- <script src="../static/resource/include.js"></script>
+    <include src="js_dialog.html"></include> -->
+    <div id='app' style="position:absolute; width:100%;height:100%;left:0;top:0">
+
+        <div class="easyui-layout" data-options="fit:true">
+            <div class=nav1 data-options="region:'north'" style="height:33px;text-align:left;vertical-align:middle;overflow:hidden;">
+                <div class="easyui-layout" data-options="fit:true">
+                    <div data-options="region:'center'" id="logo_div" style="background:#a3bff5;">
+                        <div id="template" style="font-size: 16px;display:none;">
+                            <a href="#" id="btn-project-new" class="easyui-linkbutton" onclick="template_add()" plain="true" iconCls="icon-template-add">{{ $t('index.New_Template') }}</a>
+                        </div>
+
+                        <div id="project" style=" font-size: 16px;">
+                            <table cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td>
+                                        <a href="#" id="new_pro_btn" class="easyui-linkbutton" onclick="create_new()" plain="true" iconCls="icon-new-project">{{ $t('index.New_project') }}</a>
+                                    </td>
+                                    <td>
+                                        <div class="datagrid-btn-separator"></div>
+                                    </td>
+                                    <td>
+                                        <a href="#" id="open_pro_btn" class="easyui-linkbutton" onclick="project_open_dialog()" plain="true" iconCls="icon-open-project">{{ $t('index.Open_project') }}</a>
+                                    </td>
+                                    <td>
+                                        <div class="datagrid-btn-separator"></div>
+                                    </td>
+                                    <td>
+                                        <a href="#" id="download_pro_btn" class="easyui-linkbutton" onclick="download_project()" plain="true" iconCls="icon-project">{{ $t('index.Download_project') }}</a>
+                                    </td>
+                                    <td>
+                                        <div class="datagrid-btn-separator"></div>
+                                    </td>
+                                    <td>
+                                        <a href="#" id="btn-project-start" class="easyui-linkbutton" onclick="start_pro()" plain="true" iconCls="icon-start-project">{{ $t('index.start_monitor') }}</a>
+                                    </td>
+                                    <td>
+                                        <a href="#" id="btn-project-stop" class="easyui-linkbutton" onclick="stop_pro()" plain="true" iconCls="icon-stop-project" style="display:none">{{ $t('index.stop_monitor') }}</a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div id="device" style="font-size: 16px;display:none;">
+                            <table cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td>
+                                        <a href="#" id="btn-add-device" class="easyui-linkbutton" plain="true" iconCls="icon-gw-add">{{ $t('index.add_device') }}</a>
+                                    </td>
+                                    <td>
+                                        <div class="datagrid-btn-separator"></div>
+                                    </td>
+                                    <td>
+                                        <a href="#" id="btn-stop-device" class="easyui-linkbutton" plain="true" iconCls="icon-cancel" style="display:none">{{ $t('index.stop_search') }}</a>
+                                    </td>
+                                    <td>
+                                        <a href="#" id="btn-search-device" class="easyui-linkbutton" plain="true" iconCls="icon-search">{{ $t('index.search_device') }}</a>
+                                    </td>
+                                    <td>
+                                        <div class="datagrid-btn-separator"></div>
+                                    </td>
+                                    <td>
+                                        <a href="#" id="btn-debug-mode" class="easyui-linkbutton" plain="true" iconCls="icon-bug">{{ $t('index.debug_mode') }}</a>
+                                    </td>
+                                    <td>
+                                        <div class="datagrid-btn-separator"></div>
+                                    </td>
+                                    <td>
+                                        <a href="#" id="btn-history-upload" class="easyui-linkbutton" plain="true" iconCls="icon-history-data">{{ $t('index.offline_monitoring') }}</a>
+                                    </td>
+                                </tr>
+                            </table>
+                            <a href="javascript:void(0)" id="system_config" class="easyui-menubutton" data-options="menu:'#menu-system-config',iconCls:'icon-language'" style="position:absolute;top:0px; left:480px">{{ $t('index.system_config') }}</a>
+
+                            <div id="menu-system-config" class="easyui-menu">
+                                <div data-options="iconCls:'icon-set-ip'" id="btn-update" onclick="set_ip()">{{ $t('index.configIP') }}</div>
+                                <div class="menu-sep"></div>
+                                <div data-options="iconCls:'icon-gw-upload'" id="btn-update" onclick="upload_project()">{{ $t('index.upload_project') }}</div>
+                                <div class="menu-sep"></div>
+                                <div data-options="iconCls:'icon-set-passwd'" id="btn-update" onclick="set_passwd()">{{ $t('index.passwd_set') }}</div>
+                                <div class="menu-sep"></div>
+                                <div data-options="iconCls:'icon-set-ntp'" id="btn-update" onclick="set_ntp()">{{ $t('index.School_time') }}</div>
+                                <div class="menu-sep"></div>
+                                <div data-options="iconCls:'icon-set-reboot'" id="btn-update" onclick="reboot_gw()">{{ $t('index.reboot_gw') }}</div>
+                                <div class="menu-sep"></div>
+                                <div data-options="iconCls:'icon-update'" id="btn-update" onclick="gw_update()">{{ $t('index.gw_update') }}</div>
+                            </div>
+                        </div>
+
+
+                        <a href="javascript:void(0)" id="language" class="easyui-menubutton" data-options="menu:'#menu-language',iconCls:'icon-language'" style="position:absolute;top:0px; right:80px">{{ $t('index.language') }}</a>
+
+                        <div id="menu-language" class="easyui-menu">
+                            <div data-options="iconCls:'icon-search'" id="btn-update" onclick="changeToChinese()">Chinese</div>
+                            <div class="menu-sep"></div>
+                            <div data-options="iconCls:'icon-search'" id="btn-update" onclick="changeToEnglish()">English</div>
+                        </div>
+
+                        <a href="javascript:void(0)" id="help" class="easyui-menubutton" data-options="menu:'#menu-help',iconCls:'icon-help'" style="position:absolute;top:0px; right:5px">{{ $t('index.help') }}</a>
+
+                        <div id="menu-help" class="easyui-menu">
+                            <!-- <div data-options="iconCls:'icon-search'" id="btn-update">检测更新</div>
+                            <div class="menu-sep"></div> -->
+                            <div data-options="iconCls:'icon-help-word'" id="btn-help">{{ $t('index.Help_document') }}</div>
+                            <div class="menu-sep"></div>
+                            <div data-options="iconCls:'icon-help-about'" id="btn-about">{{ $t('index.about') }}</div>
+                            <div class="menu-sep"></div>
+                            <div data-options="iconCls:'icon-help-log'" id="btn-version">{{ $t('index.Release_Notes') }}</div>
+                            <div class="menu-sep"></div>
+                            <div data-options="iconCls:'icon-help-registered'" id="btn-registered">{{ $t('index.registered') }}</div>
+                        </div>
+                    </div>
+                    <!-- <div data-options="region:'south'" style="height:30px;">
+
+                    </div> -->
+                </div>
+            </div>
+
+
+            <div region="south" split="true" style="height: 200px; background: #fff; ">
+                <div class="easyui-layout" data-options="fit:true">
+                    <div class="easyui-panel" v-bind:title="System_log" style="padding-left:10px;padding-top:10px;height:95%" data-options="tools:'#log_div'">
+                        <div id="real_log" style="height: 80%; overflow-y: scroll; background: #ffffff;">
+                        </div>
+
+                        <!-- <textarea id="real_message_result" style="width: 100%;height:100%;max-width: 100%;max-height: 100%;resize: none;"></textarea> -->
+                    </div>
+                    <div id="log_div">
+                        <label><input id="log_scroll_btn" type="checkbox" checked>{{ $t('index.Whether_to_scroll') }}</label>
+                        <a class="icon-save easyui-tooltip" v-bind:title="save" id="log_save_btn" style="padding-right:20px" onclick="log_save()"></a>
+                        <a style="padding-right:40px" v-bind:title="Empty" class="icon-remove easyui-tooltip" onclick="log_delete()"></a>
+                    </div>
+                    <div region="south" split="true" style="height: 40px; background: #6C7B8B; ">
+                        <div style="text-align: center;color:white;margin: 0px;padding: 0px;line-height: 30px;font-weight: bold;">
+                            <label for="company">&copy; Copyright 2019 by</label>
+                            <a href="javascript:void(0)" id="company" onclick="open_web()" style="text-decoration:underline;color: white;"></a>
+                            <span id="version" style="float:right; padding-right:20px;" class="head">Version 内测版v1.2</span>
+                            <!--  <img id="tubiao" src='../static/images/connect.png' width="20" height="20"
+                     style="float:right; padding-right:20px;" align="absmiddle"/>
+                <label id="status" style="float:right; padding-right:5px;"></label> -->
+                            <label style="float:right; padding-right:20px;">{{ $t('index.local_time') }}
+                    <label id="gw_time"></label>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div region="west" split="true" v-bind:title="Navigation_menu" style="width:250px;" id="west_tree">
+                <div id="pro_device" class="easyui-tabs" data-options="fit:true">
+                    <div v-bind:title="project" style="padding:0px;display:none">
+                        <ul id="tt" class="easyui-tree">
+                        </ul>
+                    </div>
+                    <div v-bind:title="device" style="overflow:auto;padding:0px;display:none;">
+                        <ul id="gw_tree" class="easyui-tree">
+                        </ul>
+                        <label id="search_label" style="display: none;font-size:20px;position:absolute;top:200px;left:30px">{{ $t('index.Searching_for_gateway') }}</label>
+                    </div>
+                    <div v-bind:title="template" style="padding:0px;color:black;display:none;">
+                        <ul id="template_tree" class="easyui-tree">
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+
+            <div id="mainPanle" region="center" split="true" style="background: #eee; overflow-y:hidden">
+            </div>
+
+            <div id="gw_info" style="width:350px;height:190px;padding:10px;display:none">
+                <div style="margin-left: 20px;margin-top: 20px">
+                    <label id="hardware">{{ $t('index.hardware_version') }}</label><br><br>
+                    <label id="software">{{ $t('index.software_version') }}</label><br><br>
+                    <label id="equipment_points">{{ $t('index.device_point') }}</label><br><br>
+                    <label id="sn">SN:</label>
+                </div>
+            </div>
+
+            <!-- 注册窗口 -->
+            <div id="registered_div" style="width:400px;height:200px;padding:10px;display:none">
+                <div style="position:absolute; top:40px;left:10px ">
+                    <form id="registered_form">
+                        <label for="machine_code" style="padding-right: 10px">{{ $t('index.machine_code') }}</label>
+                        <input class="easyui-textbox" required="true" editable="false" id='machine_code' style="height:25px;width:250px"><br><br>
+                        <label for="registration_code" style="padding-right: 10px">{{ $t('index.registration_code') }}</label>
+                        <input class="easyui-textbox" required="true" id='registration_code' style="height:25px;width:250px">
+                    </form>
+                </div>
+            </div>
+
+            <!-- 网关搜索 -->
+            <div id="gw_serach" style="width:350px;height:300px;padding:10px;display:none">
+                <table id="gw_addr" style="font-size:18px;">
+                </table>
+                <div style="position:absolute; bottom:10px;right:10px ">
+                    <a href="# " class="easyui-linkbutton " iconCls="icon-cancel" onclick="stop_search();">{{ $t('index.stop_search') }}</a>
+                    <a href="# " class="easyui-linkbutton " iconCls="icon-search" onclick="search_gw();">{{ $t('index.search') }}</a>
+                    <a href="# " class="easyui-linkbutton " iconCls="icon-ok" onclick="ip_check()">{{ $t('index.connect') }}</a>
+                    <a href="# " class="easyui-linkbutton " iconCls="icon-undo " onclick="close_searchdialog()">{{ $t('index.back') }}</a>
+                </div>
+            </div>
+
+            <!-- 网关地址设置窗口 -->
+            <div id="dlg-url-set" style="width:350px;height:150px;padding:10px;display:none">
+                <div class="input_container" style="position:absolute;top:50px">
+                    <label for="gw_ip" style="padding-right: 10px">{{ $t('index.gwaddr') }}</label>
+                    <input class="easyui-textbox" id='gw_ip' style="height:25px;width:150px">
+                </div>
+                <div style="text-align:right;margin-top:65px ">
+                    <a href="# " class="easyui-linkbutton " iconCls="icon-ok" onclick="ip_check()">{{ $t('index.connect') }}</a>
+                    <a href="# " class="easyui-linkbutton " iconCls="icon-cancel" onclick="javascript:$('#dlg-url-set').dialog('close')">{{ $t('common.cancel') }}</a>
+                </div>
+            </div>
+
+            <!-- 模板窗口 -->
+            <div id="template_dialog" style="width:320px;height:200px;padding:10px;display:none">
+                <label for="deviceCode">{{ $t('common.template_name') }}</label>
+                <input class="easyui-textbox" id="deviceCode" value="Template1" required="true" style="width: 180px;" validType='maxLength[20]'><br><br>
+                <label for="template_protocol">{{ $t('index.protocol_name') }}</label>
+                <input class="easyui-combobox" id='template_protocol' value="Modbus" labelWidth="70px" data-options="editable:false" style="height:25px;width:180px">
+            </div>
+
+            <!-- 输入密码窗口 -->
+            <div id="enter_passwd_dialog" style="width:350px;height:150px;padding:10px;display:none">
+
+                <label for="enter_passwd">{{ $t('index.enter_passwd') }}</label>
+                <input class="easyui-textbox" type="password" id="enter_passwd" style="width: 200px;" validType='maxLength[15]'><br><br>
+            </div>
+
+            <!-- 新建工程窗口 -->
+            <div id="project_new" style="width:350px;height:140px;padding:10px;display:none">
+
+                <label for="pro_new">{{ $t('index.project_name') }}</label>
+                <input class="easyui-textbox" id="pro_new" style="width: 200px;" validType='maxLength[15]'><br><br>
+                <div style="text-align:right;margin-top:10px ">
+                    <a href="# " class="easyui-linkbutton " iconCls="icon-ok" onclick="project_new()">{{ $t('common.ok') }}</a>
+                    <a href="# " class="easyui-linkbutton " iconCls="icon-cancel " onclick="javascript:$('#project_new').dialog('close')">{{ $t('common.cancel') }}</a>
+                </div>
+            </div>
+
+            <!-- 打开工程窗口 -->
+            <div id="project_open" style="width:500px;height:360px;display:none">
+                <input class="easyui-textbox" id="text">
+                <div id="cc" class="easyui-layout" style="width: auto;height: 280px">
+                    <div data-options="region:'north',border:false" style="height:230px;">
+                        <div id="container" style="height:100px">
+                            <ul id="ull">
+                            </ul>
+                        </div>
+                    </div>
+                    <div data-options="region:'center',border:false" style="height: auto;"><br>
+                        <label id="pro_path">&#12288;&#12288;&#12288;{{ $t('index.project_path') }}</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MQTT配置窗口 -->
+            <div id="dlg-mqtt" style="width:600px;height:600px;padding:10px;display:none">
+            </div>
+
+            <!-- 密码设定窗口 -->
+            <div id="passwd_dialog" style="width:320px;height:200px;padding:10px;display:none">
+                <input class="easyui-textbox" type="password" v-bind:label="oldPasswd" labelWidth="100px" required="true" id='oldPasswd' style="height:25px;width:240px"><br><br>
+                <input class="easyui-textbox" type="password" v-bind:label="newPasswd" labelWidth="100px" required="true" id='newPasswd' style="height:25px;width:240px"><br><br>
+                <input class="easyui-textbox" type="password" v-bind:label="confirmPasswd" labelWidth="100px" required="true" id='confirmPasswd' style="height:25px;width:240px">
+            </div>
+
+            <!-- 关于窗口 -->
+            <div id="dlg-about" style="width:400px;height:260px;padding:10px;display:none">
+            </div>
+
+            <!-- <span style="padding-left:10px; font-size: 16px; " class='title-nodrag'><img src="../static/images/logo.png" width="120" height="30" align="absmiddle" /> 数据采集网关配置管理工具</span> -->
+            <!-- 添加网关设备窗口 -->
+            <div id="gw_add" style="width:350px;height:310px;padding:10px;display:none">
+                <form id="gw_add_form">
+                    <label for="gw_new">{{ $t('index.gw_name') }}</label><br>
+                    <input class="easyui-textbox" id="gw_new" style="width: 200px;" required="true" value="Gateway_1" validType='maxLength[15]'><br><br>
+                    <label for="gw_type">{{ $t('index.gw_class') }}</label><br>
+                    <input class="easyui-combobox" id='gw_type' data-options="editable:false,panelHeight: 'auto'" style="width:200px;editable:false"><br><br>
+                    <label for="gw_version">{{ $t('index.Gateway_model') }}</label><br>
+                    <input class="easyui-combobox" id='gw_version' data-options="editable:false" style="width:200px;editable:false"><br><br>
+                    <label for="gw_remark">{{ $t('index.remark') }}</label><br>
+                    <input class="easyui-textbox" id="gw_remark" style="width: 200px;" validType='maxLength[15]'><br><br>
+                </form>
+                <div style="text-align:right;margin-top:20px ">
+                    <a href="# " class="easyui-linkbutton " iconCls="icon-ok" onclick="gw_add()">{{ $t('common.ok') }}</a>
+                    <a href="# " class="easyui-linkbutton " iconCls="icon-cancel " onclick="javascript:$('#gw_add').dialog('close')">{{ $t('common.cancel') }}</a>
+                </div>
+            </div>
+
+            <!-- 新建通道窗口 -->
+            <div id="channel_dialog" style="width:530px;height:400px;padding:10px;display:none">
+                <form id="channel_dialog_form">
+                    <div class="input_container">
+                        <label for="channelName">{{ $t('index.channel_name') }}</label>
+                        <input class="easyui-textbox" id='channelName' required="true" value="Channel_1" validType='maxLength[15]' style="height:25px;width:120px">
+                    </div>
+                    <div class="input_container">
+                        <label for="channel">{{ $t('index.channel') }}</label>
+                        <input class="easyui-combobox" id='channel' v-bind:value="specific" data-options="editable:false" style="height:25px;width:120px">
+                        <label for="protocol_name">{{ $t('index.protocol_name') }}</label>
+                        <input class="easyui-combobox" id='protocol_name' value="ModbusRTUClient" data-options="editable:false" style="height:25px;width:180px">
+                    </div>
+                    <div id="serial" class="input_container">
+                        <label for="serialport">{{ $t('index.Serialport_number') }}</label>
+                        <input class="easyui-combobox" id='serialport' required="true" data-options="editable:false" style="height:25px;width:70px"><br><br>
+                        <label for="serial_baud">{{ $t('index.baud') }}</label>
+                        <input class="easyui-combobox" id='serial_baud' value="9600" required="true" data-options="editable:false" style="height:25px;width:65px">
+                        <label for="serial_data">{{ $t('index.databit') }}</label>
+                        <input class="easyui-combobox" id='serial_data' value="8" required="true" data-options="editable:false" style="height:25px;width:45px">
+                        <label for="serial_stop">{{ $t('index.stopbit') }}</label>
+                        <input class="easyui-combobox" id='serial_stop' value="1" required="true" data-options="editable:false" style="height:25px;width:45px">
+                        <label for="serial_parity">{{ $t('index.parity') }}</label>
+                        <input class="easyui-combobox" id='serial_parity' value="N" required="true" data-options="editable:false" style="height:25px;width:75px">
+                    </div>
+                    <div id="tcp" class="input_container" style="display:none">
+                        <label for="net_ip">{{ $t('index.IPaddr') }}</label>
+                        <input class="easyui-textbox" id='net_ip' value="192.168.1.100" style="height:25px;width:130px">
+                    </div>
+                    <div id="bacnetipdiv" class="input_container" style="display:none">
+                        <label for="bacnet_tcp">{{ $t('index.Communication_port') }}</label>
+                        <input class="easyui-combobox" id='bacnet_tcp' value="eth0" style="height:25px;width:80px">
+                    </div>
+                    <div id="port" class="input_container" style="display:none">
+                        <label for="net_port">{{ $t('index.port') }}</label>
+                        <input class="easyui-numberbox" id='net_port' value="502" style="height:25px;width:50px">
+                    </div>
+                    <div id="mstpmac_parameters" class="input_container" style="display:none">
+                        <label for="mac">{{ $t('index_tree.mac') }}</label>
+                        <input class="easyui-numberbox" id='mac' value="127" required="true" style="height:25px;width:60px">
+                    </div>
+                    <div class="input_container">
+                        <label for="timeout">{{ $t('index.timeout') }}</label>
+                        <input class="easyui-numberbox" id='timeout' value="500" required="true" style="height:25px;width:60px">&nbsp;&nbsp;
+                        <label for="between">{{ $t('index.between') }}</label>
+                        <input class="easyui-numberbox" id='between' value="500" required="true" style="height:25px;width:60px">
+                    </div>
+                    <div class="input_container">
+                        <label for="serial_time">{{ $t('index.Polling_time') }}</label>
+                        <input class="easyui-numberbox" id='serial_time' value="100" required="true" style="height:25px;width:60px">&nbsp;&nbsp;
+                        <label for="retryCount">{{ $t('index.retryCount') }}</label>
+                        <input class="easyui-numberbox" id='retryCount' value="3" required="true" style="height:25px;width:60px">
+                    </div>
+                    <div id="continuousAddress_div" class="input_container">
+                        <a href="# " id="modbus_button" class="easyui-linkbutton " style="width:15px" onclick="parameters_dialog()">+</a>&nbsp;&nbsp;{{ $t('index.Advanced_parameters') }}
+                    </div>
+                    <div id="modbus_parameters" class="input_container" style="display:none">
+                        <label class="my_protocol"><input class="input_agreement_protocol" id="watchTime_check" type="checkbox"><span></span></label>
+                        <label style="font-size:14px" for="watchTime">watch time(s):</label>
+                        <input class="easyui-numberbox" id='watchTime' disabled="disabled" value="10" style="height:25px;width:75px">&nbsp;&nbsp;
+                        <label class="my_protocol" style="font-size:14px"><input class="input_agreement_protocol" id="continuousAddress" type="checkbox"><span></span>{{ $t('index.continuousAddress') }}</label><br><br>
+                        <label style="font-size:14px" for="readCount">{{ $t('index.dutyCycle') }}</label>
+                        <input class="easyui-numberbox" id='readCount' value="1" required="true" style="height:25px;width:40px">:
+                        <input class="easyui-numberbox" id='writeCount' value="1" required="true" style="height:25px;width:40px"><br><br>
+                    </div>
+                </form>
+            </div>
+            <!-- 新建设备窗口 -->
+            <div id="equipment_add" style="width:350px;height:200px;padding:10px;display:none">
+                <form id="equipment_add_form">
+                    <div class="input_container">
+                        <!-- <label for="equipment_name" style="padding-right: 10px">{{ $t('index.device_name') }}</label> -->
+                        <input class="easyui-textbox" id='equipment_name' v-bind:label="device_name" labelWidth="110px" value="Device_1" required="ture" validType='maxLength[15]' style="height:25px;width:280px">
+                    </div>
+                    <div class="input_container">
+                        <!-- <label for="equipment_addr" style="padding-right: 10px">{{ $t('index.device_addr') }}</label> -->
+                        <input class="easyui-textbox" id='equipment_addr' v-bind:label="device_addr" labelWidth="110px" required="ture" value="1" style="height:25px;width:280px">
+                    </div>
+                    <div id="mstp_parameters" class="input_container" style="display:none">
+                        <a href="# " id="mstp_button" class="easyui-linkbutton " style="width:15px" onclick="device_parameters_dialog()">+</a>&nbsp;&nbsp;{{ $t('index.Advanced_parameters') }}
+                    </div>
+                    <div id="device_parameters" class="input_container" style="display:none">
+                        <label class="my_protocol" style="font-size:12px;"><input id="mstp_type"class="input_agreement_protocol" type="checkbox"><span></span>slave</label><br><br>
+                        <label for="mstp_mac" style="padding-right: 10px">MAC:</label>
+                        <input class="easyui-textbox" id='mstp_mac' value="1" style="height:25px;width:100px" validType='range[0,254]'>&nbsp;&nbsp;
+                    </div>
+                </form>
+            </div>
+
+            <table id="mytab" border="1" style="display: none">
+                <tr>
+                    <td>{{ $t('index.time') }}</td>
+                    <td>{{ $t('index.information') }}</td>
+                </tr>
+            </table>
+
+            <!-- 网关设备列表 -->
+            <div id="download_gw" style="width:350px;height:300px;padding:10px;display:none">
+                <ul id="file_gw_tree" class="easyui-tree">
+                </ul>
+            </div>
+
+            <div id="download_gw_search" style="width:350px;height:300px;padding:10px;display:none">
+                <ul id="download_gw_tree" class="easyui-tree">
+                </ul>
+                <label id="download_search_label" style="display: none;font-size:20px;position:absolute;top:50%;left:30px">{{ $t('index.Searching_for_gateway') }}</label>
+            </div>
+
+            <!-- 历史数据趋势图 -->
+            <div id="chart_dialog" style="width:650px;height:400px;display:none">
+                <div id="chart" style="width:600px;height:350px"></div>
+            </div>
+
+            <!-- 单个数据点的历史数据 -->
+            <div id="history_data_dialog" style="width:70%;height:400px;padding:10px;display:none">
+                <!-- <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-reload'" onclick="echarts()">趋势图</a> -->
+                <!-- <table id="history_data" border="1px" cellspacing="0" width="100%">
+                    <tr align="center">
+                        <td>{{ $t('real_data.name') }}</td>
+                        <td>value</td>
+                        <td>status</td>
+                        <td>{{ $t('real_data.timestamp') }}</td>
+                    </tr>
+                    <tr v-for="iddata in iddatas" align="center">
+                        <td>{{ iddata.id }}</td>
+                        <td>{{ iddata.val }}</td>
+                        <td>{{ iddata.status }}</td>
+                        <td>{{ iddata.timestamp }}</td>
+                    </tr>
+                </table> -->
+                <div style="width:100%;height:90%;">
+                    <table id="history_data" style="width:100%;height:350px;" scrolling="auto" singleSelect="true" class="easyui-datagrid" data-options="fit:true,fitColumns:true,rownumbers:true,pagination:false">
+
+                    </table>
+                </div>
+            </div>
+
+            <!-- 右键菜单 -->
+            <div id="template_add" class="easyui-menu" style="width:150px;">
+                <div onclick="template_add()" data-options="iconCls:'icon-add'">{{ $t('index.New_Template') }}</div>
+                <div data-options="iconCls:'icon-cancel'">{{ $t('common.cancel') }}</div>
+            </div>
+            <div id="template_remove" class="easyui-menu" style="width:150px;">
+                <div onclick="template_remove()" data-options="iconCls:'icon-add'">{{ $t('index.Delete_template') }}</div>
+                <div data-options="iconCls:'icon-cancel'">{{ $t('common.cancel') }}</div>
+            </div>
+            <div id="root_row" class="easyui-menu" style="width:170px;">
+                <div onclick="gw()" data-options="iconCls:'icon-add'">{{ $t('index.add_gw') }}</div>
+                <div data-options="iconCls:'icon-cancel'">{{ $t('common.cancel') }}</div>
+            </div>
+            <div id="gw_delete" class="easyui-menu" style="width:150px;">
+                <div onclick="remove()" data-options="iconCls:'icon-remove'">{{ $t('index.delete') }}</div>
+                <div data-options="iconCls:'icon-cancel'">{{ $t('common.cancel') }}</div>
+            </div>
+            <div id="data_row" class="easyui-menu" style="width:150px;">
+                <div onclick="aisle('new',null)" data-options="iconCls:'icon-add'">{{ $t('index.new_channel') }}</div>
+                <div data-options="iconCls:'icon-cancel'">{{ $t('common.cancel') }}</div>
+            </div>
+            <div id="aisle_row" class="easyui-menu" style="width:150px;">
+                <div onclick="equip('null')" data-options="iconCls:'icon-add'">{{ $t('index.new_device') }}</div>
+                <div onclick="remove()" data-options="iconCls:'icon-remove'">{{ $t('index.delete') }}</div>
+                <div data-options="iconCls:'icon-cancel'">{{ $t('common.cancel') }}</div>
+            </div>
+            <div id="device_row" class="easyui-menu" style="width:150px;">
+                <div onclick="remove()" data-options="iconCls:'icon-remove'">{{ $t('index.delete') }}</div>
+                <div onclick="copy_device('copy')" data-options="iconCls:'icon-copydevice'">{{ $t('index.Copy_device') }}</div>
+                <div data-options="iconCls:'icon-cancel'">{{ $t('common.cancel') }}</div>
+            </div>
+
+            <!-- 协议服务双击添加tag点 -->
+            <div id="tag_dialog" style="width:320px;height:480px;padding:10px;display: none">
+                <div id="cc" class="easyui-layout" style="width: auto;height: 380px">
+                    <div data-options="region:'north',border:false" style="height:300px;">
+                        <ul id="tag_tree" class="easyui-tree">
+                        </ul>
+                    </div>
+                    <div data-options="region:'center',border:false" style="height: auto;"><br>
+                        <input class="easyui-combobox" id='tag_type' value="4X (Holding Register)" data-options="editable:false" style="height:25px;width:180px"><br><br>
+                        <input class="easyui-combobox" id='modbustype' value="float" data-options="editable:false,disabled:false" style="height:25px;width:90px">
+                        <input class="easyui-combobox" id='modbussort' value="Little-endian byte swap" data-options="editable:false,disabled:false" style="height:25px;width:170px">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 报文监控窗口 -->
+            <div id="message_monitor" style="width:600px;height:440px;display: none">
+                <div id="cc" class="easyui-layout" data-options="fit:true">
+                    <div data-options="region:'west',border:false" style="width:200px;">
+                        <ul id="list">
+                        </ul>
+                    </div>
+                    <div data-options="region:'center',border:false" style="height: auto;"><br>
+                        <textarea id="monitor_message" style="width: 98%;height: 95%;max-width: 98%;max-height: 95%;resize: none;"></textarea>
+                        <!--width: 98%;height: 98%;max-width: 98%;max-height: 98%固定textarea大小，resize: none 去除textarea拖动图标  -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- 事件管理中事件编辑窗口 -->
+            <div id='event_add' title="事件编辑" style="display:none;width:950px;height:450px">
+                <form id="event_form" style="height:100%">
+                    <div id="ff" class="easyui-layout" data-options="fit:true">
+                        <div data-options="region:'north'" style="height:70px;padding:10px">
+                            <label class="my_protocol" style="font-size:12px;"><input id="event_check" class="input_agreement_protocol" type="checkbox" checked><span></span>启用</label><br>
+                            <input class="easyui-textbox" id='event_name' label="事件名称：" value="New Event" labelWidth="100px" style="width: 30%" validType="maxLength[30]">
+                        </div>
+                        <div data-options="region:'west',title:'事件来源'" style="width:26%;"><br>
+                            <div style="margin-left:10px">
+                                <div style="margin-bottom:5px">
+                                    <div>事件种类:</div>
+                                    <select id='event_class' class="easyui-combobox" data-options="panelHeight: 'auto',editable:false" style="width:85%;height:20px">
+                                <option>点值超出范围</option>
+                                <option>质量不为Good</option>
+                            </select>
+                                </div>
+                                <div style="margin-bottom:5px">
+                                    <div>间隔时间(ms):</div>
+                                    <input id='event_interval' class="easyui-textbox" value="5000" required="true" style="width:85%;height:20px">
+                                </div>
+                                <div style="margin-bottom:5px">
+                                    <div>关联点名称:</div>
+                                    <input id='event_piontname' class="easyui-textbox" buttonAlign="left" required="true" buttonText="添加" style="width:85%;height:20px">
+                                </div>
+                                <div style="margin-bottom:5px">
+                                    <div id="event_max_div">最大值:</div>
+                                    <input id='event_max' class="easyui-textbox" value="0" required="true" style="width:85%;height:20px">
+                                </div>
+                                <div style="margin-bottom:5px">
+                                    <div id="event_min_div">最小值:</div>
+                                    <input id='event_min' class="easyui-textbox" value="0" required="true" style="width:85%;height:20px">
+                                </div>
+                                <div style="margin-bottom:5px">
+                                    <div>抖动延时(ms):</div>
+                                    <input id='delay' class="easyui-textbox" value="0" required="true" style="width:85%;height:20px">
+                                </div>
+                            </div>
+                        </div>
+                        <div data-options="region:'center',title:'当事件触发'"><br><br>
+                            <div style="margin-left:10px">
+                                <div style="margin-bottom:5px">
+                                    <div>处理动作选择:</div>
+                                    <select id='trigger_action' class="easyui-combobox" data-options="panelHeight: 'auto',editable:false" style="width:40%;height:20px">
+                                    <option>不响应</option>
+                                    <option selected>写入值</option>
+                                </select>
+                                </div>
+                                <div id="trigger_div" style="margin-bottom:5px;">
+                                    <label style="display:inline-block;width:157px">写入点名称:</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label style="display:inline-block;width:64px">写入值:</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick='tadditem("tb")'></a>
+                                    <table id="tb">
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div data-options="region:'east',title:'当事件解除'" style="width:37%;"><br><br>
+                            <div style="margin-left:10px">
+                                <div style="margin-bottom:5px">
+                                    <div>处理动作选择:</div>
+                                    <select id='release_action' class="easyui-combobox" data-options="panelHeight: 'auto',editable:false" style="width:40%;height:20px">
+                            <option>不响应</option>
+                            <option selected>写入值</option>
+                        </select>
+                                </div>
+                                <div id="release_div" style="margin-bottom:5px;">
+                                    <label style="display:inline-block;width:157px">写入点名称:</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label style="display:inline-block;width:64px">写入值:</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick='radditem("rb")'></a>
+                                    <table id="rb">
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div data-options="region:'south',title:'描述'" style="height:180px;">
+                            <label id="describe"></label>
+                        </div> -->
+                    </div>
+                </form>
+            </div>
+            <!-- js脚本编辑窗口 -->
+            <div id='js_add' title="js脚本" style="display:none;width:950px;height:600px">
+                <div id="jsall_div" class="easyui-layout" data-options="fit:true">
+                    <div data-options="region:'north',iconCls:'icon-reload',split:true" style="height:60px;">
+                        <label class="my_protocol" style="font-size:12px;"><input id="js_check" class="input_agreement_protocol" type="checkbox" checked><span></span>启用</label><br>
+                        <div id="js_name_div" style="float:left">
+                            <input class="easyui-textbox" id='js_name' label="js名称:" value="New JS" labelWidth="60px" style="width: 200px" validType="maxLength[30]">&nbsp;&nbsp;&nbsp;&nbsp;
+                        </div>
+                        <div id="runtype_div" style="float:left">
+                            <input class="easyui-combobox" id='runtype' label="执行方式:" data-options="editable:false,panelHeight: 'auto'" style="width:200px">&nbsp;&nbsp;&nbsp;&nbsp;
+                        </div>
+                        <div id="jstime_div" style="display:none;float:left">
+                            <input id="jstime" class="easyui-timespinner" label="时间:" style="width:180px" required="required" value="08:00:00" data-options="showSeconds:true" />
+                        </div>
+                        <div id="jscycle_div" style="display:none;float:left">
+                            <input id="jscycle" class="easyui-numberbox" label="执行周期(ms):" style="width:180px">
+                        </div>
+                    </div>
+                    <div data-options="region:'center'">
+                        <div id="js_div" class="easyui-layout" data-options="fit:true">
+                            <div data-options="region:'east',iconCls:'icon-reload',split:true" style="width:200px;">
+                                <ul id="func_tree"></ul>
+                            </div>
+                            <div data-options="region:'center'">
+                                <div id="center_div" class="easyui-layout" data-options="fit:true">
+                                    <div data-options="region:'north',iconCls:'icon-reload',split:true" style="height:300px">
+                                        <textarea id="js_preview" style="width: 100%;height: 100%;max-width: 100%;max-height: 100%;resize: none;"></textarea>
+                                    </div>
+                                    <div data-options="region:'center'">
+                                        <div id="document_div" class="easyui-layout" data-options="fit:true">
+                                            <div data-options="region:'south',iconCls:'icon-reload',split:true" style="height:40px;">
+                                                <input id='func_preview' class="easyui-textbox" style="width:85%;height:20px">
+                                                <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick='insert_js()'>插入</a>
+                                            </div>
+                                            <div data-options="region:'east',iconCls:'icon-reload',split:true" style="width:250px;">
+                                                <div id="read_tag_div">
+                                                    <label for="read_tag">Tag点:</label>
+                                                    <input id='read_tag' class="easyui-textbox" buttonAlign="left" required="true" buttonText="添加" style="width:85%;height:20px">
+                                                </div>
+                                            </div>
+                                            <div data-options="region:'center'">
+                                                <textarea id="func_document" style="width: 100%;height: 100%;max-width: 100%;max-height: 100%;resize: none;"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+    var debug_real_data = "[]";
+
+    cn_json = readFileSync('locales/zh-CN.json')
+    cn_json_object = JSON.parse(cn_json)
+    us_json = readFileSync('locales/en-US.json')
+    us_json_object = JSON.parse(us_json)
+    var messages = {
+        'zh-CN': cn_json_object,
+        'en-US': us_json_object
+    }
+    Vue.use(VueI18n)
+
+    language = readFileSync('locales/language.json')
+    language_object = JSON.parse(language)
+    var initial = language_object['language']
+
+    if (initial == 'zh-CN') {
+        $.getScript("../static/easyui/locale/easyui-lang-zh_CN.js"); 
+    } else {   
+        $.getScript("../static/easyui/locale/easyui-lang-en.js"); 
+    }
+
+    var i18n = new VueI18n({
+        locale: initial,
+        messages: messages
+    })
+
+    var vm = new Vue({
+        i18n: i18n,
+        data: {
+            locale: initial,
+            save: self.parent.messages[initial]['common']['save'],
+            Empty: self.parent.messages[initial]['index']['Empty'],
+            System_log: self.parent.messages[initial]['index']['System_log'],
+            Navigation_menu: self.parent.messages[initial]['index']['Navigation_menu'],
+            template: self.parent.messages[initial]['index']['template'],
+            project: self.parent.messages[initial]['index']['project'],
+            device: self.parent.messages[initial]['index']['device'],
+            between: self.parent.messages[initial]['index']['between'],
+            specific: self.parent.messages[initial]['index']['specific'],
+            device_name: self.parent.messages[initial]['index']['device_name'],
+            device_addr: self.parent.messages[initial]['index']['device_addr'],
+            oldPasswd: self.parent.messages[initial]['index']['oldPasswd'],
+            newPasswd: self.parent.messages[initial]['index']['newPasswd'],
+            confirmPasswd: self.parent.messages[initial]['index']['confirmPasswd'],
+            real_message: self.parent.messages[initial]['index']['real_message'],
+            Serial_test: self.parent.messages[initial]['index']['Serial_test'],
+            debug: self.parent.messages[initial]['index']['debug']
+        },
+        watch: {
+            locale: function(val) {
+                this.$i18n.locale = val
+            }
+        }
+    }).$mount('#app')
+
+    if (help_oem) {
+        document.getElementById("help").style.display = 'none';
+    }
+    if (upload_oem) {
+        document.getElementById("btn-project-cloud").style.display = 'none';
+    }
+    // $("#logo_div").css("background", 'url(' + oemData['logo'] + ')');
+    $("#company").text(oemData[initial]['companyName']);
+
+    function changeToChinese() {
+        if (vm.$i18n.locale == 'en-US') {
+            content = JSON.stringify({
+                'language': 'zh-CN'
+            })
+            status = wirte_localfile('locales/language.json', content)
+            if (status) {
+                window.location.reload()
+            }
+        } else {
+            $.messager.alert(messages[initial]['common']['system_hint'], "当前语言即为中文", "info")
+        }
+    }
+
+    function changeToEnglish() {
+        if (vm.$i18n.locale == 'zh-CN') {
+            content = JSON.stringify({
+                'language': 'en-US'
+            })
+            status = wirte_localfile('locales/language.json', content)
+            if (status) {
+                window.location.reload()
+            }
+        } else {
+            $.messager.alert(messages[initial]['common']['system_hint'], "The current language is English", "info")
+        }
+    }
+
+    $(function() {
+        $("#gw_type").combobox({
+            valueField: 'id',
+            textField: 'text',
+            data: oemData[initial]["gw_type"],
+            panelHeight: 'auto'
+        });
+        $("#gw_version").combobox({
+            valueField: 'text',
+            textField: 'text',
+            data: oemData[initial]["gw_version"][messages[initial]['index']['MODBUS']],
+            panelHeight: 'auto'
+        });
+        $("#event_class").combobox({
+            onChange: function(newValue, oldValue) {
+                if (newValue == '点值超出范围') {
+                    document.getElementById('event_max_div').style.display = '';
+                    document.getElementById('event_min_div').style.display = '';
+                    $("#event_max").next().show();
+                    $("#event_min").next().show();
+                } else if (newValue == '质量不为Good') {
+                    document.getElementById('event_max_div').style.display = 'none';
+                    document.getElementById('event_min_div').style.display = 'none';
+                    $("#event_max").next().hide();
+                    $("#event_min").next().hide();
+                }
+            }
+        });
+
+        $("#trigger_action").combobox({
+            onChange: function(newValue, oldValue) {
+                if (newValue == '写入值') {
+                    document.getElementById('trigger_div').style.display = '';
+                } else if (newValue == '不响应') {
+                    document.getElementById('trigger_div').style.display = 'none';
+                }
+            }
+        });
+
+        $("#release_action").combobox({
+            onChange: function(newValue, oldValue) {
+                if (newValue == '写入值') {
+                    document.getElementById('release_div').style.display = '';
+                } else if (newValue == '不响应') {
+                    document.getElementById('release_div').style.display = 'none';
+                }
+            }
+        });
+        $('#event_piontname').textbox({
+            onClickButton: function() {
+                button_name = 'event_piontname';
+                display_tag('alarm_event', 'event_piontname', true)
+            }
+        });
+        $('#trigger_pointname').textbox({
+            onClickButton: function() {
+                button_name = 'trigger_pointname';
+                display_tag('alarm_event', 'trigger_pointname', false)
+            }
+        });
+        $('#release_pointname').textbox({
+            onClickButton: function() {
+                button_name = 'release_pointname';
+                display_tag('alarm_event', 'release_pointname', false)
+            }
+        });
+    });
+
+    var tcount = 0;
+    var rcount = 0;
+
+    function tadditem(id) {
+        var row, cell, str;
+        row = document.getElementById(id).insertRow();
+        if (row != null) {
+            cell = row.insertCell();
+            cell.innerHTML = "<input id=\"tp" + tcount + "\" class=\"easyui-textbox\" required=\"true\" buttonAlign=\"left\" buttonText=\"添加\" name=\"tp" + tcount + "\" style=\"width:150px\">&#12288;&#12288;<input id=\"tv" + tcount + "\" class=\"easyui-textbox\" required=\"true\" name=\"tv" + tcount + "\" style=\"width:64px\">&#12288;&#12288;<a href=\"#\" class=\"easyui-linkbutton\" onclick=\"tdeleteitem(this)\">删除</a>"
+            $.parser.parse(cell);
+            $('#tp' + tcount).textbox({
+                onClickButton: function() {
+                    display_tag('alarm_event', this.id, false)
+                }
+            });
+            tcount++;
+        }
+    }
+
+    function tdeleteitem(obj) {
+        var curRow = obj.parentNode.parentNode;
+        tb.deleteRow(curRow.rowIndex);
+    }
+
+    function radditem(id) {
+        var row, cell, str;
+        row = document.getElementById(id).insertRow();
+        if (row != null) {
+            cell = row.insertCell();
+            cell.innerHTML = "<input id=\"rp" + rcount + "\" class=\"easyui-textbox\" required=\"true\" buttonAlign=\"left\" buttonText=\"添加\" name=\"rp" + rcount + "\" style=\"width:150px\">&#12288;&#12288;<input id=\"rv" + rcount + "\" class=\"easyui-textbox\" required=\"true\" name=\"rv" + rcount + "\" style=\"width:64px\">&#12288;&#12288;<a href=\"#\" class=\"easyui-linkbutton\" onclick=\"rdeleteitem(this)\">删除</a>"
+            $.parser.parse(cell);
+            $('#rp' + rcount).textbox({
+                onClickButton: function() {
+                    display_tag('alarm_event', this.id, false)
+                }
+            });
+            rcount++;
+        }
+    }
+
+    function rdeleteitem(obj) {
+        var curRow = obj.parentNode.parentNode;
+        rb.deleteRow(curRow.rowIndex);
+    }
+
+    // 打开网页
+    function open_web() {
+        openurl(oemData["companyUrl"]);
+    }
+
+    function glo_status() {
+        value = get_baseurl()
+        $.ajax({
+            type: 'get',
+            url: 'http://' + value + '/glo_status',
+            success: function(data) {
+                data = JSON.parse(data)
+                document.getElementById("gw_time").innerText = data.time;
+                document.getElementById("status").innerText = data.module;
+                var element = document.getElementById('tubiao')
+                if (data.status == 'on') {
+                    element.src = "../static/images/connect.png"
+                } else {
+                    element.src = "../static/images/disconnect.png"
+                }
+            }
+        });
+    };
+    // setInterval("glo_status()", 30000)
+    function local_time() {
+        var myDate = new Date(); //获取系统当前时间
+        var mytime = DateUtil.dateToStr("yyyy-MM-dd HH:mm:ss", myDate); //获取日期与时间
+        document.getElementById("gw_time").innerText = mytime;
+    }
+    setInterval("local_time()", 1000)
+</script>

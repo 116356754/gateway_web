@@ -1,0 +1,5 @@
+[
+    { "text": "开机启动", "value": "start", "selected": true },
+    { "text": "循环", "value": "timer" },
+    { "text": "定时", "value": "cron" }
+]

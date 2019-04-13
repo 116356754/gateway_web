@@ -1,0 +1,27 @@
+<!doctype html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="shortcut icon" href="../static/favicon.ico">
+    <link rel=stylesheet href="../static/easyui/themes/bootstrap/easyui.css">
+    <link rel=stylesheet href="../static/easyui/themes/icon.css">
+    <script src="../static/easyui/jquery.min.js"></script>
+    <script src="../static/easyui/jquery.easyui.min.js"></script>
+    <script src="../static/easyui/locale/easyui-lang-zh_CN.js"></script>
+    <script src='../static/resource/autosize.min.js'></script>
+    <script src='../static/javascript/api.js'></script>
+</head>
+
+<h2 id="log_title"></h2>
+<textarea id="log_value" style="width: 100%;height: 100%"></textarea>
+
+<script>
+    $(function() {
+        filename = window.location.href.split('=')[1]; // log.html传递的文件名参数
+        content = readFileSync('log/' + filename); // 同步读log文件
+        document.getElementById("log_title").innerHTML = filename; //设置标题
+        $('#log_value').val(content); // 填充log内容
+        autosize(document.querySelectorAll('textarea'));
+    })
+</script>

@@ -1,0 +1,436 @@
+<!doctype html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="shortcut icon" href="../static/favicon.ico">
+    <link rel=stylesheet href="../static/easyui/themes/bootstrap/easyui.css">
+    <link rel=stylesheet href="../static/easyui/themes/icon.css">
+    <script src="../static/easyui/jquery.min.js"></script>
+    <script src="../static/easyui/jquery.easyui.min.js"></script>
+    <script src="../static/javascript/language.js"></script>
+    <script src="../static/easyui/jquery.edatagrid.js"></script>
+    <script src="../static/easyui/jquery.easyui.validatex.js"></script>
+    <script src="../static/javascript/api.js"></script>
+    <script src="../static/resource/vue.min.js"></script>
+    <script src="../static/resource/vue-i18n.min.js"></script>
+    <script src="../static/javascript/calculate.js"></script>
+    <script src="../static/resource/xlsx.core.min.js"></script>
+    <script src="../static/resource/jquery.table2excel.js"></script>
+</head>
+
+<body>
+    <div id='app' style="position:absolute; width:100%;height:100%;left:0;top:0">
+        <div class="easyui-layout" data-options="fit:true">
+            <div id="excel_title" data-options="region:'center',split:false">
+                <div id='mrx' title="导入Excel配置" style="display:none;width:300px;height:100px">
+                    <input type=file id="excel-file" accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="padding:20px;">
+                </div>
+                <div id='verification' v-bind:title="Validation_expression" style="display:none;width:500px;height:310px">
+                    <div style="position: absolute;top:40px;left:20px">
+                        <input class="easyui-combobox" id='arithmetic_operation1' v-bind:value="arithmetic_operation1" data-options="editable:false" style="height:25px;width:100px">
+                        <input class="easyui-combobox" id='function_operation1' value="函数" data-options="editable:false" style="height:25px;width:100px"><br><br>
+                        <!-- <input class="easyui-combobox" id='trigonometric_function1' value="三角函数" data-options="editable:false" style="height:25px;width:100px"><br><br> &#12288; -->
+                        <input class="easyui-combobox" id='logical_judgment1' v-bind:value="logical_judgment1" data-options="editable:false" style="height:25px;width:100px">
+                        <input class="easyui-combobox" id='boolean_operation1' v-bind:value="boolean_operation1" data-options="editable:false" style="height:25px;width:100px"><br><br>
+                        <!-- <input class="easyui-combobox" id='constant1' value="常数" data-options="editable:false" style="height:25px;width:100px"><br> &#12288; -->
+                        &#12288;<label>{{ $t('calculate.expression1') }}</label><br> &#12288;
+                        <textarea id="expression1" rows="2" cols="20"></textarea>&#12288;
+                        <button onclick="equal()" style="width:40px;height:33px;background: url('../static/images/dengyu.png')"></button> &#12288;
+                        <textarea id="expression2" rows="2" cols="20"></textarea><br><br>
+                        <input class="easyui-textbox" id='A1' label="A=" value="1" labelWidth="25px" style="width: 100px">&#12288;&#12288;
+                        <input class="easyui-textbox" id='B1' label="B=" value="2" labelWidth="25px" style="width: 100px"><br><br>
+                        <input class="easyui-textbox" id='C1' label="C=" value="3" labelWidth="25px" style="width: 100px">&#12288;&#12288;
+                        <input class="easyui-textbox" id='D1' label="D=" value="4" labelWidth="25px" style="width: 100px">
+                    </div>
+                </div>
+                <div id='add' v-bind:title="net_point" style="display:none;width:660px;height:400px">
+                    <div id="cc" class="easyui-layout" style="width:97%;height:97%;">
+                        <div data-options="region:'west'" v-bind:title="Basic_Information" style="width:250px;">
+                            <div style="position: absolute;top:50px;left:10px">
+                                <input class="easyui-textbox" id='new_id' v-bind:label="name" value="tag1" labelWidth="70px" style="width: 200px" validType="maxLength[15]"><br><br>
+                                <input class="easyui-textbox" id='new_name' v-bind:label="description" labelWidth="70px" style="width: 200px"><br><br>
+                                <!-- <input class="easyui-textbox" id='new_cycle' label="周期(s)：" value="10" labelWidth="60px" style="width: 200px" validType="eqmaxLength[3]"> -->
+                            </div>
+                        </div>
+                        <div data-options="region:'center'" v-bind:title="expression_config" style=""><br> &#12288;
+                            <div style="position: absolute;top:40px;left:20px">
+                                <input class="easyui-combobox" id='arithmetic_operation' v-bind:value="arithmetic_operation1" data-options="editable:false" style="height:25px;width:100px;"> &#12288;
+                                <input class="easyui-combobox" id='function_operation' value="函数" data-options="editable:false" style="height:25px;width:100px"> &#12288;<br><br>
+                                <!-- <input class="easyui-combobox" id='trigonometric_function' value="三角函数" data-options="editable:false" style="height:25px;width:100px"><br><br> &#12288; -->
+                                <input class="easyui-combobox" id='logical_judgment' v-bind:value="logical_judgment1" data-options="editable:false" style="height:25px;width:100px"> &#12288;
+                                <input class="easyui-combobox" id='boolean_operation' v-bind:value="boolean_operation1" data-options="editable:false" style="height:25px;width:100px"> &#12288;<br><br>
+                                <!-- <input class="easyui-combobox" id='constant' value="常数" data-options="editable:false" style="height:25px;width:100px"><br> &#12288; -->
+                                &#12288;<label>{{ $t('calculate.expression1') }}</label><br> &#12288;
+                                <textarea id="expression" rows="3" cols="20"></textarea>&#12288;
+                                <button onclick="verification_dialog()" style="width:58px;height:58px;background: url('../static/images/yunsuan.png');background-position: -16px -26px;"></button>
+                                <br><br> &#12288;
+                                <input class="easyui-textbox" id='A' label="A：" buttonAlign="left" v-bind:buttonText="add" labelWidth="30px" style="width: 300px"><br> &#12288;
+                                <input class="easyui-textbox" id='B' label="B：" buttonAlign="left" v-bind:buttonText="add" labelWidth="30px" style="width: 300px"><br> &#12288;
+                                <input class="easyui-textbox" id='C' label="C：" buttonAlign="left" v-bind:buttonText="add" labelWidth="30px" style="width: 300px"><br> &#12288;
+                                <input class="easyui-textbox" id='D' label="D：" buttonAlign="left" v-bind:buttonText="add" labelWidth="30px" style="width: 300px"><br>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <table id="calculate_xls_config" style="width:100%;height:100%;" scrolling="auto" singleSelect="true" class="easyui-datagrid" data-options="fit:true,fitColumns:true,rownumbers:true,pagination:false">
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    window.onload = function() {  
+        contextPath = '../static/easyui/locale/'
+        if (self.parent.vm.$i18n.locale == 'zh-CN') {
+            $.getScript("../static/easyui/locale/easyui-lang-zh_CN.js"); 
+        } else {   
+            $.getScript("../static/easyui/locale/easyui-lang-en.js"); 
+        }
+    }
+
+    Vue.use(VueI18n)
+
+    var initial = self.parent.vm.$i18n.locale
+    var i18n = new VueI18n({
+        locale: initial,
+        messages: self.parent.messages
+    })
+    var vm = new Vue({
+        i18n: i18n,
+        data: {
+            locale: initial,
+            calculate_config: self.parent.messages[initial]['calculate']['calculate_config'],
+            Validation_expression: self.parent.messages[initial]['calculate']['Validation_expression'],
+            arithmetic_operation1: self.parent.messages[initial]['calculate']['arithmetic_operation1'],
+            logical_judgment1: self.parent.messages[initial]['calculate']['logical_judgment1'],
+            boolean_operation1: self.parent.messages[initial]['calculate']['boolean_operation1'],
+
+            net_point: self.parent.messages[initial]['calculate']['net_point'],
+            Basic_Information: self.parent.messages[initial]['calculate']['Basic_Information'],
+
+            new: self.parent.messages[initial]['calculate']['new'],
+            expression_config: self.parent.messages[initial]['calculate']['expression_config'],
+            add: self.parent.messages[initial]['calculate']['add'],
+
+            name: self.parent.messages[initial]['calculate']['name'],
+            description: self.parent.messages[initial]['calculate']['description']
+        },
+        watch: {
+            locale: function(val) {
+                this.$i18n.locale = val
+            }
+        }
+    }).$mount('#app')
+
+    var button_name = '';
+    $("#arithmetic_operation").combobox({
+        url: "../static/json/calculate.json",
+        valueField: 'text',
+        textField: 'text',
+        method: "GET",
+        panelHeight: 'auto',
+        loadFilter: function(data) {
+            filter_data = [];
+            data.forEach(function(e) {
+                for (key in e) {
+                    if (key == 'text') {
+                        filter_data.push(e)
+                    }
+                }
+            });
+            return filter_data
+        }
+    });
+    $("#function_operation").combobox({
+        url: "../static/json/calculate.json",
+        valueField: 'function',
+        textField: 'function',
+        method: "GET",
+        panelHeight: 'auto',
+        loadFilter: function(data) {
+            filter_data = [];
+            data.forEach(function(e) {
+                for (key in e) {
+                    if (key == 'function') {
+                        filter_data.push(e)
+                    }
+                }
+            });
+            return filter_data
+        }
+    });
+    // $("#trigonometric_function").combobox({
+    //     url: "../static/json/calculate.json",
+    //     valueField: 'trigonometric',
+    //     textField: 'trigonometric',
+    //     method: "GET",
+    //     panelHeight: 'auto',
+    //     loadFilter: function(data) {
+    //         filter_data = [];
+    //         data.forEach(function(e) {
+    //             for (key in e) {
+    //                 if (key == 'trigonometric') {
+    //                     filter_data.push(e)
+    //                 }
+    //             }
+    //         });
+    //         return filter_data
+    //     }
+    // });
+    $("#logical_judgment").combobox({
+        url: "../static/json/calculate.json",
+        valueField: 'logical',
+        textField: 'logical',
+        method: "GET",
+        panelHeight: 'auto',
+        loadFilter: function(data) {
+            filter_data = [];
+            data.forEach(function(e) {
+                for (key in e) {
+                    if (key == 'logical') {
+                        filter_data.push(e)
+                    }
+                }
+            });
+            return filter_data
+        }
+    });
+    $("#boolean_operation").combobox({
+        url: "../static/json/calculate.json",
+        valueField: 'boolean',
+        textField: 'boolean',
+        method: "GET",
+        panelHeight: 'auto',
+        loadFilter: function(data) {
+            filter_data = [];
+            data.forEach(function(e) {
+                for (key in e) {
+                    if (key == 'boolean') {
+                        filter_data.push(e)
+                    }
+                }
+            });
+            return filter_data
+        }
+    });
+    $("#arithmetic_operation1").combobox({
+        url: "../static/json/calculate.json",
+        valueField: 'text',
+        textField: 'text',
+        method: "GET",
+        panelHeight: 'auto',
+        loadFilter: function(data) {
+            filter_data = [];
+            data.forEach(function(e) {
+                for (key in e) {
+                    if (key == 'text') {
+                        filter_data.push(e)
+                    }
+                }
+            });
+            return filter_data
+        }
+    });
+    $("#function_operation1").combobox({
+        url: "../static/json/calculate.json",
+        valueField: 'function',
+        textField: 'function',
+        method: "GET",
+        panelHeight: 'auto',
+        loadFilter: function(data) {
+            filter_data = [];
+            data.forEach(function(e) {
+                for (key in e) {
+                    if (key == 'function') {
+                        filter_data.push(e)
+                    }
+                }
+            });
+            return filter_data
+        }
+    });
+    $("#logical_judgment1").combobox({
+        url: "../static/json/calculate.json",
+        valueField: 'logical',
+        textField: 'logical',
+        method: "GET",
+        panelHeight: 'auto',
+        loadFilter: function(data) {
+            filter_data = [];
+            data.forEach(function(e) {
+                for (key in e) {
+                    if (key == 'logical') {
+                        filter_data.push(e)
+                    }
+                }
+            });
+            return filter_data
+        }
+    });
+    $("#boolean_operation1").combobox({
+        url: "../static/json/calculate.json",
+        valueField: 'boolean',
+        textField: 'boolean',
+        method: "GET",
+        panelHeight: 'auto',
+        loadFilter: function(data) {
+            filter_data = [];
+            data.forEach(function(e) {
+                for (key in e) {
+                    if (key == 'boolean') {
+                        filter_data.push(e)
+                    }
+                }
+            });
+            return filter_data
+        }
+    });
+    $(function() {
+        $('#arithmetic_operation').combobox({
+            onSelect: function(record) {
+                var ele = document.getElementById("expression");
+                ele.value = ele.value + record.text;
+            },
+            onHidePanel: function() {
+                $('#arithmetic_operation').combobox('setValue', self.parent.messages[initial]['calculate']['arithmetic_operation1']);
+            }
+        });
+        $('#function_operation').combobox({
+            onSelect: function(record) {
+                var ele = document.getElementById("expression");
+                ele.value = ele.value + record.function;
+            },
+            onHidePanel: function() {
+                $('#function_operation').combobox('setValue', '函数');
+            }
+        });
+        $('#trigonometric_function').combobox({
+            onSelect: function(record) {
+                var ele = document.getElementById("expression");
+                ele.value = ele.value + record.trigonometric;
+            },
+            onHidePanel: function() {
+                $('#trigonometric_function').combobox('setValue', '三角函数');
+            }
+        });
+        $('#logical_judgment').combobox({
+            onSelect: function(record) {
+                var ele = document.getElementById("expression");
+                ele.value = ele.value + record.logical;
+            },
+            onHidePanel: function() {
+                $('#logical_judgment').combobox('setValue', self.parent.messages[initial]['calculate']['logical_judgment1']);
+            }
+        });
+        $('#boolean_operation').combobox({
+            onSelect: function(record) {
+                var ele = document.getElementById("expression");
+                ele.value = ele.value + record.boolean;
+            },
+            onHidePanel: function() {
+                $('#boolean_operation').combobox('setValue', self.parent.messages[initial]['calculate']['boolean_operation1']);
+            }
+        });
+
+        $('#arithmetic_operation1').combobox({
+            onSelect: function(record) {
+                var ele = document.getElementById("expression1");
+                ele.value = ele.value + record.text;
+            },
+            onHidePanel: function() {
+                $('#arithmetic_operation1').combobox('setValue', self.parent.messages[initial]['calculate']['arithmetic_operation1']);
+            }
+        })
+        $('#logical_judgment1').combobox({
+            onSelect: function(record) {
+                var ele = document.getElementById("expression1");
+                ele.value = ele.value + record.logical;
+            },
+            onHidePanel: function() {
+                $('#logical_judgment1').combobox('setValue', self.parent.messages[initial]['calculate']['logical_judgment1']);
+            }
+        })
+        $('#boolean_operation1').combobox({
+            onSelect: function(record) {
+                var ele = document.getElementById("expression1");
+                ele.value = ele.value + record.boolean;
+            },
+            onHidePanel: function() {
+                $('#boolean_operation1').combobox('setValue', self.parent.messages[initial]['calculate']['boolean_operation1']);
+            }
+        })
+
+        $('#A').textbox({
+            onClickButton: function() {
+                button_name = 'A'
+                self.parent.display_tag('calculate', null, true)
+            }
+        });
+        $('#B').textbox({
+            onClickButton: function() {
+                button_name = 'B'
+                self.parent.display_tag('calculate', null, true)
+            }
+        });
+        $('#C').textbox({
+            onClickButton: function() {
+                button_name = 'C'
+                self.parent.display_tag('calculate', null, true)
+            }
+        });
+        $('#D').textbox({
+            onClickButton: function() {
+                button_name = 'D'
+                self.parent.display_tag('calculate', null, true)
+            }
+        });
+    });
+
+    window.onmessage = function(e) {
+        data = JSON.parse(e.data)
+        $('#' + button_name).textbox('setText', data[0][0])
+    }
+
+    function verification_dialog() {
+        $('#verification').dialog({
+            closable: false,
+            draggable: false,
+            modal: true,
+            buttons: [{
+                text: self.parent.messages[initial]['common']['ok'],
+                iconCls: 'icon-ok',
+                handler: function() {
+                    $("#verification").dialog('close');
+                }
+            }, {
+                text: self.parent.messages[initial]['common']['cancel'],
+                iconCls: 'icon-cancel',
+                handler: function() {
+                    $("#verification").dialog('close');
+                }
+            }]
+        });
+        document.getElementById("expression1").value = document.getElementById("expression").value
+        $("#verification").dialog('open'); //必须先显示，再弹出
+    }
+
+    function equal() {
+        expression1 = document.getElementById("expression1").value;
+        A1 = $('#A1').textbox('getText');
+        B1 = $('#B1').textbox('getText');
+        C1 = $('#C1').textbox('getText');
+        D1 = $('#D1').textbox('getText');
+        var str1 = expression1.replace(/A/g, A1);
+        var str2 = str1.replace(/B/g, B1);
+        var str3 = str2.replace(/C/g, C1);
+        var str4 = str3.replace(/D/g, D1);
+        try {
+            console.log(str4)
+            document.getElementById("expression2").value = eval(str4)
+        } catch (err) {
+            document.getElementById("expression2").value = err
+        }
+    }
+</script>
