@@ -13,6 +13,7 @@
     <link rel=stylesheet href="../static/easyui/themes/bootstrap/easyui.css">
     <link rel=stylesheet href="../static/css/default.css">
     <link rel=stylesheet href="../static/easyui/themes/icon.css">
+    <link rel=stylesheet href="../static/rewriteui/css/rewrite.css">
     <link rel="stylesheet" href="../static/css/style.css" media="screen" type="text/css" />
     <script src="../static/easyui/jquery.min.js"></script>
     <script src="../static/easyui/jquery.easyui.min.js"></script>
@@ -72,31 +73,9 @@
         list-style: none;
     }
     
-    #ull a,
-    #ull a {
-        width: 80px;
-        height: 80px;
-        border: 2px solid white;
-        float: left;
-        text-align: center;
-        word-break: break-all;
-        white-space: pre-wrap;
-        text-decoration: none
-    }
     
-    #ull a:hover {
-        color: black
-    }
     
-    #ull .active {
-        background: #8DB2E3;
-        color: black;
-    }
-    
-    #help :hover {
-        color: black;
-    }
-    
+     
     div .btn-separator {
         float: left;
         height: 24px;
@@ -127,7 +106,7 @@
         <div class="easyui-layout" data-options="fit:true">
             <div class=nav1 data-options="region:'north'" style="height:33px;text-align:left;vertical-align:middle;overflow:hidden;">
                 <div class="easyui-layout" data-options="fit:true">
-                    <div data-options="region:'center'" id="logo_div" style="background:#a3bff5;">
+                    <div data-options="region:'center'" id="logo_div">
                         <div id="template" style="font-size: 16px;display:none;">
                             <a href="#" id="btn-project-new" class="easyui-linkbutton" onclick="template_add()" plain="true" iconCls="icon-template-add">{{ $t('index.New_Template') }}</a>
                         </div>
@@ -139,19 +118,10 @@
                                         <a href="#" id="new_pro_btn" class="easyui-linkbutton" onclick="create_new()" plain="true" iconCls="icon-new-project">{{ $t('index.New_project') }}</a>
                                     </td>
                                     <td>
-                                        <div class="datagrid-btn-separator"></div>
-                                    </td>
-                                    <td>
                                         <a href="#" id="open_pro_btn" class="easyui-linkbutton" onclick="project_open_dialog()" plain="true" iconCls="icon-open-project">{{ $t('index.Open_project') }}</a>
                                     </td>
                                     <td>
-                                        <div class="datagrid-btn-separator"></div>
-                                    </td>
-                                    <td>
                                         <a href="#" id="download_pro_btn" class="easyui-linkbutton" onclick="download_project()" plain="true" iconCls="icon-project">{{ $t('index.Download_project') }}</a>
-                                    </td>
-                                    <td>
-                                        <div class="datagrid-btn-separator"></div>
                                     </td>
                                     <td>
                                         <a href="#" id="btn-project-start" class="easyui-linkbutton" onclick="start_pro()" plain="true" iconCls="icon-start-project">{{ $t('index.start_monitor') }}</a>
@@ -169,9 +139,7 @@
                                     <td>
                                         <a href="#" id="btn-add-device" class="easyui-linkbutton" plain="true" iconCls="icon-gw-add">{{ $t('index.add_device') }}</a>
                                     </td>
-                                    <td>
-                                        <div class="datagrid-btn-separator"></div>
-                                    </td>
+                                    
                                     <td>
                                         <a href="#" id="btn-stop-device" class="easyui-linkbutton" plain="true" iconCls="icon-cancel" style="display:none">{{ $t('index.stop_search') }}</a>
                                     </td>
@@ -179,32 +147,27 @@
                                         <a href="#" id="btn-search-device" class="easyui-linkbutton" plain="true" iconCls="icon-search">{{ $t('index.search_device') }}</a>
                                     </td>
                                     <td>
-                                        <div class="datagrid-btn-separator"></div>
-                                    </td>
-                                    <td>
                                         <a href="#" id="btn-debug-mode" class="easyui-linkbutton" plain="true" iconCls="icon-bug">{{ $t('index.debug_mode') }}</a>
                                     </td>
-                                    <td>
-                                        <div class="datagrid-btn-separator"></div>
-                                    </td>
+                                   
                                     <td>
                                         <a href="#" id="btn-history-upload" class="easyui-linkbutton" plain="true" iconCls="icon-history-data">{{ $t('index.offline_monitoring') }}</a>
                                     </td>
                                 </tr>
                             </table>
-                            <a href="javascript:void(0)" id="system_config" class="easyui-menubutton" data-options="menu:'#menu-system-config',iconCls:'icon-language'" style="position:absolute;top:0px; left:480px">{{ $t('index.system_config') }}</a>
+                            <a href="javascript:void(0)" id="system_config" class="easyui-menubutton" data-options="menu:'#menu-system-config',iconCls:'icon-setting'">{{ $t('index.system_config') }}</a>
 
                             <div id="menu-system-config" class="easyui-menu">
                                 <div data-options="iconCls:'icon-set-ip'" id="btn-update" onclick="set_ip()">{{ $t('index.configIP') }}</div>
-                                <div class="menu-sep"></div>
+                                
                                 <div data-options="iconCls:'icon-gw-upload'" id="btn-update" onclick="upload_project()">{{ $t('index.upload_project') }}</div>
-                                <div class="menu-sep"></div>
+                                
                                 <div data-options="iconCls:'icon-set-passwd'" id="btn-update" onclick="set_passwd()">{{ $t('index.passwd_set') }}</div>
-                                <div class="menu-sep"></div>
+                                
                                 <div data-options="iconCls:'icon-set-ntp'" id="btn-update" onclick="set_ntp()">{{ $t('index.School_time') }}</div>
-                                <div class="menu-sep"></div>
+                                
                                 <div data-options="iconCls:'icon-set-reboot'" id="btn-update" onclick="reboot_gw()">{{ $t('index.reboot_gw') }}</div>
-                                <div class="menu-sep"></div>
+                                
                                 <div data-options="iconCls:'icon-update'" id="btn-update" onclick="gw_update()">{{ $t('index.gw_update') }}</div>
                             </div>
                         </div>
@@ -213,9 +176,9 @@
                         <a href="javascript:void(0)" id="language" class="easyui-menubutton" data-options="menu:'#menu-language',iconCls:'icon-language'" style="position:absolute;top:0px; right:80px">{{ $t('index.language') }}</a>
 
                         <div id="menu-language" class="easyui-menu">
-                            <div data-options="iconCls:'icon-search'" id="btn-update" onclick="changeToChinese()">Chinese</div>
-                            <div class="menu-sep"></div>
-                            <div data-options="iconCls:'icon-search'" id="btn-update" onclick="changeToEnglish()">English</div>
+                            <div data-options="iconCls:'icon-retweet'" id="btn-update" onclick="changeToChinese()">Chinese</div>
+                            
+                            <div data-options="iconCls:'icon-retweet'" id="btn-update" onclick="changeToEnglish()">English</div>
                         </div>
 
                         <a href="javascript:void(0)" id="help" class="easyui-menubutton" data-options="menu:'#menu-help',iconCls:'icon-help'" style="position:absolute;top:0px; right:5px">{{ $t('index.help') }}</a>
@@ -224,11 +187,11 @@
                             <!-- <div data-options="iconCls:'icon-search'" id="btn-update">检测更新</div>
                             <div class="menu-sep"></div> -->
                             <div data-options="iconCls:'icon-help-word'" id="btn-help">{{ $t('index.Help_document') }}</div>
-                            <div class="menu-sep"></div>
+                    
                             <div data-options="iconCls:'icon-help-about'" id="btn-about">{{ $t('index.about') }}</div>
-                            <div class="menu-sep"></div>
+                            
                             <div data-options="iconCls:'icon-help-log'" id="btn-version">{{ $t('index.Release_Notes') }}</div>
-                            <div class="menu-sep"></div>
+                            
                             <div data-options="iconCls:'icon-help-registered'" id="btn-registered">{{ $t('index.registered') }}</div>
                         </div>
                     </div>
@@ -241,22 +204,22 @@
 
             <div region="south" split="true" style="height: 200px; background: #fff; ">
                 <div class="easyui-layout" data-options="fit:true">
-                    <div class="easyui-panel" v-bind:title="System_log" style="padding-left:10px;padding-top:10px;height:95%" data-options="tools:'#log_div'">
-                        <div id="real_log" style="height: 80%; overflow-y: scroll; background: #ffffff;">
+                    <div class="easyui-panel" v-bind:title="System_log" class="log-div" data-options="tools:'#log_div'">
+                        <div id="real_log">
                         </div>
 
                         <!-- <textarea id="real_message_result" style="width: 100%;height:100%;max-width: 100%;max-height: 100%;resize: none;"></textarea> -->
                     </div>
                     <div id="log_div">
                         <label><input id="log_scroll_btn" type="checkbox" checked>{{ $t('index.Whether_to_scroll') }}</label>
-                        <a class="icon-save easyui-tooltip" v-bind:title="save" id="log_save_btn" style="padding-right:20px" onclick="log_save()"></a>
-                        <a style="padding-right:40px" v-bind:title="Empty" class="icon-remove easyui-tooltip" onclick="log_delete()"></a>
+                        <a class="icon-save easyui-tooltip" v-bind:title="save" id="log_save_btn" onclick="log_save()"></a>
+                        <a v-bind:title="Empty" class="icon-remove easyui-tooltip" onclick="log_delete()"></a>
                     </div>
-                    <div region="south" split="true" style="height: 40px; background: #6C7B8B; ">
-                        <div style="text-align: center;color:white;margin: 0px;padding: 0px;line-height: 30px;font-weight: bold;">
+                    <div region="south" split="true" style="height:30px">
+                        <div class="info-footer">
                             <label for="company">&copy; Copyright 2019 by</label>
-                            <a href="javascript:void(0)" id="company" onclick="open_web()" style="text-decoration:underline;color: white;"></a>
-                            <span id="version" style="float:right; padding-right:20px;" class="head">Version 内测版v1.2</span>
+                            <a href="javascript:void(0)" id="company" onclick="open_web()"></a>
+                            <span id="version" style="float:right; padding-right:20px;" class="head">Version v2.2.0</span>
                             <!--  <img id="tubiao" src='../static/images/connect.png' width="20" height="20"
                      style="float:right; padding-right:20px;" align="absmiddle"/>
                 <label id="status" style="float:right; padding-right:5px;"></label> -->
@@ -287,7 +250,7 @@
 
             </div>
 
-            <div id="mainPanle" region="center" split="true" style="background: #eee; overflow-y:hidden">
+            <div id="mainPanle" region="center" split="true" style="overflow-y:hidden">
             </div>
 
             <div id="gw_info" style="width:350px;height:190px;padding:10px;display:none">
@@ -351,11 +314,11 @@
             </div>
 
             <!-- 新建工程窗口 -->
-            <div id="project_new" style="width:350px;height:140px;padding:10px;display:none">
+            <div id="project_new" style="width:350px;height:140px;display:none">
 
                 <label for="pro_new">{{ $t('index.project_name') }}</label>
                 <input class="easyui-textbox" id="pro_new" style="width: 200px;" validType='maxLength[15]'><br><br>
-                <div style="text-align:right;margin-top:10px ">
+                <div class="window-fotter">
                     <a href="# " class="easyui-linkbutton " iconCls="icon-ok" onclick="project_new()">{{ $t('common.ok') }}</a>
                     <a href="# " class="easyui-linkbutton " iconCls="icon-cancel " onclick="javascript:$('#project_new').dialog('close')">{{ $t('common.cancel') }}</a>
                 </div>
@@ -364,14 +327,14 @@
             <!-- 打开工程窗口 -->
             <div id="project_open" style="width:500px;height:360px;display:none">
                 <input class="easyui-textbox" id="text">
-                <div id="cc" class="easyui-layout" style="width: auto;height: 280px">
-                    <div data-options="region:'north',border:false" style="height:230px;">
-                        <div id="container" style="height:100px">
+                <div id="cc" class="easyui-layout project-open">
+                    <div data-options="region:'north',border:false" class="container">
+                        <div id="container" >
                             <ul id="ull">
                             </ul>
                         </div>
                     </div>
-                    <div data-options="region:'center',border:false" style="height: auto;"><br>
+                    <div data-options="region:'center',border:false" class="path"><br>
                         <label id="pro_path">&#12288;&#12288;&#12288;{{ $t('index.project_path') }}</label>
                     </div>
                 </div>
@@ -628,7 +591,7 @@
                                 </div>
                                 <div style="margin-bottom:5px">
                                     <div>间隔时间(ms):</div>
-                                    <input id='event_interval' class="easyui-textbox" value="5000" required="true" style="width:85%;height:20px">
+                                    <input id='event_interval' class="easyui-textbox" value="5" required="true" style="width:85%;height:20px">
                                 </div>
                                 <div style="margin-bottom:5px">
                                     <div>关联点名称:</div>
