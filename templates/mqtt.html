@@ -8,6 +8,7 @@
     <link rel="shortcut icon" href="../static/favicon.ico">
     <link rel=stylesheet href="../static/easyui/themes/bootstrap/easyui.css">
     <link rel=stylesheet href="../static/easyui/themes/icon.css">
+    <link rel=stylesheet href="../static/rewriteui/css/rewrite.css">
     <script src="../static/easyui/jquery.easyui.min.js"></script>
     <script src="../static/javascript/language.js"></script>
     <script src="../static/easyui/jquery.edatagrid.js"></script>
@@ -56,14 +57,14 @@
                 <textarea id="lastwillmessage" style="width: 400px;height:120px;max-width: 400px;max-height: 120px;resize: none;"></textarea>
             </div>
         </div>
-        <div id='add_realtopic_div' title='添加实时数据主题' style="display:none;width:400px;height:350px;padding:20px;">
+        <div id='add_realtopic_div' style="display:none;width:400px;height:350px;padding:20px;">
             <form id='newtopic_form'>
-                <label for="newtopic" style="padding-right: 10px">实时数据主题：</label>
+                <label for="newtopic" style="padding-right: 10px">{{$t('mqtt.realtopic')}}</label>
                 <input class="easyui-textbox" id='newtopic' required='true' style="width:130px;"><br><br>
                 <input class="easyui-combobox" id='newtopicqos' data-options="editable:false,panelHeight: 'auto'" style="width:60px;height: 20px">
                 <label for="newtopicretain" style="padding-left: 5px">retained:</label>
                 <input id="newtopicretain" class="easyui-switchbutton" labelWidth="100px" data-options="onText:'Yes',offText:'No'" style="height:20px;width:50px">
-                <label for="newfreq" style="padding-right: 10px">上传周期：</label>
+                <label for="newfreq" style="padding-right: 10px">{{$t('mqtt.freq')}}</label>
                 <input class="easyui-numberbox" id='newfreq' required='true' style="width:80px;">
                 <div style="margin-top:20px">
                     <div>{{ $t('mqtt.filter') }}</div>
@@ -79,10 +80,10 @@
                 </div>
             </form>
         </div>
-        <div id='expandtopic_div' title='拓展主题' style="display:none;width:500px;height:250px;">
+        <div id='expandtopic_div' style="display:none;width:500px;height:250px;">
             <form id='expandtopic_form' style="height:100%">
                 <div class="easyui-tabs" style="width:100%;height:100%">
-                    <div title="离线">
+                    <div v-bind:title="offline">
                         <div style="padding:20px">
                             <div>{{ $t('mqtt.historytopic') }}</div>
                             <input id='historytopic' class="easyui-textbox" style="width:180px;height:20px">
@@ -91,54 +92,63 @@
                             <input id="historyretain" class="easyui-switchbutton" labelWidth="100px" data-options="onText:'Yes',offText:'No'" style="height:20px;width:50px">
                         </div>
                     </div>
-                    <div title="查询">
+                    <div v-bind:title="inquire">
                         <div style="padding:20px">
-                            <div>查询数据发布的主题:</div>
+                            <div>{{ $t('mqtt.inquireResponseTopic') }}</div>
                             <input id='inquireResponsetopic' class="easyui-textbox" style="width:180px;height:20px">
                             <input class="easyui-combobox" id='inquireResponseqos' data-options="editable:false,panelHeight: 'auto'" style="width:60px;height: 20px">
                             <label for="inquireResponseretain" style="padding-left: 5px">retained:</label>
                             <input id="inquireResponseretain" class="easyui-switchbutton" labelWidth="100px" data-options="onText:'Yes',offText:'No'" style="height:20px;width:50px">
                             <br><br>
-                            <div>查询数据订阅的主题:</div>
+                            <div>{{ $t('mqtt.inquiretopic') }}</div>
                             <input id='inquiretopic' class="easyui-textbox" style="width:180px;height:20px">
                             <input class="easyui-combobox" id='inquireqos' data-options="editable:false,panelHeight: 'auto'" style="width:60px;height: 20px">
                             <label for="inquireretain" style="padding-left: 5px">retained:</label>
                             <input id="inquireretain" class="easyui-switchbutton" labelWidth="100px" data-options="onText:'Yes',offText:'No'" style="height:20px;width:50px">
                         </div>
                     </div>
-                    <div title="控制">
+                    <div v-bind:title="publishalarm">
                         <div style="padding:20px">
-                            <div>控制订阅的主题:</div>
+                            <div>{{ $t('mqtt.alarmtopic') }}</div>
+                            <input id='alarmtopic' class="easyui-textbox" style="width:180px;height:20px">
+                            <input class="easyui-combobox" id='alarmqos' data-options="editable:false,panelHeight: 'auto'" style="width:60px;height: 20px">
+                            <label for="alarmretain" style="padding-left: 5px">retained:</label>
+                            <input id="alarmretain" class="easyui-switchbutton" labelWidth="100px" data-options="onText:'Yes',offText:'No'" style="height:20px;width:50px">
+                        </div>
+                    </div>
+                    <div v-bind:title="write">
+                        <div style="padding:20px">
+                            <div>{{ $t('mqtt.writetopic') }}</div>
                             <input id='writetopic' class="easyui-textbox" style="width:180px;height:20px">
                             <input class="easyui-combobox" id='writeqos' data-options="editable:false,panelHeight: 'auto'" style="width:60px;height: 20px">
                             <label for="writeretain" style="padding-left: 5px">retained:</label>
                             <input id="writeretain" class="easyui-switchbutton" labelWidth="100px" data-options="onText:'Yes',offText:'No'" style="height:20px;width:50px">
                             <br><br>
-                            <div>控制响应发布的主题:</div>
+                            <div>{{ $t('mqtt.writeresponsetopic') }}</div>
                             <input id='writeResponsetopic' class="easyui-textbox" style="width:180px;height:20px">
                             <input class="easyui-combobox" id='writeResponseqos' data-options="editable:false,panelHeight: 'auto'" style="width:60px;height: 20px">
                             <label for="writeResponseretain" style="padding-left: 5px">retained:</label>
                             <input id="writeResponseretain" class="easyui-switchbutton" labelWidth="100px" data-options="onText:'Yes',offText:'No'" style="height:20px;width:50px">
                         </div>
                     </div>
-                    <div title="重启">
+                    <div v-bind:title="reboot">
                         <div style="padding:20px">
-                            <div>重启订阅的主题:</div>
+                            <div>{{ $t('mqtt.reboottopic') }}</div>
                             <input id='reboottopic' class="easyui-textbox" style="width:180px;height:20px">
                             <input class="easyui-combobox" id='rebootqos' data-options="editable:false,panelHeight: 'auto'" style="width:60px;height: 20px">
                             <label for="rebootretain" style="padding-left: 5px">retained:</label>
                             <input id="rebootretain" class="easyui-switchbutton" labelWidth="100px" data-options="onText:'Yes',offText:'No'" style="height:20px;width:50px">
                             <br><br>
-                            <div>重启响应发布的主题:</div>
+                            <div>{{ $t('mqtt.rebootresponsetopic') }}</div>
                             <input id='rebootResponsetopic' class="easyui-textbox" style="width:180px;height:20px">
                             <input class="easyui-combobox" id='rebootResponseqos' data-options="editable:false,panelHeight: 'auto'" style="width:60px;height: 20px">
                             <label for="rebootResponseretain" style="padding-left: 5px">retained:</label>
                             <input id="rebootResponseretain" class="easyui-switchbutton" labelWidth="100px" data-options="onText:'Yes',offText:'No'" style="height:20px;width:50px">
                         </div>
                     </div>
-                    <div title="配置">
+                    <div v-bind:title="config">
                         <div style="padding:20px">
-                            <div>网关配置订阅的主题:</div>
+                            <div>{{ $t('mqtt.configtopic') }}</div>
                             <input id='configtopic' class="easyui-textbox" style="width:180px;height:20px">
                             <input class="easyui-combobox" id='configqos' data-options="editable:false,panelHeight: 'auto'" style="width:60px;height: 20px">
                             <label for="configretain" style="padding-left: 5px">retained:</label>
@@ -288,7 +298,13 @@
             locale: initial,
             mqtt_config: self.parent.messages[initial]['mqtt']['mqtt_config'],
             point_table: self.parent.messages[initial]['mqtt']['point_table'],
-            identifying: self.parent.messages[initial]['mqtt']['identifying']
+            identifying: self.parent.messages[initial]['mqtt']['identifying'],
+            offline: self.parent.messages[initial]['mqtt']['offline'],
+            inquire: self.parent.messages[initial]['mqtt']['inquire'],
+            publishalarm: self.parent.messages[initial]['mqtt']['publishalarm'],
+            write: self.parent.messages[initial]['mqtt']['write'],
+            reboot: self.parent.messages[initial]['mqtt']['reboot'],
+            config: self.parent.messages[initial]['mqtt']['config']
         },
         watch: {
             locale: function(val) {
@@ -299,7 +315,7 @@
 
     $('body').addClass('active');
 
-    qos_list = ["realqos", "newtopicqos", "historyqos", "inquireResponseqos", "writeResponseqos", "rebootResponseqos", "lastwillqos", "getconfigqos", "inquireqos", "writeqos", "rebootqos", "configqos"];
+    qos_list = ["realqos", "newtopicqos", "historyqos", "alarmqos", "inquireResponseqos", "writeResponseqos", "rebootResponseqos", "lastwillqos", "getconfigqos", "inquireqos", "writeqos", "rebootqos", "configqos"];
     qos_list.forEach(function(oneqos) {
         $("#" + oneqos).combobox({
             url: "../static/json/simplify_qos.json",
@@ -311,48 +327,6 @@
 
     var dir = self.parent.$('#text').textbox('getText'); // 选中的文件夹名称
     feature_path = 'Project/' + dir + '/Gateway';
-
-
-    function topicdiv_none() { // 将所有拓展主题的div隐藏
-        document.getElementById("history_div").style.display = 'none';
-        document.getElementById("inquireresponse_div").style.display = 'none';
-        document.getElementById("inquire_div").style.display = 'none';
-        document.getElementById("writeresponse_div").style.display = 'none';
-        document.getElementById("write_div").style.display = 'none';
-        document.getElementById("rebootresponse_div").style.display = 'none';
-        document.getElementById("reboot_div").style.display = 'none';
-        document.getElementById("config_div").style.display = 'none';
-        document.getElementById("getconfig_div").style.display = 'none';
-    }
-
-    $('#historybtn').bind('click', function() {
-        topicdiv_none();
-        document.getElementById("history_div").style.display = '';
-    });
-
-    $('#inquirebtn').bind('click', function() {
-        topicdiv_none();
-        document.getElementById("inquire_div").style.display = '';
-        document.getElementById("inquireresponse_div").style.display = '';
-    });
-
-    $('#writebtn').bind('click', function() {
-        topicdiv_none();
-        document.getElementById("writeresponse_div").style.display = '';
-        document.getElementById("write_div").style.display = '';
-    });
-
-    $('#rebootbtn').bind('click', function() {
-        topicdiv_none();
-        document.getElementById("rebootresponse_div").style.display = '';
-        document.getElementById("reboot_div").style.display = '';
-    });
-
-    $('#configbtn').bind('click', function() {
-        topicdiv_none();
-        document.getElementById("config_div").style.display = '';
-        document.getElementById("getconfig_div").style.display = '';
-    });
 
     mustaches = JSON.parse(scanFile(cfxApi.getCurrentDirectory() + '\\mqtt\\template'));
     mustaches_object = new Array();
@@ -578,6 +552,15 @@
                 $('#inquireResponseretain').switchbutton('uncheck');
             }
         }
+        if (obj['publish']['alarm']) {
+            $('#alarmtopic').textbox('setValue', obj['publish']['alarm'].topic);
+            $('#alarmqos').combobox('setValue', obj['publish']['alarm'].qos);
+            if (obj['publish']['alarm'].retain) {
+                $('#alarmretain').switchbutton('check');
+            } else {
+                $('#alarmretain').switchbutton('uncheck');
+            }
+        }
         if (obj['publish']['rebootResponse']) {
             $('#rebootResponsetopic').textbox('setValue', obj['publish']['rebootResponse'].topic);
             $('#rebootResponseqos').combobox('setValue', obj['publish']['rebootResponse'].qos);
@@ -743,6 +726,7 @@
         }
         current_historytopic = $("#historytopic").textbox('getValue');
         if (current_historytopic != "") {
+            console.log($("#historyqos").combobox('getValue'))
             expandtopic["publish"]["history"] = {
                 topic: document.getElementById('historytopic').value,
                 qos: parseInt($("#historyqos").combobox('getValue')),
@@ -760,6 +744,14 @@
                 topic: document.getElementById('inquiretopic').value,
                 qos: parseInt($("#inquireqos").combobox('getValue')),
                 retain: $("#inquireretain").switchbutton("options").checked
+            }
+        };
+        current_alarmtopic = $("#alarmtopic").textbox('getValue');
+        if (current_alarmtopic != "") {
+            expandtopic["publish"]["alarm"] = {
+                topic: document.getElementById('alarmtopic').value,
+                qos: parseInt($("#alarmqos").combobox('getValue')),
+                retain: $("#alarmretain").switchbutton("options").checked
             }
         };
         current_writetopic = $("#writetopic").textbox('getValue');
@@ -829,6 +821,7 @@
             closable: false,
             draggable: false,
             modal: true,
+            topic: self.parent.messages[initial]['mqtt']['expandtopic'],
             buttons: [{
                 text: self.parent.messages[initial]['common']['ok'],
                 iconCls: 'icon-ok',
@@ -942,6 +935,7 @@
             closable: false,
             draggable: false,
             modal: true,
+            title: self.parent.messages[initial]['mqtt']['addrealtopic'],
             buttons: [{
                 text: self.parent.messages[initial]['common']['ok'],
                 iconCls: 'icon-ok',
@@ -988,7 +982,7 @@
                             set_realtopic(newtopicmessage);
                             $("#add_realtopic_div").dialog('close');
                         } else {
-                            $.messager.alert(self.parent.messages[initial]['common']['system_hint'], '实时主题列表中已有当前主题，不可重复添加', "info")
+                            $.messager.alert(self.parent.messages[initial]['common']['system_hint'], self.parent.messages[initial]['mqtt']['onetopic_add'], "info")
                         }
                     }
                 }
@@ -1046,6 +1040,7 @@
             closable: false,
             draggable: false,
             modal: true,
+            title: self.parent.messages[initial]['mqtt']['updaterealtopic'],
             buttons: [{
                 text: self.parent.messages[initial]['common']['ok'],
                 iconCls: 'icon-ok',
@@ -1073,11 +1068,13 @@
                         content_object = JSON.parse(content);
                         obj = JSON.parse(content_object[0]['config']);
                         topicrepeat = true;
-                        obj['publish']['realtime'].forEach(function(onetopic) {
-                            if (onetopic['topic'] == newtopicmessage.topic) {
-                                topicrepeat = false;
-                            }
-                        })
+                        if (newtopicmessage.topic != current_topic) {
+                            obj['publish']['realtime'].forEach(function(onetopic) {
+                                if (onetopic['topic'] == newtopicmessage.topic) {
+                                    topicrepeat = false;
+                                }
+                            })
+                        }
                         if (topicrepeat) {
                             new_topicList = [];
                             obj['publish']['realtime'].forEach(function(oneTopic) {
@@ -1104,7 +1101,7 @@
                             set_realtopic(newtopicmessage);
                             $("#add_realtopic_div").dialog('close');
                         } else {
-                            $.messager.alert(self.parent.messages[initial]['common']['system_hint'], '实时主题列表中已有当前主题，不可重复添加', "info")
+                            $.messager.alert(self.parent.messages[initial]['common']['system_hint'], self.parent.messages[initial]['common']['onetopic_add'], "info")
                         }
                     }
                 }

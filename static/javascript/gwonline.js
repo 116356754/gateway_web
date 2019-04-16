@@ -150,16 +150,16 @@ $(function() {
     // 历史数据库文件夹上传
     $('#btn-history-upload').bind('click', function() {
         value = get_baseurl()
-        $.messager.confirm(self.parent.messages[initial]['common']['system_hint'], self.parent.messages[initial]['index']['if_upload_history'].format(value), function(r) {
+        $.messager.confirm(messages[initial]['common']['system_hint'], messages[initial]['index']['if_upload_history'].format(value), function(r) {
             if (r) {
                 filefolder = cfxApi.download_cycledata('storage');
                 console.log(filefolder)
                 if (filefolder != '') {
                     cfxApi.downloadFolderFtp('/mnt/sd/history/', filefolder, function(status) {
                         if (status) {
-                            $.messager.alert(self.parent.messages[initial]['common']['system_hint'], self.parent.messages[initial]['gwonline']['history_upload_success'], "info")
+                            $.messager.alert(messages[initial]['common']['system_hint'], messages[initial]['gwonline']['history_upload_success'], "info")
                         } else {
-                            $.messager.alert(self.parent.messages[initial]['common']['system_hint'], self.parent.messages[initial]['gwonline']['history_upload_fail'], "info")
+                            $.messager.alert(messages[initial]['common']['system_hint'], messages[initial]['gwonline']['history_upload_fail'], "info")
                         }
                     })
                 }

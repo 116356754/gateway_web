@@ -44,7 +44,7 @@ $(function() {
     $.ajax({
         type: 'get',
         url: 'http://' + value + '/get_config',
-        timeout: 5000,
+        timeout: 10000,
         success: function(data) {
             data['channel'].forEach(function(channel) {
                 channel['children'] = [];

@@ -75,6 +75,7 @@ function event_data(type, old_name) {
         enable = 0;
     }
     var name = self.parent.$('#event_name').textbox('getText');
+    var content = self.parent.$('#event_content').textbox('getValue');
     var range = self.parent.$('#event_class').combobox('getValue');
     if (range == "点值超出范围") {
         range = 1
@@ -101,9 +102,9 @@ function event_data(type, old_name) {
         clear = getsub(self.parent.rcount, "rp", "rv")
     }
     if (type == 'add') {
-        sql = "insert into alarm values ('{0}','{1}','{2}','{3}','{4}',nullif('{5}',''),'{6}','{7}',nullif('{8}','[]'),nullif('{9}','[]'))".format(name, enable, range, interval, delay, tag, low, high, JSON.stringify(trigger), JSON.stringify(clear));
+        sql = "insert into alarm values ('{0}',nullif('{1}',''),'{2}','{3}','{4}','{5}',nullif('{6}',''),'{7}','{8}',nullif('{9}','[]'),nullif('{10}','[]'))".format(name, content, enable, range, interval, delay, tag, low, high, JSON.stringify(trigger), JSON.stringify(clear));
     } else {
-        sql = "update alarm set name='{0}',enable='{1}',range='{2}',interval='{3}',delay='{4}',tag=nullif('{5}',''),low='{6}',high='{7}',trigger=nullif('{8}','[]'),clear=nullif('{9}','[]') where name='{10}'".format(name, enable, range, interval, delay, tag, low, high, JSON.stringify(trigger), JSON.stringify(clear), old_name);
+        sql = "update alarm set name='{0}',content=nullif('{1}',''),enable='{2}',range='{3}',interval='{4}',delay='{5}',tag=nullif('{6}',''),low='{7}',high='{8}',trigger=nullif('{9}','[]'),clear=nullif('{10}','[]') where name='{11}'".format(name, content, enable, range, interval, delay, tag, low, high, JSON.stringify(trigger), JSON.stringify(clear), old_name);
     }
     console.log(sql)
     result = insertsql(path, sql)

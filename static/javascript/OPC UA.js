@@ -117,7 +117,7 @@ $(function() {
         columns: [
             [{
                     field: 'rowid',
-                    title: 'ID',
+                    title: self.parent.messages[initial]['common']['name'],
                     width: 100,
                     align: 'left',
                     editor: {
@@ -130,7 +130,7 @@ $(function() {
                 },
                 {
                     field: 'name',
-                    title: '名称',
+                    title: self.parent.messages[initial]['common']['description'],
                     width: 100,
                     align: 'center',
                     editor: {
@@ -143,7 +143,7 @@ $(function() {
                 },
                 {
                     field: 'dataType',
-                    title: '数据类型',
+                    title: self.parent.messages[initial]['modbus_slave']['dataType'],
                     width: 100,
                     align: 'center',
                     editor: {
@@ -162,7 +162,7 @@ $(function() {
             ]
         ],
         toolbar: [{
-                text: '添加',
+                text: self.parent.messages[initial]['common']['add'],
                 iconCls: 'icon-add',
                 handler: function() {
                     self.parent.display_tag('OPC_UA', null, true)
@@ -170,7 +170,7 @@ $(function() {
             },
             '-',
             {
-                text: '保存',
+                text: self.parent.messages[initial]['common']['save'],
                 iconCls: 'icon-save',
                 handler: function() {
                     if (editingId != undefined) {
@@ -180,7 +180,7 @@ $(function() {
                 }
             },
             '-', {
-                text: '撤销',
+                text: self.parent.messages[initial]['common']['redo'],
                 iconCls: 'icon-redo',
                 handler: function() {
                     if (editingId != undefined) {
@@ -189,24 +189,24 @@ $(function() {
                     }
                 }
             }, '-', {
-                text: '删除',
+                text: self.parent.messages[initial]['common']['remove'],
                 iconCls: 'icon-remove',
                 handler: function() {
                     // if (editingId != undefined) {
                     //     $('#tg').treegrid('remove', editingId);
                     //     editingId = undefined;
                     // }
-                    $.messager.confirm('系统提示', '您确定要删除该节点和他的所有子节点吗?', function(r) {
+                    $.messager.confirm(self.parent.messages[initial]['common']['system_hint'], self.parent.messages[initial]['opcua']['deletenode'], function(r) {
                         if (r) {
                             var dir = self.parent.$('#text').textbox('getText'); // 选中的文件夹Name
                             if (row_value._parentId != null) {
                                 sql = "DELETE FROM OPC_UA where id='{0}'".format(row_value.rowid);
                             } else {
-                                sql = "DELETE FROM OPC_UA where deviceCode='{0}'".format(row_value.id);
+                                sql = "DELETE FROM OPC_UA where deviceCode='{0}'".format(row_value.rowid);
                             }
                             result = deletesql('Project/' + dir + '/Gateway', sql);
                             if (result == 'true') {
-                                self.parent.insert_info('删除成功');
+                                self.parent.insert_info(self.parent.messages[initial]['common']['successfully_deleted'])
                                 $("#tg").treegrid('reload');
                             } else {
                                 sqlite_message(result, self.parent.messages[initial]['common']['system_hint']);
@@ -216,16 +216,16 @@ $(function() {
                     });
                 }
             }, '-', {
-                text: '清空',
+                text: self.parent.messages[initial]['index']['Empty'],
                 iconCls: 'icon-empty',
                 handler: function() {
-                    $.messager.confirm('系统提示', '您确定要清空表数据吗?', function(r) {
+                    $.messager.confirm(self.parent.messages[initial]['common']['system_hint'], self.parent.messages[initial]['common']['if_clear_table'], function(r) {
                         if (r) {
                             var dir = self.parent.$('#text').textbox('getText'); // 选中的文件夹Name
                             sql = "DELETE FROM OPC_UA";
                             result = truncatesql('Project/' + dir + '/Gateway', sql, 'VACUUM');
                             if (result == 'true') {
-                                self.parent.insert_info('清空成功');
+                                self.parent.insert_info(self.parent.messages[initial]['common']['clear_success']);
                                 $("#tg").treegrid('reload');
                             } else {
                                 sqlite_message(result, self.parent.messages[initial]['common']['system_hint']);
