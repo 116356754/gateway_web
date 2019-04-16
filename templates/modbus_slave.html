@@ -7,6 +7,7 @@
     <link rel="shortcut icon" href="../static/favicon.ico">
     <link rel=stylesheet href="../static/easyui/themes/bootstrap/easyui.css">
     <link rel=stylesheet href="../static/easyui/themes/icon.css">
+    <link rel=stylesheet href="../static/rewriteui/css/rewrite.css">
     <script src="../static/easyui/jquery.min.js"></script>
     <script src="../static/easyui/jquery.easyui.min.js"></script>
     <script src="../static/javascript/language.js"></script>
@@ -26,11 +27,11 @@
             <div id="modbus_config" data-options="region:'north',split:true,collapsible:true" style="height:260px; overflow:hidden">
                 <form id="querytb" method="post" style="padding:10px;" accept-charset="UTF-8">
                     <div id="rtu_div" style="width:550px;height:300px;padding:10px;display:none">
-                        <label style="display:inline-block;width:85px">串口号</label>
-                        <label style="display:inline-block;width:85px">波特率</label>
-                        <label style="display:inline-block;width:85px">数据位</label>
-                        <label style="display:inline-block;width:85px">停止位</label>
-                        <label style="display:inline-block;width:85px">奇偶校验</label>
+                        <label style="display:inline-block;width:85px">{{ $t('index.Serialport_number') }}</label>
+                        <label style="display:inline-block;width:85px">{{ $t('index.baud') }}</label>
+                        <label style="display:inline-block;width:85px">{{ $t('index.databit') }}</label>
+                        <label style="display:inline-block;width:85px">{{ $t('index.stopbit') }}</label>
+                        <label style="display:inline-block;width:85px">{{ $t('index.parity') }}</label>
                         <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick='addcom()'></a>
                         <table id="tb">
                         </table>
@@ -178,8 +179,11 @@
         row = document.getElementById("tb").insertRow();
         if (row != null) {
             cell = row.insertCell();
-            cell.innerHTML = "<input id=\"number" + tcount + "\" class=\"easyui-combobox\" data-options=\"panelHeight:'auto',editable:false\" required=\"true\" value=\"com1\" style=\"width:64px\">&#12288;&#12288;<input id=\"baud" + tcount + "\" class=\"easyui-combobox\" required=\"true\" data-options=\"panelHeight:'auto',editable:false\" value=\"9600\" style=\"width:64px\">&#12288;&#12288;<input id=\"data" + tcount + "\" class=\"easyui-combobox\" data-options=\"panelHeight:'auto',editable:false\" required=\"true\" value=\"8\" style=\"width:64px\">&#12288;&#12288;<input id=\"stop" + tcount + "\" class=\"easyui-combobox\" data-options=\"panelHeight:'auto',editable:false\" required=\"true\" value=\"1\" style=\"width:64px\">&#12288;&#12288;<input id=\"parity" + tcount + "\" class=\"easyui-combobox\" data-options=\"panelHeight:'auto',editable:false\" required=\"true\" value=\"N\" style=\"width:64px\">&#12288;&#12288;<a href=\"#\" class=\"easyui-linkbutton\" onclick=\"deletecom(this)\">删除</a>"
+            cell.innerHTML = "<input id=\"number" + tcount + "\" class=\"easyui-combobox\" data-options=\"editable:false\" required=\"true\" value=\"com1\" style=\"width:64px\">&#12288;&#12288;<input id=\"baud" + tcount + "\" class=\"easyui-combobox\" required=\"true\" data-options=\"panelHeight:'auto',editable:false\" value=\"9600\" style=\"width:64px\">&#12288;&#12288;<input id=\"data" + tcount + "\" class=\"easyui-combobox\" data-options=\"panelHeight:'auto',editable:false\" required=\"true\" value=\"8\" style=\"width:64px\">&#12288;&#12288;<input id=\"stop" + tcount + "\" class=\"easyui-combobox\" data-options=\"panelHeight:'auto',editable:false\" required=\"true\" value=\"1\" style=\"width:64px\">&#12288;&#12288;<input id=\"parity" + tcount + "\" class=\"easyui-combobox\" data-options=\"panelHeight:'auto',editable:false\" required=\"true\" value=\"N\" style=\"width:64px\">&#12288;&#12288;<a href=\"#\" class=\"easyui-linkbutton\" onclick=\"deletecom(this)\">Delete</a>"
             $.parser.parse(cell);
+            var select = self.parent.$('#tt').tree('getSelected');
+            var parent1 = self.parent.$('#tt').tree('getParent', select.target);
+            var parent2 = self.parent.$('#tt').tree('getParent', parent1.target);
             com_data = parent2.feature[1];
             $('#number' + tcount).combobox({
                 valueField: 'text',

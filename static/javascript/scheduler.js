@@ -68,7 +68,7 @@ function scheduler_data(type, old_name) {
     })
     wday = wday.substring(0, wday.length - 1);
     if (wday == "") {
-        $.messager.alert(self.parent.messages[initial]['common']['system_hint'], "必须最少选中星期中的一项", "info")
+        $.messager.alert(self.parent.messages[initial]['common']['system_hint'], self.parent.messages[initial]['scheduler']['leastone'], "info")
         return false;
     };
     var sets = getsub(tcount, "start_tag", "start_val");
@@ -100,10 +100,10 @@ function scheduler_new(type, old_name) {
     status = scheduler_data(type, old_name);
     if (status == 'true') {
         if (type == 'add') {
-            self.parent.insert_info('添加成功');
+            self.parent.insert_info(self.parent.messages[initial]['common']['add_success']);
             $("#scheduler_div").dialog('close');
         } else { // 双击修改
-            self.parent.insert_info('修改成功');
+            self.parent.insert_info(self.parent.messages[initial]['common']['edit_success']);
             $("#scheduler_div").dialog('close');
         }
     }
@@ -128,9 +128,9 @@ $(function() {
             content = JSON.parse(selectsql(path, "select * from scheduler"));
             content.forEach(function(tag) {
                 if (tag['enable']) {
-                    tag['enable'] = "启用"
+                    tag['enable'] = self.parent.messages[initial]['common']['enable']
                 } else {
-                    tag['enable'] = "不启用"
+                    tag['enable'] = self.parent.messages[initial]['common']['disable']
                 }
             })
             return content;
@@ -155,7 +155,7 @@ $(function() {
             $("#start_table").empty();
             data = $("#scheduler_config").datagrid('getSelected');
             scheduler_dialog('modify', data.name);
-            if (data.enable == "启用") {
+            if (data.enable == self.parent.messages[initial]['common']['enable']) {
                 $("#scheduler_check").prop("checked", true);
             } else {
                 $("#scheduler_check").prop("checked", false);
@@ -185,7 +185,7 @@ $(function() {
         columns: [
             [{
                     field: 'enable',
-                    title: '启用',
+                    title: self.parent.messages[initial]['mqtt']['used'],
                     width: 100,
                     align: 'center',
                     editor: {
@@ -198,7 +198,7 @@ $(function() {
                 },
                 {
                     field: 'name',
-                    title: '名称',
+                    title: self.parent.messages[initial]['common']['name'],
                     width: 100,
                     align: 'center',
                     editor: {
@@ -210,7 +210,7 @@ $(function() {
                 },
                 {
                     field: 'start',
-                    title: '起始时间',
+                    title: self.parent.messages[initial]['offline_data']['Start_time'],
                     width: 100,
                     align: 'center',
                     editor: {
@@ -222,7 +222,7 @@ $(function() {
                 },
                 {
                     field: 'stop',
-                    title: '结束时间',
+                    title: self.parent.messages[initial]['offline_data']['Stop_time'],
                     width: 100,
                     align: 'center',
                     editor: {

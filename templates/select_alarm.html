@@ -7,6 +7,7 @@
     <link rel="shortcut icon" href="../static/favicon.ico">
     <link rel=stylesheet href="../static/easyui/themes/bootstrap/easyui.css">
     <link rel=stylesheet href="../static/easyui/themes/icon.css">
+    <link rel=stylesheet href="../static/rewriteui/css/rewrite.css">
     <script src="../static/easyui/jquery.min.js"></script>
     <script src="../static/easyui/jquery.easyui.min.js"></script>
     <script src="../static/easyui/locale/easyui-lang-zh_CN.js"></script>
@@ -26,7 +27,7 @@
     <div id='app' style="position:absolute; width:100%;height:100%;left:0;top:0">
         <div class="easyui-layout" data-options="fit:true">
 
-            <div data-options="region:'north',split:true" style="height:80px;">
+            <div data-options="region:'north'" style="height:80px;">
                 <div style="padding-left:20px;padding-top:20px;">
                     <input class="easyui-datetimebox" v-bind:label="start_time" labelWidth="70px" data-options="required:true,showSeconds:true" id="start_time" value="3/4/2010 0:0:0" style="width:250px">&nbsp;&nbsp;&nbsp;&nbsp;
                     <input class="easyui-datetimebox" v-bind:label="stop_time" labelWidth="70px" data-options="required:true,showSeconds:true" id="stop_time" value="3/4/2010 0:0:0" style="width:250px">&nbsp;&nbsp;&nbsp;&nbsp;

@@ -73,9 +73,6 @@
         list-style: none;
     }
     
-    
-    
-     
     div .btn-separator {
         float: left;
         height: 24px;
@@ -131,6 +128,11 @@
                                     </td>
                                 </tr>
                             </table>
+                            <a href="javascript:void(0)" id="database_menu" class="easyui-menubutton" data-options="menu:'#menu-database-config',iconCls:'icon-setting'">{{ $t('index.database') }}</a>
+
+                            <div id="menu-database-config" class="easyui-menu">
+                                <div data-options="iconCls:'icon-search'" id="btn-inquireAlarm" onclick="alarm_inquire()">{{ $t('index.inquireAlarm') }}</div>
+                            </div>
                         </div>
 
                         <div id="device" style="font-size: 16px;display:none;">
@@ -139,7 +141,6 @@
                                     <td>
                                         <a href="#" id="btn-add-device" class="easyui-linkbutton" plain="true" iconCls="icon-gw-add">{{ $t('index.add_device') }}</a>
                                     </td>
-                                    
                                     <td>
                                         <a href="#" id="btn-stop-device" class="easyui-linkbutton" plain="true" iconCls="icon-cancel" style="display:none">{{ $t('index.stop_search') }}</a>
                                     </td>
@@ -149,25 +150,23 @@
                                     <td>
                                         <a href="#" id="btn-debug-mode" class="easyui-linkbutton" plain="true" iconCls="icon-bug">{{ $t('index.debug_mode') }}</a>
                                     </td>
-                                   
-                                    <td>
-                                        <a href="#" id="btn-history-upload" class="easyui-linkbutton" plain="true" iconCls="icon-history-data">{{ $t('index.offline_monitoring') }}</a>
-                                    </td>
                                 </tr>
                             </table>
+                            <a href="javascript:void(0)" id="gw_database_menu" class="easyui-menubutton" data-options="menu:'#menu-gwdatabase-config',iconCls:'icon-setting'">{{ $t('index.database') }}</a>
+
+                            <div id="menu-gwdatabase-config" class="easyui-menu">
+                                <div data-options="iconCls:'icon-history-data'" id="btn-history-upload">{{ $t('index.offline_monitoring') }}</div>
+                                <div data-options="iconCls:'icon-search'" id="btn-gwinquireAlarm" onclick="alarm_inquire()">{{ $t('index.inquireAlarm') }}</div>
+                            </div>
+
                             <a href="javascript:void(0)" id="system_config" class="easyui-menubutton" data-options="menu:'#menu-system-config',iconCls:'icon-setting'">{{ $t('index.system_config') }}</a>
 
                             <div id="menu-system-config" class="easyui-menu">
                                 <div data-options="iconCls:'icon-set-ip'" id="btn-update" onclick="set_ip()">{{ $t('index.configIP') }}</div>
-                                
                                 <div data-options="iconCls:'icon-gw-upload'" id="btn-update" onclick="upload_project()">{{ $t('index.upload_project') }}</div>
-                                
                                 <div data-options="iconCls:'icon-set-passwd'" id="btn-update" onclick="set_passwd()">{{ $t('index.passwd_set') }}</div>
-                                
                                 <div data-options="iconCls:'icon-set-ntp'" id="btn-update" onclick="set_ntp()">{{ $t('index.School_time') }}</div>
-                                
                                 <div data-options="iconCls:'icon-set-reboot'" id="btn-update" onclick="reboot_gw()">{{ $t('index.reboot_gw') }}</div>
-                                
                                 <div data-options="iconCls:'icon-update'" id="btn-update" onclick="gw_update()">{{ $t('index.gw_update') }}</div>
                             </div>
                         </div>
@@ -177,7 +176,7 @@
 
                         <div id="menu-language" class="easyui-menu">
                             <div data-options="iconCls:'icon-retweet'" id="btn-update" onclick="changeToChinese()">Chinese</div>
-                            
+
                             <div data-options="iconCls:'icon-retweet'" id="btn-update" onclick="changeToEnglish()">English</div>
                         </div>
 
@@ -187,11 +186,8 @@
                             <!-- <div data-options="iconCls:'icon-search'" id="btn-update">检测更新</div>
                             <div class="menu-sep"></div> -->
                             <div data-options="iconCls:'icon-help-word'" id="btn-help">{{ $t('index.Help_document') }}</div>
-                    
                             <div data-options="iconCls:'icon-help-about'" id="btn-about">{{ $t('index.about') }}</div>
-                            
                             <div data-options="iconCls:'icon-help-log'" id="btn-version">{{ $t('index.Release_Notes') }}</div>
-                            
                             <div data-options="iconCls:'icon-help-registered'" id="btn-registered">{{ $t('index.registered') }}</div>
                         </div>
                     </div>
@@ -215,11 +211,11 @@
                         <a class="icon-save easyui-tooltip" v-bind:title="save" id="log_save_btn" onclick="log_save()"></a>
                         <a v-bind:title="Empty" class="icon-remove easyui-tooltip" onclick="log_delete()"></a>
                     </div>
-                    <div region="south" split="true" style="height:30px">
+                    <div region="south" split="true" style="height: 30px">
                         <div class="info-footer">
                             <label for="company">&copy; Copyright 2019 by</label>
                             <a href="javascript:void(0)" id="company" onclick="open_web()"></a>
-                            <span id="version" style="float:right; padding-right:20px;" class="head">Version v2.2.0</span>
+                            <span id="version" style="float:right; padding-right:20px;" class="head">Version 内测版v1.3</span>
                             <!--  <img id="tubiao" src='../static/images/connect.png' width="20" height="20"
                      style="float:right; padding-right:20px;" align="absmiddle"/>
                 <label id="status" style="float:right; padding-right:5px;"></label> -->
@@ -287,7 +283,7 @@
             </div>
 
             <!-- 网关地址设置窗口 -->
-            <div id="dlg-url-set" style="width:350px;height:150px;padding:10px;display:none">
+            <div id="dlg-url-set" style="width:350px;height:160px;padding:10px;display:none">
                 <div class="input_container" style="position:absolute;top:50px">
                     <label for="gw_ip" style="padding-right: 10px">{{ $t('index.gwaddr') }}</label>
                     <input class="easyui-textbox" id='gw_ip' style="height:25px;width:150px">
@@ -329,7 +325,7 @@
                 <input class="easyui-textbox" id="text">
                 <div id="cc" class="easyui-layout project-open">
                     <div data-options="region:'north',border:false" class="container">
-                        <div id="container" >
+                        <div id="container">
                             <ul id="ull">
                             </ul>
                         </div>
@@ -357,7 +353,7 @@
 
             <!-- <span style="padding-left:10px; font-size: 16px; " class='title-nodrag'><img src="../static/images/logo.png" width="120" height="30" align="absmiddle" /> 数据采集网关配置管理工具</span> -->
             <!-- 添加网关设备窗口 -->
-            <div id="gw_add" style="width:350px;height:310px;padding:10px;display:none">
+            <div id="gw_add" style="width:350px;height:320px;padding:10px;display:none">
                 <form id="gw_add_form">
                     <label for="gw_new">{{ $t('index.gw_name') }}</label><br>
                     <input class="easyui-textbox" id="gw_new" style="width: 200px;" required="true" value="Gateway_1" validType='maxLength[15]'><br><br>
@@ -579,6 +575,7 @@
                         <div data-options="region:'north'" style="height:70px;padding:10px">
                             <label class="my_protocol" style="font-size:12px;"><input id="event_check" class="input_agreement_protocol" type="checkbox" checked><span></span>启用</label><br>
                             <input class="easyui-textbox" id='event_name' label="事件名称：" value="New Event" labelWidth="100px" style="width: 30%" validType="maxLength[30]">
+                            <input class="easyui-textbox" id='event_content' label="事件描述：" labelWidth="100px" style="width: 30%" validType="maxLength[30]">
                         </div>
                         <div data-options="region:'west',title:'事件来源'" style="width:26%;"><br>
                             <div style="margin-left:10px">
@@ -591,7 +588,7 @@
                                 </div>
                                 <div style="margin-bottom:5px">
                                     <div>间隔时间(ms):</div>
-                                    <input id='event_interval' class="easyui-textbox" value="5" required="true" style="width:85%;height:20px">
+                                    <input id='event_interval' class="easyui-textbox" value="5000" required="true" style="width:85%;height:20px">
                                 </div>
                                 <div style="margin-bottom:5px">
                                     <div>关联点名称:</div>

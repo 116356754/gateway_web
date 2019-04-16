@@ -1,12 +1,18 @@
 function file_download(file_name, dir) { // FTP下载配置文件
     ip = get_baseurl();
-    cfxApi.uploadFileFtp('/home/', 'lm.db', getCurrentDirectory() + '\\Project\\' + dir + '\\' + file_name + '.db', function(status) {
+    cfxApi.uploadFileFtp('/home/', 'lm.db', getCurrentDirectory() + '\\Project\\' + dir + '\\Gateway.db', function(status) {
         if (status) {
             cfxApi.uploadFolderFtp('/home/mqtt/ssl', 'mqtt/ssl/', function(status) {
                 if (status) {
-                    cfxApi.uploadFolderFtp('/home/mqtt/template', 'mqtt/template/', function(status) {
+                    cfxApi.uploadFolderFtp('/home/mqtt/realtime', 'mqtt/realtime/', function(status) {
                         if (status) {
-                            determine_database_complate();
+                            cfxApi.uploadFolderFtp('/home/mqtt/write', 'mqtt/write/', function(status) {
+                                if (status) {
+                                    determine_database_complate();
+                                } else {
+                                    insert_info(messages[initial]['index']['download_fail'])
+                                }
+                            });
                         } else {
                             insert_info(messages[initial]['index']['download_fail'])
                         }
@@ -67,11 +73,11 @@ function download_valid_passwd(file_name, dir) {
                     if (data.Model == gwVersion) { // 硬件版本
                         file_download(file_name, dir)
                     } else {
-                        $.messager.alert(messages[initial]['common']['system_hint'], messages[initial]['index']['hardware_different'], "info");
+                        $.messager.alert(messages[initial]['common']['system_hint'], messages[initial]['index']['hardware_different'].format(gwVersion, data.Model), "info");
                         insert_info(messages[initial]['index']['download_fail'])
                     }
                 } else {
-                    $.messager.alert(messages[initial]['common']['system_hint'], messages[initial]['index']['software_different'], "info");
+                    $.messager.alert(messages[initial]['common']['system_hint'], messages[initial]['index']['software_different'].format(tool_version, data.Version), "info");
                     insert_info(messages[initial]['index']['download_fail'])
                 }
             } else {

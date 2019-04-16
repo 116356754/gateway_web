@@ -12,6 +12,7 @@
     <link rel="shortcut icon" href="../static/favicon.ico">
     <link rel=stylesheet href="../static/easyui/themes/bootstrap/easyui.css">
     <link rel=stylesheet href="../static/easyui/themes/icon.css">
+    <link rel=stylesheet href="../static/rewriteui/css/rewrite.css">
     <script src="../static/easyui/jquery.min.js"></script>
     <script src="../static/easyui/jquery.easyui.min.js"></script>
     <script src="../static/easyui/locale/easyui-lang-zh_CN.js"></script>
@@ -151,7 +152,7 @@
                             iconCls: 'icon-ok',
                             handler: function() {
                                 dir = $('#pro_new').textbox('getText');
-                                self.parent.project_new(dir);
+                                project_new(dir);
                                 $('#project_new').dialog('close');
                             }
                         }, {
@@ -172,5 +173,36 @@
                 $.messager.alert(self.parent.messages[initial]['common']['system_hint'], self.parent.messages[initial]['index']['connectip_fail'].format(value), "info");
             }
         });
+    }
+
+    // 备份网关工程
+    function project_new(dir) {
+        if (dir) {
+            var content = scanPro(project_path);
+            if (content.indexOf(dir) == '-1') { // 不存在重名工程
+                createdir(project_path + dir);
+                cfxApi.downloadFileFtp('/home', 'lm.db', project_path + dir + '', function(status) {
+                    if (status) {
+                        sql = "select gwName from gw";
+                        content = selectsql(project_path + dir + '\\lm', sql)
+                        content = JSON.parse(content);
+                        moveFile(project_path + dir + '\\lm.db', project_path + dir + '\\Gateway.db')
+                        self.parent.insert_info(self.parent.messages[initial]['index']['Backup_success'])
+                        self.parent.load_proname();
+                        self.parent.$('#text').textbox('setText', dir);
+                        self.parent.project_open('Backup');
+                    } else { // 上载工程失败时删除工程文件夹
+                        self.parent.project_open('Backup');
+                        self.parent.insert_info(self.parent.messages[initial]['index']['Backup_fail']);
+                        $.messager.alert(self.parent.messages[initial]['common']['system_hint'], self.parent.messages[initial]['index']['Backup_fail']);
+                        deletedir(project_path + dir)
+                    }
+                });
+            } else {
+                $.messager.alert(self.parent.messages[initial]['common']['system_hint'], self.parent.messages[initial]['index']['pro_already'].format(dir));
+            }
+        } else {
+            $.messager.alert(self.parent.messages[initial]['common']['system_hint'], self.parent.messages[initial]['index']['no_proname']);
+        }
     }
 </script>

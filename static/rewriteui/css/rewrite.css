@@ -42,6 +42,13 @@
 .icon-update,
 .messager-question,
 .icon-template-add,
+.icon-add,
+.icon-redo,
+.icon-excel,
+.icon-empty,
+.icon-template,
+.icon-dltinsert,
+.icon-stop-project,
 .panel-tool-close{
     background: none;
 }
@@ -90,7 +97,8 @@
 .icon-save:before {
     content: "\e7a8";
 }
-.icon-remove:before {
+.icon-remove:before,
+.icon-empty:before{
     content: "\e7f8";
 }
 .icon-setting:before {
@@ -131,6 +139,24 @@
 }
 .messager-question:before {
     content: "\e78c";
+}
+.icon-add:before {
+    content: "\e9a9";
+}
+.icon-redo:before {
+    content: "\e88e";
+}
+.icon-excel:before {
+    content: "\e7e3";
+}
+.icon-template:before {
+    content: "\e7ed";
+}
+.icon-dltinsert:before {
+    content: "\e9b4";
+} 
+.icon-stop-project:before {
+    content: "\e896";
 }
 
 /* 重写easyui部分css */
@@ -270,7 +296,9 @@ a:hover{
 }
 
 /* 自己扩展 */
-
+iframe{
+    border:none;
+}
 input[type="checkbox"]::after{
     position: relative;
     top: 0;
@@ -282,7 +310,6 @@ input[type="checkbox"]::after{
     border: 1px solid #d9d9d9;
     border-collapse: separate;
 }
-
 #logo_div{
     padding: 4.5px 0 0;
     border-bottom:1px solid #c0c4c5;
@@ -293,14 +320,19 @@ input[type="checkbox"]::after{
     padding: 0 5px;
 }
 #language,
-#help,
-#system_config{
+#help{
     margin: 5px 0 0;
 }
-#system_config{
-    position:absolute;
-    top:0px; 
-    left:309px;
+#device >table,
+#project >table{
+    float: left;
+}
+#device #gw_database_menu,
+#project #database_menu{
+    float: left;
+}
+#device #system_config{
+    float: left;
 }
 .project-open{
     height: 100%;
@@ -357,6 +389,7 @@ input[type="checkbox"]::after{
 .layout-split-south .panel-header{
     background: #f0f1f1;
     padding: 0 10px;
+    width: 100% !important;
 }
 .layout-split-south .panel-header .panel-title{
     height: 30px;
@@ -387,12 +420,13 @@ input[type="checkbox"]::after{
 }
 .layout-split-south .panel-htop:first-child .panel-body{
     height: calc(100% - 30px);
+    width: 100% !important;
 }
 .layout-split-south .panel-htop:first-child .panel-body #real_log{
     height: 100%;
     padding: 10px;
     background: #fff;
-    overflow: auto;
+    overflow-y: scroll;
 }
 .layout-split-south .panel-htop .panel-body .info-footer{
     line-height: 29px;
@@ -406,4 +440,10 @@ input[type="checkbox"]::after{
     margin: 10px 10px 10px 0;
     font-size: 30px !important;
     color: #999;
+}
+.datagrid-wrap{
+    background: #fff;
+}
+.layout-expand{
+    background: #f1f1f1;
 }

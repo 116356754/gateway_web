@@ -10,36 +10,36 @@ function treeConfigMode() {
             // TimeFn = setTimeout(function() {
             document.getElementById('mainPanle').innerHTML = '';
             if (level == 4 && row.iconCls == 'icon-calculation-point') { // 显示计算点配置窗口
-                document.getElementById('mainPanle').innerHTML = '<iframe id=calculate src="../templates/calculate.html" style="width:99%;height:100%;background:#fafafa;"></iframe>';
+                document.getElementById('mainPanle').innerHTML = '<iframe id=calculate src="../templates/calculate.html" style="width:100%;height:100%;background:#fafafa;"></iframe>';
             } else if (level == 4 && row.iconCls == 'icon-user-point') { // 显示用户点配置窗口
-                document.getElementById('mainPanle').innerHTML = '<iframe id=user src="../templates/user_point.html" style="width:99%;height:100%;background:#fafafa;"></iframe>';
+                document.getElementById('mainPanle').innerHTML = '<iframe id=user src="../templates/user_point.html" style="width:100%;height:100%;background:#fafafa;"></iframe>';
             } else if (level == 4 && row.iconCls == 'icon-system-point') { // 显示系统点配置窗口
-                document.getElementById('mainPanle').innerHTML = '<iframe id=system src="../templates/system_point.html" style="width:99%;height:100%;background:#fafafa;"></iframe>';
+                document.getElementById('mainPanle').innerHTML = '<iframe id=system src="../templates/system_point.html" style="width:100%;height:100%;background:#fafafa;"></iframe>';
             } else if (level == 3 && row.iconCls == 'icon-data-storage') {
-                document.getElementById('mainPanle').innerHTML = '<iframe id=data_storage src="../templates/data_storage.html" style="width:99%;height:100%;background:#fafafa;"></iframe>';
+                document.getElementById('mainPanle').innerHTML = '<iframe id=data_storage src="../templates/data_storage.html" style="width:100%;height:100%;background:#fafafa;"></iframe>';
             } else if (level == 3 && row.iconCls == 'icon-scheduler') {
-                document.getElementById('mainPanle').innerHTML = '<iframe id=scheduler src="../templates/scheduler.html" style="width:99%;height:100%;background:#fafafa;"></iframe>';
+                document.getElementById('mainPanle').innerHTML = '<iframe id=scheduler src="../templates/scheduler.html" style="width:100%;height:100%;background:#fafafa;"></iframe>';
             } else if (level == 3 && row.iconCls == 'icon-alarm_event') {
-                document.getElementById('mainPanle').innerHTML = '<iframe id=alarm_event src="../templates/event.html" style="width:99%;height:100%;background:#fafafa;"></iframe>';
+                document.getElementById('mainPanle').innerHTML = '<iframe id=alarm_event src="../templates/event.html" style="width:100%;height:100%;background:#fafafa;"></iframe>';
             } else if (level == 3 && row.iconCls == 'icon-js_script') {
-                document.getElementById('mainPanle').innerHTML = '<iframe id=js_script src="../templates/js_script.html" style="width:99%;height:100%;background:#fafafa;"></iframe>';
+                document.getElementById('mainPanle').innerHTML = '<iframe id=js_script src="../templates/js_script.html" style="width:100%;height:100%;background:#fafafa;"></iframe>';
             } else if (level == 4 && row.iconCls == 'icon-Modbus') {
-                document.getElementById('mainPanle').innerHTML = '<iframe id=modbus_slave src="../templates/modbus_slave.html" frameborder="0" framespacing="0" style="width:99%;height:100%;background:#fafafa;"></iframe>';
+                document.getElementById('mainPanle').innerHTML = '<iframe id=modbus_slave src="../templates/modbus_slave.html" frameborder="0" framespacing="0" style="width:100%;height:100%;background:#fafafa;"></iframe>';
             } else if (level == 4 && row.iconCls == 'icon-upload-mqtt') {
-                document.getElementById('mainPanle').innerHTML = '<iframe id=mqtt src="../templates/mqtt.html" style="width:99%;height:100%;background:#fafafa;"></iframe>';
+                document.getElementById('mainPanle').innerHTML = '<iframe id=mqtt src="../templates/mqtt.html" style="width:100%;height:100%;background:#fafafa;"></iframe>';
             } else if (level == 4 && row.iconCls == 'icon-upload-luomiyun') {
-                document.getElementById('mainPanle').innerHTML = '<iframe id=luomiyun src="../templates/luomiyun.html" style="width:99%;height:100%;background:#fafafa;"></iframe>';
+                document.getElementById('mainPanle').innerHTML = '<iframe id=luomiyun src="../templates/luomiyun.html" style="width:100%;height:100%;background:#fafafa;"></iframe>';
             } else if (level == 4 && row.iconCls == 'icon-upload-BaCnet') {
-                document.getElementById('mainPanle').innerHTML = '<iframe id=BaCnet_Service src="../templates/BaCnet Service.html" style="width:99%;height:100%;background:#fafafa;"></iframe>';
+                document.getElementById('mainPanle').innerHTML = '<iframe id=BaCnet_Service src="../templates/BaCnet Service.html" style="width:100%;height:100%;background:#fafafa;"></iframe>';
             } else if (level == 4 && row.iconCls == 'icon-upload-dlt645') {
-                document.getElementById('mainPanle').innerHTML = '<iframe id=dlt645_reverse src="../templates/dlt645_reverse.html" style="width:99%;height:100%;background:#fafafa;"></iframe>';
+                document.getElementById('mainPanle').innerHTML = '<iframe id=dlt645_reverse src="../templates/dlt645_reverse.html" style="width:100%;height:100%;background:#fafafa;"></iframe>';
             } else if (level == 4 && row.iconCls == 'icon-upload-OPC') {
-                document.getElementById('mainPanle').innerHTML = '<iframe id=OPC_UA src="../templates/OPC UA.html" style="width:99%;height:100%;background:#fafafa;"></iframe>';
+                document.getElementById('mainPanle').innerHTML = '<iframe id=OPC_UA src="../templates/OPC UA.html" style="width:100%;height:100%;background:#fafafa;"></iframe>';
             } else if (level == 6) { // 单击设备弹出配置界面
                 var select = $("#tt").tree('getSelected');
                 var select_1 = $("#tt").tree('getParent', select.target);
                 src = "../templates/" + select_1.protocol + ".html";
-                document.getElementById('mainPanle').innerHTML = '<iframe src="' + src + '" style="width:99%;height:100%;background:#fafafa;"></iframe>';
+                document.getElementById('mainPanle').innerHTML = '<iframe src="' + src + '" style="width:100%;height:100%;background:#fafafa;"></iframe>';
             }
         }
     })
@@ -53,14 +53,12 @@ function treeDebugMode() {
         onClick: function(row) {
             var level = easyui_tree_options.getLevel(this, row);
             if (level == 6) {
-                document.getElementById('mainPanle').innerHTML = '<iframe id=debug_real src="../templates/debug_real.html" style="width:99%;height:100%;background:#fafafa;"></iframe>';
+                document.getElementById('mainPanle').innerHTML = '<iframe id=debug_real src="../templates/debug_real.html" style="width:100%;height:100%;background:#fafafa;"></iframe>';
                 cfxApi.sendCodetoNamepipe(row.text);
             } else {
                 if (['icon-calculation-point', 'icon-user-point', 'icon-system-point'].indexOf(row.iconCls) != -1) {
-                    document.getElementById('mainPanle').innerHTML = '<iframe id=debug_real src="../templates/debug_real.html" style="width:99%;height:100%;background:#fafafa;"></iframe>';
+                    document.getElementById('mainPanle').innerHTML = '<iframe id=debug_real src="../templates/debug_real.html" style="width:100%;height:100%;background:#fafafa;"></iframe>';
                     cfxApi.sendCodetoNamepipe(row.pointName);
-                } else if (row.iconCls == 'icon-alarm_event') {
-                    document.getElementById('mainPanle').innerHTML = '<iframe id=select_alarm src="../templates/select_alarm.html" style="width:99%;height:100%;background:#fafafa;"></iframe>';
                 } else {
                     document.getElementById('mainPanle').innerHTML = '';
                 }
