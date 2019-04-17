@@ -57,14 +57,14 @@ function load_template() {
             document.getElementById('mainPanle').innerHTML = '';
             if (node.iconCls != 'icon-template') {
                 if (node.protocol == 'Modbus') {
-                    document.getElementById('mainPanle').innerHTML = '<iframe src="../templates/ModbusTCPClient.html" style="width:99%;height:100%;background:#fafafa;"></iframe>';
+                    document.getElementById('mainPanle').innerHTML = '<iframe src="../templates/ModbusTCPClient.html" style="width:100%;height:100%;background:#fafafa;"></iframe>';
                 } else if (node.protocol == 'BACnet') {
-                    document.getElementById('mainPanle').innerHTML = '<iframe src="../templates/BACnetIP.html" style="width:99%;height:100%;background:#fafafa;"></iframe>';
+                    document.getElementById('mainPanle').innerHTML = '<iframe src="../templates/BACnetIP.html" style="width:100%;height:100%;background:#fafafa;"></iframe>';
                 } else if (node.protocol == 'PLC') {
-                    document.getElementById('mainPanle').innerHTML = '<iframe src="../templates/S7_200_PPI.html" style="width:99%;height:100%;background:#fafafa;"></iframe>';
+                    document.getElementById('mainPanle').innerHTML = '<iframe src="../templates/S7_200_PPI.html" style="width:100%;height:100%;background:#fafafa;"></iframe>';
                 } else {
                     src = "../templates/" + node.protocol + ".html";
-                    document.getElementById('mainPanle').innerHTML = '<iframe src="' + src + '" style="width:99%;height:100%;background:#fafafa;"></iframe>';
+                    document.getElementById('mainPanle').innerHTML = '<iframe src="' + src + '" style="width:100%;height:100%;background:#fafafa;"></iframe>';
                 }
             }
             // }, 500);

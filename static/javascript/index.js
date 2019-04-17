@@ -546,7 +546,7 @@ $(function() {
 });
 //查询报警记录
 function alarm_inquire() {
-    document.getElementById('mainPanle').innerHTML = '<iframe id=select_alarm src="../templates/select_alarm.html" style="width:99%;height:100%;background:#fafafa;"></iframe>';
+    document.getElementById('mainPanle').innerHTML = '<iframe id=select_alarm src="../templates/select_alarm.html" style="width:100%;height:100%;background:#fafafa;"></iframe>';
 }
 
 function addTab(subtitle, url, icon) {

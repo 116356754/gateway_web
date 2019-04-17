@@ -23,6 +23,8 @@ $(function() {
         fitColumns: true,
         striped: true,
         rownumbers: true,
+        remoteSort: false,
+        multiSort: true,
         loadFilter: function(data, parentId) {
             var obj = get_select();
             var sql = "select * from BACnet where deviceCode='{0}'".format(obj.select.text);
@@ -103,7 +105,8 @@ $(function() {
                             textField: "text",
                             required: true
                         }
-                    }
+                    },
+                    sortable: true
                 },
                 {
                     field: 'objectInstance',
@@ -116,7 +119,8 @@ $(function() {
                             required: true,
                             validType: "eqmaxLength[10]"
                         }
-                    }
+                    },
+                    sortable: true
                 },
                 {
                     field: 'propertyPriority',

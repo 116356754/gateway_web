@@ -10,7 +10,6 @@
     <link rel=stylesheet href="../static/rewriteui/css/rewrite.css">
     <script src="../static/easyui/jquery.min.js"></script>
     <script src="../static/easyui/jquery.easyui.min.js"></script>
-    <script src="../static/easyui/locale/easyui-lang-zh_CN.js"></script>
     <script src="../static/javascript/language.js"></script>
     <script src="../static/easyui/jquery.edatagrid.js"></script>
     <script src="../static/easyui/jquery.easyui.validatex.js"></script>
@@ -29,8 +28,8 @@
 
             <div data-options="region:'north'" style="height:80px;">
                 <div style="padding-left:20px;padding-top:20px;">
-                    <input class="easyui-datetimebox" v-bind:label="start_time" labelWidth="70px" data-options="required:true,showSeconds:true" id="start_time" value="3/4/2010 0:0:0" style="width:250px">&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input class="easyui-datetimebox" v-bind:label="stop_time" labelWidth="70px" data-options="required:true,showSeconds:true" id="stop_time" value="3/4/2010 0:0:0" style="width:250px">&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input class="easyui-datetimebox" v-bind:label="start_time" labelWidth="70px" data-options="required:true,showSeconds:true" id="start_time" value="4/17/2019 0:0:0" style="width:250px">&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input class="easyui-datetimebox" v-bind:label="stop_time" labelWidth="70px" data-options="required:true,showSeconds:true" id="stop_time" value="4/17/2019 0:0:0" style="width:250px">&nbsp;&nbsp;&nbsp;&nbsp;
                     <a href="#" class="easyui-linkbutton " iconCls="icon-ok" onclick="data_ajax()">{{ $t('offline_data.Inquire') }}</a>
                 </div>
             </div>
@@ -42,6 +41,31 @@
     </div>
 </body>
 <script>
+    window.onload = function() {  
+        contextPath = '../static/easyui/locale/'
+        if (self.parent.vm.$i18n.locale == 'zh-CN') {
+            $.getScript("../static/easyui/locale/easyui-lang-zh_CN.js"); 
+        } else {   
+            $.getScript("../static/easyui/locale/easyui-lang-en.js"); 
+        }
+    }
+
+    $.fn.datetimebox.defaults.formatter = function(date) {
+        //显示格式: 2017-05-08 17(只显示年月日和小时)
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var day = date.getDate();
+        var hour = date.getHours();
+        var min = date.getMinutes();
+        var sec = date.getSeconds();
+        month = month < 10 ? '0' + month : month;
+        day = day < 10 ? '0' + day : day;
+        hour = hour < 10 ? '0' + hour : hour;
+        min = min < 10 ? '0' + min : min;
+        sec = sec < 10 ? '0' + sec : sec;
+        return year + "-" + month + "-" + day + " " + hour + ":" + min + ":" + sec;
+    }
+
     Vue.use(VueI18n)
 
     var initial = self.parent.initial
@@ -66,8 +90,4 @@
             }
         }
     }).$mount('#app')
-
-    function data_ajax() {
-        $("#alarm_xls_config").datagrid('reload');
-    }
 </script>

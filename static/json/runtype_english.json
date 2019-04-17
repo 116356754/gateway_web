@@ -1,0 +1,5 @@
+[
+    { "text": "Boot", "value": "start", "selected": true },
+    { "text": "Cycle", "value": "timer" },
+    { "text": "Timing", "value": "cron" }
+]

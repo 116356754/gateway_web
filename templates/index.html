@@ -201,7 +201,7 @@
             <div region="south" split="true" style="height: 200px; background: #fff; ">
                 <div class="easyui-layout" data-options="fit:true">
                     <div class="easyui-panel" v-bind:title="System_log" class="log-div" data-options="tools:'#log_div'">
-                        <div id="real_log" style="height: 85%; overflow-y: scroll; background: #ffffff;">
+                        <div id="real_log">
                         </div>
 
                         <!-- <textarea id="real_message_result" style="width: 100%;height:100%;max-width: 100%;max-height: 100%;resize: none;"></textarea> -->
@@ -303,10 +303,10 @@
             </div>
 
             <!-- 输入密码窗口 -->
-            <div id="enter_passwd_dialog" style="width:350px;height:150px;padding:10px;display:none">
-
+            <div id="enter_passwd_dialog" style="width:350px;height:160px;padding:10px;display:none">
                 <label for="enter_passwd">{{ $t('index.enter_passwd') }}</label>
                 <input class="easyui-textbox" type="password" id="enter_passwd" style="width: 200px;" validType='maxLength[15]'><br><br>
+                <label class="my_protocol"><input class="input_agreement_protocol" id="remember_passwd" type="checkbox"><span></span>{{ $t('index.Remember_password') }}</label>
             </div>
 
             <!-- 新建工程窗口 -->
@@ -424,7 +424,7 @@
                         <input class="easyui-numberbox" id='retryCount' value="3" required="true" style="height:25px;width:60px">
                     </div>
                     <div id="continuousAddress_div" class="input_container">
-                        <a href="# " id="modbus_button" class="easyui-linkbutton " style="width:15px" onclick="parameters_dialog()">+</a>&nbsp;&nbsp;{{ $t('index.Advanced_parameters') }}
+                        <a href="# " id="modbus_button" class="easyui-linkbutton " style="width:25px" onclick="parameters_dialog()">+</a>&nbsp;&nbsp;{{ $t('index.Advanced_parameters') }}
                     </div>
                     <div id="modbus_parameters" class="input_container" style="display:none">
                         <label class="my_protocol"><input class="input_agreement_protocol" id="watchTime_check" type="checkbox"><span></span></label>
@@ -438,18 +438,18 @@
                 </form>
             </div>
             <!-- 新建设备窗口 -->
-            <div id="equipment_add" style="width:350px;height:200px;padding:10px;display:none">
+            <div id="equipment_add" style="width:350px;height:210px;padding:10px;display:none">
                 <form id="equipment_add_form">
                     <div class="input_container">
                         <!-- <label for="equipment_name" style="padding-right: 10px">{{ $t('index.device_name') }}</label> -->
                         <input class="easyui-textbox" id='equipment_name' v-bind:label="device_name" labelWidth="110px" value="Device_1" required="ture" validType='maxLength[15]' style="height:25px;width:280px">
                     </div>
-                    <div class="input_container">
+                    <div id="device_addr_div" class="input_container">
                         <!-- <label for="equipment_addr" style="padding-right: 10px">{{ $t('index.device_addr') }}</label> -->
                         <input class="easyui-textbox" id='equipment_addr' v-bind:label="device_addr" labelWidth="110px" required="ture" value="1" style="height:25px;width:280px">
                     </div>
                     <div id="mstp_parameters" class="input_container" style="display:none">
-                        <a href="# " id="mstp_button" class="easyui-linkbutton " style="width:15px" onclick="device_parameters_dialog()">+</a>&nbsp;&nbsp;{{ $t('index.Advanced_parameters') }}
+                        <a href="# " id="mstp_button" class="easyui-linkbutton " style="width:25px" onclick="device_parameters_dialog()">+</a>&nbsp;&nbsp;{{ $t('index.Advanced_parameters') }}
                     </div>
                     <div id="device_parameters" class="input_container" style="display:none">
                         <label class="my_protocol" style="font-size:12px;"><input id="mstp_type"class="input_agreement_protocol" type="checkbox"><span></span>slave</label><br><br>
@@ -569,73 +569,79 @@
             </div>
 
             <!-- 事件管理中事件编辑窗口 -->
-            <div id='event_add' title="事件编辑" style="display:none;width:950px;height:450px">
+            <div id='event_add' v-bind:title="Event_editing" style="display:none;width:950px;height:450px">
                 <form id="event_form" style="height:100%">
                     <div id="ff" class="easyui-layout" data-options="fit:true">
                         <div data-options="region:'north'" style="height:70px;padding:10px">
-                            <label class="my_protocol" style="font-size:12px;"><input id="event_check" class="input_agreement_protocol" type="checkbox" checked><span></span>启用</label><br>
-                            <input class="easyui-textbox" id='event_name' label="事件名称：" value="New Event" labelWidth="100px" style="width: 30%" validType="maxLength[30]">
-                            <input class="easyui-textbox" id='event_content' label="事件描述：" labelWidth="100px" style="width: 30%" validType="maxLength[30]">
+                            <label class="my_protocol" style="font-size:12px;"><input id="event_check" class="input_agreement_protocol" type="checkbox" checked><span></span>{{ $t('common.enable') }}</label><br>
+                            <input class="easyui-textbox" id='event_name' v-bind:label="eventName" value="New Event" labelWidth="90px" style="width: 30%" validType="maxLength[30]">
+                            <font color="red">*</font>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <input class="easyui-textbox" id='event_content' v-bind:label="eventDescription" labelWidth="80px" style="width: 30%" validType="maxLength[30]">
                         </div>
-                        <div data-options="region:'west',title:'事件来源'" style="width:26%;"><br>
+                        <div data-options="region:'west'" v-bind:title="eventSource" style="width:26%;"><br>
                             <div style="margin-left:10px">
                                 <div style="margin-bottom:5px">
-                                    <div>事件种类:</div>
+                                    <div>{{ $t('event.types') }}</div>
                                     <select id='event_class' class="easyui-combobox" data-options="panelHeight: 'auto',editable:false" style="width:85%;height:20px">
-                                <option>点值超出范围</option>
-                                <option>质量不为Good</option>
+                                <option>{{ $t('event.out_of_range') }}</option>
+                                <option>{{ $t('event.notGood') }}</option>
                             </select>
                                 </div>
                                 <div style="margin-bottom:5px">
-                                    <div>间隔时间(ms):</div>
+                                    <div>{{ $t('index.between') }}</div>
                                     <input id='event_interval' class="easyui-textbox" value="5000" required="true" style="width:85%;height:20px">
+                                    <font color="red">*</font>
                                 </div>
                                 <div style="margin-bottom:5px">
-                                    <div>关联点名称:</div>
-                                    <input id='event_piontname' class="easyui-textbox" buttonAlign="left" required="true" buttonText="添加" style="width:85%;height:20px">
+                                    <div>{{ $t('event.Association_point_name') }}</div>
+                                    <input id='event_piontname' class="easyui-textbox" buttonAlign="left" required="true" buttonText="Add" style="width:85%;height:20px">
+                                    <font color="red">*</font>
                                 </div>
                                 <div style="margin-bottom:5px">
-                                    <div id="event_max_div">最大值:</div>
+                                    <div id="event_max_div">{{ $t('event.max') }}</div>
                                     <input id='event_max' class="easyui-textbox" value="0" required="true" style="width:85%;height:20px">
+                                    <font color="red">*</font>
                                 </div>
                                 <div style="margin-bottom:5px">
-                                    <div id="event_min_div">最小值:</div>
+                                    <div id="event_min_div">{{ $t('event.min') }}</div>
                                     <input id='event_min' class="easyui-textbox" value="0" required="true" style="width:85%;height:20px">
+                                    <font color="red">*</font>
                                 </div>
                                 <div style="margin-bottom:5px">
-                                    <div>抖动延时(ms):</div>
+                                    <div>{{ $t('event.delay') }}</div>
                                     <input id='delay' class="easyui-textbox" value="0" required="true" style="width:85%;height:20px">
+                                    <font color="red">*</font>
                                 </div>
                             </div>
                         </div>
-                        <div data-options="region:'center',title:'当事件触发'"><br><br>
+                        <div data-options="region:'center'" v-bind:title="When_the_event_is_triggered"><br><br>
                             <div style="margin-left:10px">
                                 <div style="margin-bottom:5px">
-                                    <div>处理动作选择:</div>
+                                    <div>{{ $t('event.action') }}</div>
                                     <select id='trigger_action' class="easyui-combobox" data-options="panelHeight: 'auto',editable:false" style="width:40%;height:20px">
-                                    <option>不响应</option>
-                                    <option selected>写入值</option>
+                                    <option>{{ $t('event.noaction') }}</option>
+                                    <option selected>{{ $t('event.writeval') }}</option>
                                 </select>
                                 </div>
                                 <div id="trigger_div" style="margin-bottom:5px;">
-                                    <label style="display:inline-block;width:157px">写入点名称:</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label style="display:inline-block;width:64px">写入值:</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <label style="display:inline-block;width:157px">{{ $t('scheduler.writeTag') }}</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label style="display:inline-block;width:64px">{{ $t('scheduler.writeVal') }}</label>&nbsp;&nbsp;&nbsp;&nbsp;
                                     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick='tadditem("tb")'></a>
                                     <table id="tb">
                                     </table>
                                 </div>
                             </div>
                         </div>
-                        <div data-options="region:'east',title:'当事件解除'" style="width:37%;"><br><br>
+                        <div data-options="region:'east'" v-bind:title="When_the_event_is_Release" style="width:37%;"><br><br>
                             <div style="margin-left:10px">
                                 <div style="margin-bottom:5px">
-                                    <div>处理动作选择:</div>
+                                    <div>{{ $t('event.action') }}</div>
                                     <select id='release_action' class="easyui-combobox" data-options="panelHeight: 'auto',editable:false" style="width:40%;height:20px">
-                            <option>不响应</option>
-                            <option selected>写入值</option>
+                            <option>{{ $t('event.noaction') }}</option>
+                            <option selected>{{ $t('event.writeval') }}</option>
                         </select>
                                 </div>
                                 <div id="release_div" style="margin-bottom:5px;">
-                                    <label style="display:inline-block;width:157px">写入点名称:</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label style="display:inline-block;width:64px">写入值:</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <label style="display:inline-block;width:157px">{{ $t('scheduler.writeTag') }}</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label style="display:inline-block;width:64px">{{ $t('scheduler.writeVal') }}</label>&nbsp;&nbsp;&nbsp;&nbsp;
                                     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick='radditem("rb")'></a>
                                     <table id="rb">
                                     </table>
@@ -649,21 +655,21 @@
                 </form>
             </div>
             <!-- js脚本编辑窗口 -->
-            <div id='js_add' title="js脚本" style="display:none;width:950px;height:600px">
+            <div id='js_add' v-bind:title="javascript" style="display:none;width:950px;height:600px">
                 <div id="jsall_div" class="easyui-layout" data-options="fit:true">
                     <div data-options="region:'north',iconCls:'icon-reload',split:true" style="height:60px;">
-                        <label class="my_protocol" style="font-size:12px;"><input id="js_check" class="input_agreement_protocol" type="checkbox" checked><span></span>启用</label><br>
+                        <label class="my_protocol" style="font-size:12px;"><input id="js_check" class="input_agreement_protocol" type="checkbox" checked><span></span>{{ $t('common.enable') }}</label><br>
                         <div id="js_name_div" style="float:left">
-                            <input class="easyui-textbox" id='js_name' label="js名称:" value="New JS" labelWidth="60px" style="width: 200px" validType="maxLength[30]">&nbsp;&nbsp;&nbsp;&nbsp;
+                            <input class="easyui-textbox" id='js_name' v-bind:label="name" value="New JS" labelWidth="60px" style="width: 200px" validType="maxLength[30]">&nbsp;&nbsp;&nbsp;&nbsp;
                         </div>
                         <div id="runtype_div" style="float:left">
-                            <input class="easyui-combobox" id='runtype' label="执行方式:" data-options="editable:false,panelHeight: 'auto'" style="width:200px">&nbsp;&nbsp;&nbsp;&nbsp;
+                            <input class="easyui-combobox" id='runtype' v-bind:label="runtypes" data-options="editable:false,panelHeight: 'auto'" style="width:200px">&nbsp;&nbsp;&nbsp;&nbsp;
                         </div>
                         <div id="jstime_div" style="display:none;float:left">
-                            <input id="jstime" class="easyui-timespinner" label="时间:" style="width:180px" required="required" value="08:00:00" data-options="showSeconds:true" />
+                            <input id="jstime" class="easyui-timespinner" v-bind:label="time" style="width:180px" required="required" value="08:00:00" data-options="showSeconds:true" />
                         </div>
                         <div id="jscycle_div" style="display:none;float:left">
-                            <input id="jscycle" class="easyui-numberbox" label="执行周期(ms):" style="width:180px">
+                            <input id="jscycle" class="easyui-numberbox" v-bind:label="cycle" style="width:180px">
                         </div>
                     </div>
                     <div data-options="region:'center'">
@@ -680,12 +686,12 @@
                                         <div id="document_div" class="easyui-layout" data-options="fit:true">
                                             <div data-options="region:'south',iconCls:'icon-reload',split:true" style="height:40px;">
                                                 <input id='func_preview' class="easyui-textbox" style="width:85%;height:20px">
-                                                <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick='insert_js()'>插入</a>
+                                                <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick='insert_js()'>{{ $t('js.insert') }}</a>
                                             </div>
                                             <div data-options="region:'east',iconCls:'icon-reload',split:true" style="width:250px;">
                                                 <div id="read_tag_div">
-                                                    <label for="read_tag">Tag点:</label>
-                                                    <input id='read_tag' class="easyui-textbox" buttonAlign="left" required="true" buttonText="添加" style="width:85%;height:20px">
+                                                    <label for="read_tag">{{ $t('js.tag_point') }}</label>
+                                                    <input id='read_tag' class="easyui-textbox" buttonAlign="left" required="true" buttonText="Add" style="width:85%;height:20px">
                                                 </div>
                                             </div>
                                             <div data-options="region:'center'">
@@ -751,7 +757,22 @@
             confirmPasswd: self.parent.messages[initial]['index']['confirmPasswd'],
             real_message: self.parent.messages[initial]['index']['real_message'],
             Serial_test: self.parent.messages[initial]['index']['Serial_test'],
-            debug: self.parent.messages[initial]['index']['debug']
+            debug: self.parent.messages[initial]['index']['debug'],
+
+            Event_editing: messages[initial]['event']['Event_editing'],
+            eventName: messages[initial]['event']['eventName'],
+            eventDescription: messages[initial]['event']['eventDescription'],
+            eventSource: messages[initial]['event']['eventSource'],
+            When_the_event_is_triggered: messages[initial]['event']['When_the_event_is_triggered'],
+            When_the_event_is_Release: messages[initial]['event']['When_the_event_is_Release'],
+
+            javascript: messages[initial]['js']['javascript'],
+            runtypes: messages[initial]['js']['runtypes'],
+            name: messages[initial]['js']['name'],
+            time: messages[initial]['js']['time'],
+            cycle: messages[initial]['js']['cycle'],
+            tag_point: messages[initial]['js']['tag_point'],
+            insert: messages[initial]['js']['insert']
         },
         watch: {
             locale: function(val) {
@@ -812,12 +833,12 @@
         });
         $("#event_class").combobox({
             onChange: function(newValue, oldValue) {
-                if (newValue == '点值超出范围') {
+                if (newValue == messages[initial]['event']['out_of_range']) {
                     document.getElementById('event_max_div').style.display = '';
                     document.getElementById('event_min_div').style.display = '';
                     $("#event_max").next().show();
                     $("#event_min").next().show();
-                } else if (newValue == '质量不为Good') {
+                } else if (newValue == messages[initial]['event']['notGood']) {
                     document.getElementById('event_max_div').style.display = 'none';
                     document.getElementById('event_min_div').style.display = 'none';
                     $("#event_max").next().hide();
@@ -828,9 +849,9 @@
 
         $("#trigger_action").combobox({
             onChange: function(newValue, oldValue) {
-                if (newValue == '写入值') {
+                if (newValue == messages[initial]['event']['writeval']) {
                     document.getElementById('trigger_div').style.display = '';
-                } else if (newValue == '不响应') {
+                } else if (newValue == messages[initial]['event']['noaction']) {
                     document.getElementById('trigger_div').style.display = 'none';
                 }
             }
@@ -838,9 +859,9 @@
 
         $("#release_action").combobox({
             onChange: function(newValue, oldValue) {
-                if (newValue == '写入值') {
+                if (newValue == messages[initial]['event']['writeval']) {
                     document.getElementById('release_div').style.display = '';
-                } else if (newValue == '不响应') {
+                } else if (newValue == messages[initial]['event']['noaction']) {
                     document.getElementById('release_div').style.display = 'none';
                 }
             }
@@ -873,7 +894,7 @@
         row = document.getElementById(id).insertRow();
         if (row != null) {
             cell = row.insertCell();
-            cell.innerHTML = "<input id=\"tp" + tcount + "\" class=\"easyui-textbox\" required=\"true\" buttonAlign=\"left\" buttonText=\"添加\" name=\"tp" + tcount + "\" style=\"width:150px\">&#12288;&#12288;<input id=\"tv" + tcount + "\" class=\"easyui-textbox\" required=\"true\" name=\"tv" + tcount + "\" style=\"width:64px\">&#12288;&#12288;<a href=\"#\" class=\"easyui-linkbutton\" onclick=\"tdeleteitem(this)\">删除</a>"
+            cell.innerHTML = "<input id=\"tp" + tcount + "\" class=\"easyui-textbox\" required=\"true\" buttonAlign=\"left\" buttonText=\"Add\" name=\"tp" + tcount + "\" style=\"width:150px\">&#12288;&#12288;<input id=\"tv" + tcount + "\" class=\"easyui-textbox\" required=\"true\" name=\"tv" + tcount + "\" style=\"width:64px\">&#12288;&#12288;<a href=\"#\" class=\"easyui-linkbutton\" onclick=\"tdeleteitem(this)\">delete</a>"
             $.parser.parse(cell);
             $('#tp' + tcount).textbox({
                 onClickButton: function() {
@@ -894,7 +915,7 @@
         row = document.getElementById(id).insertRow();
         if (row != null) {
             cell = row.insertCell();
-            cell.innerHTML = "<input id=\"rp" + rcount + "\" class=\"easyui-textbox\" required=\"true\" buttonAlign=\"left\" buttonText=\"添加\" name=\"rp" + rcount + "\" style=\"width:150px\">&#12288;&#12288;<input id=\"rv" + rcount + "\" class=\"easyui-textbox\" required=\"true\" name=\"rv" + rcount + "\" style=\"width:64px\">&#12288;&#12288;<a href=\"#\" class=\"easyui-linkbutton\" onclick=\"rdeleteitem(this)\">删除</a>"
+            cell.innerHTML = "<input id=\"rp" + rcount + "\" class=\"easyui-textbox\" required=\"true\" buttonAlign=\"left\" buttonText=\"Add\" name=\"rp" + rcount + "\" style=\"width:150px\">&#12288;&#12288;<input id=\"rv" + rcount + "\" class=\"easyui-textbox\" required=\"true\" name=\"rv" + rcount + "\" style=\"width:64px\">&#12288;&#12288;<a href=\"#\" class=\"easyui-linkbutton\" onclick=\"rdeleteitem(this)\">delete</a>"
             $.parser.parse(cell);
             $('#rp' + rcount).textbox({
                 onClickButton: function() {

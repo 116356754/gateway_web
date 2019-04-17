@@ -2,22 +2,24 @@
  * Created by Administrator on 2017/9/14.
  */
 function event_dialog(type, index, old_name) {
+    self.parent.$("#event_form").form("disableValidation");
     self.parent.$('#event_add').dialog({
         closable: false,
         draggable: false,
         modal: true,
         buttons: [{
-                text: "确定",
+                text: self.parent.messages[initial]['common']['ok'],
                 iconCls: 'icon-ok',
                 handler: function() {
                     //set_describe(); // 显示下方描述语句
+                    self.parent.$("#event_form").form("enableValidation");
                     if (self.parent.$('#event_form').form('validate')) {
                         event_new(type, index, old_name)
                     }
                 }
             },
             {
-                text: "取消",
+                text: self.parent.messages[initial]['common']['cancel'],
                 iconCls: 'icon-cancel',
                 handler: function() {
                     self.parent.$("#event_add").dialog('close');
@@ -156,14 +158,14 @@ $(function() {
             content = JSON.parse(selectsql(path, "select * from alarm"));
             content.forEach(function(tag) {
                 if (tag['enable']) {
-                    tag['enable'] = "启用"
+                    tag['enable'] = self.parent.messages[initial]['common']['enable']
                 } else {
-                    tag['enable'] = "不启用"
+                    tag['enable'] = self.parent.messages[initial]['common']['disable']
                 };
                 if (tag['range']) {
-                    tag['range'] = "点值超出范围"
+                    tag['range'] = self.parent.messages[initial]['event']['out_of_range']
                 } else {
-                    tag['range'] = "质量不为Good"
+                    tag['range'] = self.parent.messages[initial]['event']['notGood']
                 };
             })
             return content;
@@ -189,7 +191,7 @@ $(function() {
             self.parent.$("#rb").empty();
             data = $("#event_config").datagrid('getSelected');
             event_dialog('modify', index, data.name);
-            if (data.enable == "启用") {
+            if (data.enable == self.parent.messages[initial]['common']['enable']) {
                 self.parent.$("#event_check").prop("checked", true);
             } else {
                 self.parent.$("#event_check").prop("checked", false);
@@ -236,7 +238,7 @@ $(function() {
         columns: [
             [{
                     field: 'enable',
-                    title: '启用',
+                    title: self.parent.messages[initial]['common']['enable'],
                     width: 100,
                     align: 'center',
                     editor: {
@@ -249,7 +251,7 @@ $(function() {
                 },
                 {
                     field: 'name',
-                    title: '名称',
+                    title: self.parent.messages[initial]['common']['name'],
                     width: 100,
                     align: 'center',
                     editor: {
@@ -261,7 +263,7 @@ $(function() {
                 },
                 {
                     field: 'range',
-                    title: '事件种类',
+                    title: self.parent.messages[initial]['event']['type'],
                     width: 100,
                     align: 'center',
                     editor: {

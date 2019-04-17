@@ -1,19 +1,37 @@
 $(function() {
-    $('#runtype').combobox({
-        url: '../static/json/runtype.json',
-        onChange(newValue, oldValue) {
-            if (newValue == 'start') {
-                document.getElementById("jstime_div").style.display = 'none';
-                document.getElementById("jscycle_div").style.display = 'none';
-            } else if (newValue == 'timer') {
-                document.getElementById("jstime_div").style.display = 'none';
-                document.getElementById("jscycle_div").style.display = '';
-            } else if (newValue == 'cron') {
-                document.getElementById("jstime_div").style.display = '';
-                document.getElementById("jscycle_div").style.display = 'none';
+    if (self.parent.vm.$i18n.locale == 'zh-CN') {
+        $('#runtype').combobox({
+            url: '../static/json/runtype.json',
+            onChange(newValue, oldValue) {
+                if (newValue == 'start') {
+                    document.getElementById("jstime_div").style.display = 'none';
+                    document.getElementById("jscycle_div").style.display = 'none';
+                } else if (newValue == 'timer') {
+                    document.getElementById("jstime_div").style.display = 'none';
+                    document.getElementById("jscycle_div").style.display = '';
+                } else if (newValue == 'cron') {
+                    document.getElementById("jstime_div").style.display = '';
+                    document.getElementById("jscycle_div").style.display = 'none';
+                }
             }
-        }
-    });
+        });
+    } else {   
+        $('#runtype').combobox({
+            url: '../static/json/runtype_english.json',
+            onChange(newValue, oldValue) {
+                if (newValue == 'start') {
+                    document.getElementById("jstime_div").style.display = 'none';
+                    document.getElementById("jscycle_div").style.display = 'none';
+                } else if (newValue == 'timer') {
+                    document.getElementById("jstime_div").style.display = 'none';
+                    document.getElementById("jscycle_div").style.display = '';
+                } else if (newValue == 'cron') {
+                    document.getElementById("jstime_div").style.display = '';
+                    document.getElementById("jscycle_div").style.display = 'none';
+                }
+            }
+        });
+    }
 
     $('#func_tree').tree({
         url: '../static/json/func_tree.json',

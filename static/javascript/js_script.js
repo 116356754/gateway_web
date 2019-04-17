@@ -10,14 +10,14 @@ function js_dialog(type, index, old_name) {
         draggable: false,
         modal: true,
         buttons: [{
-                text: "确定",
+                text: self.parent.messages[initial]['common']['ok'],
                 iconCls: 'icon-ok',
                 handler: function() {
                     js_new(type, index, old_name)
                 }
             },
             {
-                text: "取消",
+                text: self.parent.messages[initial]['common']['cancel'],
                 iconCls: 'icon-cancel',
                 handler: function() {
                     self.parent.$("#js_add").dialog('close');
@@ -172,7 +172,7 @@ $(function() {
         columns: [
             [{
                     field: 'enable',
-                    title: '启用',
+                    title: self.parent.messages[initial]['common']['enable'],
                     width: 100,
                     align: 'center',
                     editor: {
@@ -185,7 +185,7 @@ $(function() {
                 },
                 {
                     field: 'name',
-                    title: '名称',
+                    title: self.parent.messages[initial]['common']['name'],
                     width: 100,
                     align: 'center',
                     editor: {
@@ -197,7 +197,7 @@ $(function() {
                 },
                 {
                     field: 'runType',
-                    title: '执行方式',
+                    title: self.parent.messages[initial]['js']['runtype'],
                     width: 100,
                     align: 'center',
                     editor: {

@@ -58,6 +58,14 @@ function download_valid_passwd(file_name, dir) {
             tool_version = document.getElementById("version").innerHTML;
             passwd = $('#enter_passwd').textbox('getValue');
             if (data.password == passwd) {
+                remember_passwd = $("#remember_passwd").is(":checked");
+                if (remember_passwd) {
+                    sql = "update gw set passwd='{0}'".format(passwd);
+                    updatesql('Project/' + dir + '/Gateway', sql);
+                } else {
+                    sql = "update gw set passwd=nullif('','')";
+                    updatesql('Project/' + dir + '/Gateway', sql);
+                }
                 n = (tool_version.split('.')).length - 1;
                 if (n == 3) { // 每个版本修改之后出一个小版本，也可以下载到大版本网关中
                     tool_version = tool_version.substring(0, tool_version.lastIndexOf('.'))
@@ -98,7 +106,14 @@ function download_valid_passwd(file_name, dir) {
 }
 
 function enter_password(file_name, dir) {
-    $('#enter_passwd').textbox('setValue', '');
+    passwd = JSON.parse(selectsql('Project/' + dir + '/Gateway', "select passwd from Gw"));
+    if (passwd[0]['passwd']) {
+        $('#enter_passwd').textbox('setValue', passwd[0]['passwd']);
+        $("#remember_passwd").prop("checked", true);
+    } else {
+        $('#enter_passwd').textbox('setValue', '');
+        $("#remember_passwd").prop("checked", false);
+    }
     display_dialog('enter_passwd_dialog', messages[initial]['index']['verify_password']);
     $('#enter_passwd_dialog').dialog({
         buttons: [{
@@ -149,7 +164,23 @@ function download_project_to_gw(dir) {
                     value = get_baseurl();
                     $.messager.confirm(messages[initial]['common']['system_hint'], messages[initial]['index']['download_to_gw'].format(value), function(r) {
                         if (r) {
-                            enter_password(filegw_text, dir);
+                            $.ajax({
+                                type: 'get',
+                                url: 'http://' + value + '/get_version',
+                                timeout: 2000,
+                                success: function(data) {
+                                    if (data.password == 'not_used_passwd') {
+                                        $('#enter_passwd').textbox('setValue', 'not_used_passwd');
+                                        download_valid_passwd(filegw_text, dir)
+                                    } else {
+                                        enter_password(filegw_text, dir);
+                                    }
+                                },
+                                error: function(data) {
+                                    $.messager.alert(messages[initial]['common']['system_hint'], messages[initial]['index']['connectip_fail'].format(value), "info");
+                                }
+                            });
+
                             $("#download_gw_search").dialog('close');
                             stop_search();
                         }

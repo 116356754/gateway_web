@@ -248,6 +248,7 @@ $(function() {
         //selectOnCheck: true,//true勾选会选择行，false勾选不选择行, 1.3以后有此选项。重点在这里
         //checkOnSelect: true, //true选择行勾选，false选择行不勾选, 1.3以后有此选项
         rownumbers: true,
+        multiSort: true,
         loadFilter: function(data, parentId) {
             var dir = self.parent.$('#text').textbox('getText'); // 选中的文件夹Name
             path = 'Project/' + dir + '/Gateway';
@@ -370,7 +371,8 @@ $(function() {
                             textField: "text",
                             required: true
                         }
-                    }
+                    },
+                    sortable: true
                 },
                 {
                     field: 'address',

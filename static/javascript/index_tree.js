@@ -318,8 +318,9 @@ function gw_add_tree(node, name, new_data) {
 }
 
 function add_init_file(name, dir, new_data, gw_type, gw_version, gw_remark) {
-    sql = "update gw set gwName='{0}',gwType='{1}',version='{2}',remark='{3}' where gwName='Gateway_1'".format(name, gw_type, gw_version, gw_remark);
-    writeresult = insertsql('Project/' + dir + '/Gateway', sql);
+    tool_version = document.getElementById("version").innerHTML;
+    sql = "update gw set gwName='{0}',gwType='{1}',version='{2}',remark='{3}',databaseVersion='{4}' where gwName='Gateway_1'".format(name, gw_type, gw_version, gw_remark, tool_version);
+    writeresult = updatesql('Project/' + dir + '/Gateway', sql);
 }
 
 // 添加网关设备
@@ -382,7 +383,7 @@ function device_parameters_dialog() {
         document.getElementById('device_parameters').style.display = 'none';
         $('#equipment_add').dialog({
             width: '350px',
-            height: '200px'
+            height: '210px'
         });
     }
 }

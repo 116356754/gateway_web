@@ -20,7 +20,8 @@ $(function() {
         fitColumns: true,
         striped: true,
         rownumbers: true,
-        // data: data,
+        remoteSort: false,
+        multiSort: true,
         loadFilter: function(data, parentId) {
             var obj = get_select();
             var sql = "select * from PLC where deviceCode='{0}'".format(obj.select.text)
@@ -128,7 +129,8 @@ $(function() {
                             textField: "text",
                             required: true
                         }
-                    }
+                    },
+                    sortable: true
                 },
                 {
                     field: 'address',
@@ -141,7 +143,8 @@ $(function() {
                             required: true,
                             validType: "mone[15]"
                         }
-                    }
+                    },
+                    sortable: true
                 },
                 {
                     field: 'dataType',

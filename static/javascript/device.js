@@ -14,6 +14,7 @@ function equip(old_text) {
     $("#equipment_name").textbox({ value: device_newname }); // 新建设备时新增不重复的device名称
     if (old_text == 'null') { // 新建设备
         if (select['protocol'] == 'BACnetMSTP') {
+            document.getElementById('device_addr_div').style.display = '';
             $("#mstp_type").prop("checked", false);
             $('#mstp_mac').textbox({
                 disabled: true
@@ -23,19 +24,25 @@ function equip(old_text) {
             document.getElementById('device_parameters').style.display = 'none';
             $('#equipment_add').dialog({
                 width: '350px',
-                height: '200px'
+                height: '210px'
             });
 
         } else {
+            if (select['protocol'] == 'S7_200_Network' || select['protocol'] == 'S7_1200_Network') {
+                document.getElementById('device_addr_div').style.display = 'none';
+            } else {
+                document.getElementById('device_addr_div').style.display = '';
+            }
             document.getElementById('mstp_parameters').style.display = 'none';
             document.getElementById('device_parameters').style.display = 'none';
             $('#equipment_add').dialog({
                 width: '350px',
-                height: '200px'
+                height: '210px'
             });
         }
     } else {
         if (select_channel['protocol'] == 'BACnetMSTP') {
+            document.getElementById('device_addr_div').style.display = '';
             document.getElementById('mstp_parameters').style.display = '';
             $('#mstp_button').linkbutton({ text: '+' });
             $('#mstp_mac').textbox({
@@ -44,14 +51,19 @@ function equip(old_text) {
             document.getElementById('device_parameters').style.display = 'none';
             $('#equipment_add').dialog({
                 width: '350px',
-                height: '200px'
+                height: '210px'
             });
         } else {
+            if (select['protocol'] == 'S7_200_Network' || select['protocol'] == 'S7_1200_Network') {
+                document.getElementById('device_addr_div').style.display = 'none';
+            } else {
+                document.getElementById('device_addr_div').style.display = '';
+            }
             document.getElementById('mstp_parameters').style.display = 'none';
             document.getElementById('device_parameters').style.display = 'none';
             $('#equipment_add').dialog({
                 width: '350px',
-                height: '200px'
+                height: '210px'
             });
         }
     }
@@ -163,7 +175,7 @@ function equipment_modify(add_name, channelName, slaveId, advance, old_text) {
         var select_channel = $('#tt').tree('getParent', select.target);
         var level = easyui_tree_options.getLevel('#tt', select);
         parent = get_tt_parents(level - 2);
-        sql = "update device set text='{0}', slaveID='{1}',advance=nullif('{2}','{}') where text='{3}'".format(add_name, slaveId, JSON.stringify(advance), old_text);
+        sql = "update device set text='{0}', slaveID=nullif('{1}',''),advance=nullif('{2}','{}') where text='{3}'".format(add_name, slaveId, JSON.stringify(advance), old_text);
         result = updatesql('Project/' + dir + '/Gateway', sql);
         if (result == 'true') {
             insert_info(add_name + messages[initial]['index_tree']['node_modify_success'])
@@ -182,7 +194,7 @@ function equipment_modify(add_name, channelName, slaveId, advance, old_text) {
         var level = easyui_tree_options.getLevel('#tt', select);
         parent = get_tt_parents(level - 2);
         category = select_channel['category'];
-        sql = "insert into device values ('{0}','{1}','{2}',nullif('{3}','{}'))".format(add_name, select_channel.text, slaveId, JSON.stringify(advance));
+        sql = "insert into device values ('{0}','{1}',nullif('{2}',''),nullif('{3}','{}'))".format(add_name, select_channel.text, slaveId, JSON.stringify(advance));
         result = insertsql('Project/' + dir + '/Gateway', sql);
         if (result == 'true') {
             sql = "select * from {0} where deviceCode='{1}'".format(category, select.text)
@@ -219,7 +231,7 @@ function equipment_modify(add_name, channelName, slaveId, advance, old_text) {
         var level = easyui_tree_options.getLevel('#tt', select);
         parent = get_tt_parents(level - 2);
         category = select['category'];
-        sql = "insert into device values ('{0}','{1}','{2}',nullif('{3}','{}'))".format(add_name, select.text, slaveId, JSON.stringify(advance));
+        sql = "insert into device values ('{0}','{1}',nullif('{2}',''),nullif('{3}','{}'))".format(add_name, select.text, slaveId, JSON.stringify(advance));
         result = insertsql('Project/' + dir + '/Gateway', sql);
         if (result == 'true') {
             insert_info(add_name + messages[initial]['index_tree']['add_node_success'])

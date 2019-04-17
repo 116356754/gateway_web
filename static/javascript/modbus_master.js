@@ -139,9 +139,10 @@ $(function() {
         striped: true,
         rownumbers: true,
         singleSelect: true,
-        remoteSort: false,
         ctrlSelect: true,
         closable: true,
+        remoteSort: false,
+        multiSort: true,
         loadFilter: function(data, parentId) {
             var obj = get_select();
             var sql = "select * from Modbus where deviceCode='{0}'".format(obj.select.text)
@@ -272,7 +273,8 @@ $(function() {
                             textField: "text",
                             required: true
                         }
-                    }
+                    },
+                    sortable: true
                 },
                 {
                     field: 'address',

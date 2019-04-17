@@ -23,10 +23,13 @@
 <body>
     <div id='app'>
         <!-- 密码设定窗口 -->
-        <div id="passwd_dialog" style="width:320px;height:200px;padding:10px;display:none">
+        <div id="passwd_dialog" style="width:320px;height:240px;padding:10px;display:none">
+            <label class="my_protocol" style="font-size:12px;"><input id="not_used" class="input_agreement_protocol" type="checkbox"><span></span>{{ $t('index.notUsedPasswd') }}</label><br><br>
             <input class="easyui-textbox" type="password" v-bind:label="oldPasswd" labelWidth="100px" required="true" id='oldPasswd' style="height:25px;width:240px"><br><br>
-            <input class="easyui-textbox" type="password" v-bind:label="newPasswd" labelWidth="100px" required="true" id='newPasswd' style="height:25px;width:240px"><br><br>
-            <input class="easyui-textbox" type="password" v-bind:label="confirmPasswd" labelWidth="100px" required="true" id='confirmPasswd' style="height:25px;width:240px">
+            <div id="new_passwd_div">
+                <input class="easyui-textbox" type="password" v-bind:label="newPasswd" labelWidth="100px" required="true" id='newPasswd' style="height:25px;width:240px"><br><br>
+                <input class="easyui-textbox" type="password" v-bind:label="confirmPasswd" labelWidth="100px" required="true" id='confirmPasswd' style="height:25px;width:240px"><br>
+            </div>
         </div>
     </div>
 </body>
@@ -63,7 +66,32 @@
         }
     }).$mount('#app')
 
+    $("#not_used").change(function() {
+        var status = $("#not_used").is(":checked");
+        if (status) {
+            document.getElementById('new_passwd_div').style.display = 'none';
+        } else {
+            document.getElementById('new_passwd_div').style.display = '';
+        }
+    });
+
     $(function() {
+        value = get_baseurl();
+        $.ajax({
+            type: 'get',
+            url: 'http://' + value + '/get_version',
+            timeout: 2000,
+            success: function(data) {
+                if (data.password == 'not_used_passwd') {
+                    $("#not_used").prop("checked", true);
+                    document.getElementById('new_passwd_div').style.display = 'none';
+                }
+            },
+            error: function(data) {
+                $.messager.alert(messages[initial]['common']['system_hint'], messages[initial]['index']['connectip_fail'].format(value), "info");
+            }
+        });
+
         initial = self.parent.initial;
         messages = self.parent.messages;
         $('#passwd_dialog').dialog({
@@ -91,9 +119,17 @@
     //设置密码
     function set_passwd() {
         value = get_baseurl();
+        not_used = $("#not_used").is(":checked");
         oldPasswd = $('#oldPasswd').textbox('getValue');
-        newPasswd = $('#newPasswd').textbox('getValue');
-        confirmPasswd = $('#confirmPasswd').textbox('getValue');
+        var newPasswd = '';
+        var confirmPasswd = '';
+        if (not_used) {
+            newPasswd = 'not_used_passwd'
+            confirmPasswd = 'not_used_passwd'
+        } else {
+            newPasswd = $('#newPasswd').textbox('getValue');
+            confirmPasswd = $('#confirmPasswd').textbox('getValue');
+        }
         if (newPasswd.indexOf(' ') == -1) {
             if (oldPasswd != '' && newPasswd != '' && confirmPasswd != '') {
                 if (newPasswd == confirmPasswd) {

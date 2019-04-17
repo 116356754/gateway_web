@@ -80,14 +80,14 @@
                 </div>
             </form>
         </div>
-        <div id='expandtopic_div' style="display:none;width:500px;height:250px;">
+        <div id='expandtopic_div' style="display:none;width:500px;height:260px;">
             <form id='expandtopic_form' style="height:100%">
                 <div class="easyui-tabs" style="width:100%;height:100%">
                     <div v-bind:title="offline">
                         <div style="padding:20px">
                             <div>{{ $t('mqtt.historytopic') }}</div>
                             <input id='historytopic' class="easyui-textbox" style="width:180px;height:20px">
-                            <input class="easyui-combobox" id='historyqos' data-options="editable:false,panelHeight: 'auto'" style="width:60px;height: 20px">
+                            <input class="easyui-combobox" id='historyqos' value="0" data-options="editable:false,panelHeight: 'auto'" style="width:60px;height: 20px">
                             <label for="historyretain" style="padding-left: 5px">retained:</label>
                             <input id="historyretain" class="easyui-switchbutton" labelWidth="100px" data-options="onText:'Yes',offText:'No'" style="height:20px;width:50px">
                         </div>
@@ -96,13 +96,13 @@
                         <div style="padding:20px">
                             <div>{{ $t('mqtt.inquireResponseTopic') }}</div>
                             <input id='inquireResponsetopic' class="easyui-textbox" style="width:180px;height:20px">
-                            <input class="easyui-combobox" id='inquireResponseqos' data-options="editable:false,panelHeight: 'auto'" style="width:60px;height: 20px">
+                            <input class="easyui-combobox" id='inquireResponseqos' value="0" data-options="editable:false,panelHeight: 'auto'" style="width:60px;height: 20px">
                             <label for="inquireResponseretain" style="padding-left: 5px">retained:</label>
                             <input id="inquireResponseretain" class="easyui-switchbutton" labelWidth="100px" data-options="onText:'Yes',offText:'No'" style="height:20px;width:50px">
                             <br><br>
                             <div>{{ $t('mqtt.inquiretopic') }}</div>
                             <input id='inquiretopic' class="easyui-textbox" style="width:180px;height:20px">
-                            <input class="easyui-combobox" id='inquireqos' data-options="editable:false,panelHeight: 'auto'" style="width:60px;height: 20px">
+                            <input class="easyui-combobox" id='inquireqos' value="0" data-options="editable:false,panelHeight: 'auto'" style="width:60px;height: 20px">
                             <label for="inquireretain" style="padding-left: 5px">retained:</label>
                             <input id="inquireretain" class="easyui-switchbutton" labelWidth="100px" data-options="onText:'Yes',offText:'No'" style="height:20px;width:50px">
                         </div>
@@ -111,7 +111,7 @@
                         <div style="padding:20px">
                             <div>{{ $t('mqtt.alarmtopic') }}</div>
                             <input id='alarmtopic' class="easyui-textbox" style="width:180px;height:20px">
-                            <input class="easyui-combobox" id='alarmqos' data-options="editable:false,panelHeight: 'auto'" style="width:60px;height: 20px">
+                            <input class="easyui-combobox" id='alarmqos' value="0" data-options="editable:false,panelHeight: 'auto'" style="width:60px;height: 20px">
                             <label for="alarmretain" style="padding-left: 5px">retained:</label>
                             <input id="alarmretain" class="easyui-switchbutton" labelWidth="100px" data-options="onText:'Yes',offText:'No'" style="height:20px;width:50px">
                         </div>
@@ -120,13 +120,13 @@
                         <div style="padding:20px">
                             <div>{{ $t('mqtt.writetopic') }}</div>
                             <input id='writetopic' class="easyui-textbox" style="width:180px;height:20px">
-                            <input class="easyui-combobox" id='writeqos' data-options="editable:false,panelHeight: 'auto'" style="width:60px;height: 20px">
+                            <input class="easyui-combobox" id='writeqos' value="0" data-options="editable:false,panelHeight: 'auto'" style="width:60px;height: 20px">
                             <label for="writeretain" style="padding-left: 5px">retained:</label>
                             <input id="writeretain" class="easyui-switchbutton" labelWidth="100px" data-options="onText:'Yes',offText:'No'" style="height:20px;width:50px">
                             <br><br>
                             <div>{{ $t('mqtt.writeresponsetopic') }}</div>
                             <input id='writeResponsetopic' class="easyui-textbox" style="width:180px;height:20px">
-                            <input class="easyui-combobox" id='writeResponseqos' data-options="editable:false,panelHeight: 'auto'" style="width:60px;height: 20px">
+                            <input class="easyui-combobox" id='writeResponseqos' value="0" data-options="editable:false,panelHeight: 'auto'" style="width:60px;height: 20px">
                             <label for="writeResponseretain" style="padding-left: 5px">retained:</label>
                             <input id="writeResponseretain" class="easyui-switchbutton" labelWidth="100px" data-options="onText:'Yes',offText:'No'" style="height:20px;width:50px">
                         </div>
@@ -135,13 +135,13 @@
                         <div style="padding:20px">
                             <div>{{ $t('mqtt.reboottopic') }}</div>
                             <input id='reboottopic' class="easyui-textbox" style="width:180px;height:20px">
-                            <input class="easyui-combobox" id='rebootqos' data-options="editable:false,panelHeight: 'auto'" style="width:60px;height: 20px">
+                            <input class="easyui-combobox" id='rebootqos' value="0" data-options="editable:false,panelHeight: 'auto'" style="width:60px;height: 20px">
                             <label for="rebootretain" style="padding-left: 5px">retained:</label>
                             <input id="rebootretain" class="easyui-switchbutton" labelWidth="100px" data-options="onText:'Yes',offText:'No'" style="height:20px;width:50px">
                             <br><br>
                             <div>{{ $t('mqtt.rebootresponsetopic') }}</div>
                             <input id='rebootResponsetopic' class="easyui-textbox" style="width:180px;height:20px">
-                            <input class="easyui-combobox" id='rebootResponseqos' data-options="editable:false,panelHeight: 'auto'" style="width:60px;height: 20px">
+                            <input class="easyui-combobox" id='rebootResponseqos' value="0" data-options="editable:false,panelHeight: 'auto'" style="width:60px;height: 20px">
                             <label for="rebootResponseretain" style="padding-left: 5px">retained:</label>
                             <input id="rebootResponseretain" class="easyui-switchbutton" labelWidth="100px" data-options="onText:'Yes',offText:'No'" style="height:20px;width:50px">
                         </div>
@@ -150,15 +150,17 @@
                         <div style="padding:20px">
                             <div>{{ $t('mqtt.configtopic') }}</div>
                             <input id='configtopic' class="easyui-textbox" style="width:180px;height:20px">
-                            <input class="easyui-combobox" id='configqos' data-options="editable:false,panelHeight: 'auto'" style="width:60px;height: 20px">
+                            <input class="easyui-combobox" id='configqos' value="0" data-options="editable:false,panelHeight: 'auto'" style="width:60px;height: 20px">
                             <label for="configretain" style="padding-left: 5px">retained:</label>
                             <input id="configretain" class="easyui-switchbutton" labelWidth="100px" data-options="onText:'Yes',offText:'No'" style="height:20px;width:50px">
                             <br><br>
-                            <div>网关配置发布的主题:</div>
-                            <input id='getconfigtopic' class="easyui-textbox" style="width:180px;height:20px">
-                            <input class="easyui-combobox" id='getconfigqos' data-options="editable:false,panelHeight: 'auto'" style="width:60px;height: 20px">
-                            <label for="getconfigretain" style="padding-left: 5px">retained:</label>
-                            <input id="getconfigretain" class="easyui-switchbutton" labelWidth="100px" data-options="onText:'Yes',offText:'No'" style="height:20px;width:50px">
+                            <div style="display:none">
+                                <div>网关配置发布的主题:</div>
+                                <input id='getconfigtopic' class="easyui-textbox" style="width:180px;height:20px">
+                                <input class="easyui-combobox" id='getconfigqos' value="0" data-options="editable:false,panelHeight: 'auto'" style="width:60px;height: 20px">
+                                <label for="getconfigretain" style="padding-left: 5px">retained:</label>
+                                <input id="getconfigretain" class="easyui-switchbutton" labelWidth="100px" data-options="onText:'Yes',offText:'No'" style="height:20px;width:50px">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -533,7 +535,9 @@
         });
         $('#newtopic').textbox('setValue', obj['publish']['realtime'][0].topic);
         set_realtopic(obj['publish']['realtime'][0]);
+    }
 
+    function expandtopic_set(obj) {
         if (obj['publish']['history']) {
             $('#historytopic').textbox('setValue', obj['publish']['history'].topic);
             $('#historyqos').combobox('setValue', obj['publish']['history'].qos);
@@ -782,11 +786,11 @@
         };
         current_configtopic = $("#configtopic").textbox('getValue');
         if (current_configtopic != "") {
-            expandtopic["publish"]["getconfig"] = {
-                topic: document.getElementById('getconfigtopic').value,
-                qos: parseInt($("#getconfigqos").combobox('getValue')),
-                retain: $("#getconfigretain").switchbutton("options").checked
-            };
+            // expandtopic["publish"]["getconfig"] = {
+            //     topic: document.getElementById('getconfigtopic').value,
+            //     qos: parseInt($("#getconfigqos").combobox('getValue')),
+            //     retain: $("#getconfigretain").switchbutton("options").checked
+            // };
             expandtopic["subscribe"]["config"] = {
                 topic: document.getElementById('configtopic').value,
                 qos: parseInt($("#configqos").combobox('getValue')),
@@ -813,15 +817,14 @@
     $('#topic_check').click(function() {
         content = selectsql(feature_path, "select config from iot where name='MQTT'");
         content_object = JSON.parse(content);
-        obj = JSON.parse(content_object[0]['config'])
-
-        // topic_set(obj);
+        obj = JSON.parse(content_object[0]['config']);
+        expandtopic_set(obj);
 
         $('#expandtopic_div').dialog({
             closable: false,
             draggable: false,
             modal: true,
-            topic: self.parent.messages[initial]['mqtt']['expandtopic'],
+            title: self.parent.messages[initial]['mqtt']['expandtopic'],
             buttons: [{
                 text: self.parent.messages[initial]['common']['ok'],
                 iconCls: 'icon-ok',

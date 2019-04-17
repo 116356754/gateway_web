@@ -81,7 +81,7 @@ $(function() {
         onClick: function(node) {
             if (node.text != messages[initial]['index']['gw_online']) {
                 setBaseUrl(node.text);
-                document.getElementById('mainPanle').innerHTML = '<iframe id=real_data src="../templates/real_data.html" style="width:99%;height:100%;background:#fafafa;"></iframe>'
+                document.getElementById('mainPanle').innerHTML = '<iframe id=real_data src="../templates/real_data.html" style="width:100%;height:100%;background:#fafafa;"></iframe>'
                 value = get_baseurl();
             }
         }
@@ -144,7 +144,7 @@ $(function() {
 
     // 停止搜索
     $('#btn-debug-mode').bind('click', function() {
-        document.getElementById('mainPanle').innerHTML = '<iframe id=calculate src="../templates/debug.html" style="width:99%;height:100%;background:#fafafa;"></iframe>';
+        document.getElementById('mainPanle').innerHTML = '<iframe id=calculate src="../templates/debug.html" style="width:100%;height:100%;background:#fafafa;"></iframe>';
     });
 
     // 历史数据库文件夹上传
@@ -204,30 +204,30 @@ function check(children) {
 
 // 设置网关ip
 function set_ip() {
-    document.getElementById('mainPanle').innerHTML = '<iframe src="../templates/ip.html" style="width:99%;height:100%;background:#fafafa;"></iframe>';
+    document.getElementById('mainPanle').innerHTML = '<iframe src="../templates/ip.html" style="width:100%;height:100%;background:#fafafa;"></iframe>';
 }
 
 // 上传工程
 function upload_project() {
-    document.getElementById('mainPanle').innerHTML = '<iframe src="../templates/upload_project.html" style="width:99%;height:100%;background:#fafafa;"></iframe>';
+    document.getElementById('mainPanle').innerHTML = '<iframe src="../templates/upload_project.html" style="width:100%;height:100%;background:#fafafa;"></iframe>';
 }
 
 // 设置密码
 function set_passwd() {
-    document.getElementById('mainPanle').innerHTML = '<iframe src="../templates/passwd_set.html" style="width:99%;height:100%;background:#fafafa;"></iframe>';
+    document.getElementById('mainPanle').innerHTML = '<iframe src="../templates/passwd_set.html" style="width:100%;height:100%;background:#fafafa;"></iframe>';
 }
 
 // 网关校时
 function set_ntp() {
-    document.getElementById('mainPanle').innerHTML = '<iframe src="../templates/ntp.html" style="width:99%;height:100%;background:#fafafa;"></iframe>';
+    document.getElementById('mainPanle').innerHTML = '<iframe src="../templates/ntp.html" style="width:100%;height:100%;background:#fafafa;"></iframe>';
 }
 
 // 重启网关
 function reboot_gw() {
-    document.getElementById('mainPanle').innerHTML = '<iframe src="../templates/gw_reboot.html" style="width:99%;height:100%;background:#fafafa;"></iframe>';
+    document.getElementById('mainPanle').innerHTML = '<iframe src="../templates/gw_reboot.html" style="width:100%;height:100%;background:#fafafa;"></iframe>';
 }
 
 // 网关升级
 function gw_update() {
-    document.getElementById('mainPanle').innerHTML = '<iframe src="../templates/gw_update.html" style="width:99%;height:100%;background:#fafafa;"></iframe>';
+    document.getElementById('mainPanle').innerHTML = '<iframe src="../templates/gw_update.html" style="width:100%;height:100%;background:#fafafa;"></iframe>';
 }
