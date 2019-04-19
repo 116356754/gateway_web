@@ -1,6 +1,14 @@
 var ws = null;
 var gwip = get_baseurl();
 
+setInterval(function() //开启循环：每2分钟检测一次系统日志高度是否达到50000
+    {
+        log_height = $('#log-container').get(0).scrollHeight;
+        if (log_height > 50000) {
+            $("#log-container").empty();
+        }
+    }, 120000);
+
 function main_debug() { // 调试页面的第一个选项卡，在点击“调试模式”的按钮和选中“调试”选项卡的时候会触发
     if (ws) {
         ws.close();

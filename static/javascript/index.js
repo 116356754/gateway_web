@@ -124,7 +124,7 @@ function delete_pro() {
 
 function new_treejson(gw_type, gw_version, gw_remark) {
     RTUmainsite = [{ "text": "ModbusRTUClient", "id": "ModbusRTUClient" }, { "text": "DL/T 645", "id": "DLT645" }, { "text": "CJ188", "id": "CJ188" }, { "text": "BACnetMSTP", "id": "BACnetMSTP" }, { "text": "Siemens S7-200 PPI", "id": "S7_200_PPI" }, { "text": "MBus_EnergyMeter", "id": "MBus_EnergyMeter" }];
-    TCPmainsite = [{ "text": "ModbusTCPClient", "id": "ModbusTCPClient" }, { "text": "ModbusRTU_over_TCP", "id": "ModbusRTU_over_TCP" }, { "text": "BACnetIP", "id": "BACnetIP" }, { "text": "Siemens S7-200 Network", "id": "S7_200_Network" }, { "text": "Siemens S7-1200 Network", "id": "S7_1200_Network" }];
+    TCPmainsite = [{ "text": "ModbusTCPClient", "id": "ModbusTCPClient" }, { "text": "ModbusRTU_over_TCP", "id": "ModbusRTU_over_TCP" }, { "text": "BACnetIP", "id": "BACnetIP" }, { "text": "Siemens S7-200 Network", "id": "S7_200_Network" }, { "text": "Siemens S7-1200 Network", "id": "S7_1200_Network" }, { "text": "丹弗斯主控器", "id": "Danfoss" }];
     RTUmainsite_noMSTP = [{ "text": "ModbusRTUClient", "id": "ModbusRTUClient" }, { "text": "DL/T 645", "id": "DLT645" }, { "text": "CJ188", "id": "CJ188" }, { "text": "Siemens S7-200 PPI", "id": "S7_200_PPI" }, { "text": "MBus_EnergyMeter", "id": "MBus_EnergyMeter" }];
     comport = [{ "text": "com1", "selected": true }];
     for (i = 2; i < 21; i++) {
@@ -164,7 +164,13 @@ function project_open(type) {
     if (dir) {
         var content = scanDir('Project/' + dir);
         var obj = JSON.parse(content);
-        if (!obj[0]) {
+        var proExist = false;
+        obj.forEach(function(db) {
+            if (db["Name"] == "Gateway.db") {
+                proExist = true;
+            }
+        })
+        if (!proExist) {
             $('#tt').tree({
                 data: [{
                     text: dir,
@@ -496,36 +502,12 @@ $(function() {
 
     //电脑注册
     $('#btn-registered').bind('click', function() {
-        display_dialog('registered_div', messages[initial]['index']['registered']);
-        MachineCode = cfxApi.createMachineCode();
-        $("#machine_code").textbox("setValue", MachineCode);
-        license_content = readFileSync("license");
-        $("#registration_code").textbox("setValue", license_content);
-        $('#registered_div').dialog({
-            buttons: [{
-                    text: messages[initial]['index']['registered'],
-                    iconCls: 'icon-ok',
-                    handler: function() {
-                        if ($('#registered_form').form('enableValidation').form('validate')) {
-                            registration_code = $("#registration_code").textbox("getValue");
-                            if (registration_code.length == 44) {
-                                wirte_localfile("license", registration_code);
-                                $("#registered_div").dialog('close');
-                            } else {
-                                $.messager.alert(messages[initial]['common']['system_hint'], messages[initial]['index']['registration_code_incorrect'], "info")
-                            }
-                        }
-                    }
-                },
-                {
-                    text: messages[initial]['common']['cancel'],
-                    iconCls: 'icon-cancel',
-                    handler: function() {
-                        $("#registered_div").dialog('close');
-                    }
-                }
-            ]
-        });
+        status = cfxApi.isExistUkey()
+        if (status == "true") {
+            $.messager.alert(messages[initial]['common']['system_hint'], messages[initial]['index']['registration_code_correct'], "info")
+        } else {
+            $.messager.alert(messages[initial]['common']['system_hint'], messages[initial]['index']['registration_code_incorrect'], "info")
+        }
     });
 
     setInterval(function() //开启循环：每10分钟检测一次系统日志是否达到1000条
@@ -575,11 +557,15 @@ function enableBtnTabs() {
 
 // 启动监控按钮
 function start_pro() {
-    // a = '192.168.1.10:502 Rx: 00 06 00 00 00 27 01 03 24 00 00 00 00 00 00 3F 80 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 '
-    // setInterval(function() //开启循环：每10分钟检测一次系统日志是否达到1000条
-    //     {
-    //         display_gwlog(a)
-    //     }, 100);
+    status = cfxApi.isExistUkey();
+    if (status == "false") {
+        $.messager.show({
+            title: 'Message',
+            msg: messages[initial]['index']['not_authorized'],
+            timeout: 5000,
+            showType: 'slide'
+        });
+    }
 
     dir = $('#text').textbox('getText'); // 选中的文件夹名称
     if (dir != "") {

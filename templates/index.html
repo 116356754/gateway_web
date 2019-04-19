@@ -215,7 +215,7 @@
                         <div class="info-footer">
                             <label for="company">&copy; Copyright 2019 by</label>
                             <a href="javascript:void(0)" id="company" onclick="open_web()"></a>
-                            <span id="version" style="float:right; padding-right:20px;" class="head">Version 内测版v1.3</span>
+                            <span id="version" style="float:right; padding-right:20px;" class="head">Version 内测版v1.4</span>
                             <!--  <img id="tubiao" src='../static/images/connect.png' width="20" height="20"
                      style="float:right; padding-right:20px;" align="absmiddle"/>
                 <label id="status" style="float:right; padding-right:5px;"></label> -->
@@ -381,7 +381,7 @@
                         <label for="channel">{{ $t('index.channel') }}</label>
                         <input class="easyui-combobox" id='channel' v-bind:value="specific" data-options="editable:false" style="height:25px;width:120px">
                         <label for="protocol_name">{{ $t('index.protocol_name') }}</label>
-                        <input class="easyui-combobox" id='protocol_name' value="ModbusRTUClient" data-options="editable:false" style="height:25px;width:180px">
+                        <input class="easyui-combobox" id='protocol_name' value="ModbusRTUClient" data-options="editable:false,panelHeight:'auto'" style="height:25px;width:180px">
                     </div>
                     <div id="serial" class="input_container">
                         <label for="serialport">{{ $t('index.Serialport_number') }}</label>
@@ -397,7 +397,7 @@
                     </div>
                     <div id="tcp" class="input_container" style="display:none">
                         <label for="net_ip">{{ $t('index.IPaddr') }}</label>
-                        <input class="easyui-textbox" id='net_ip' value="192.168.1.100" style="height:25px;width:130px">
+                        <input class="easyui-textbox" id='net_ip' value="192.168.1.100" style="height:25px;width:180px">
                     </div>
                     <div id="bacnetipdiv" class="input_container" style="display:none">
                         <label for="bacnet_tcp">{{ $t('index.Communication_port') }}</label>
