@@ -49,6 +49,9 @@
 .icon-template,
 .icon-dltinsert,
 .icon-stop-project,
+.icon-database,
+.icon-pencil,
+.icon-upload-project,
 .panel-tool-close{
     background: none;
 }
@@ -97,7 +100,9 @@
 .icon-save:before {
     content: "\e7a8";
 }
-.icon-remove:before,
+.icon-remove:before {
+    content: "\e88c";
+}
 .icon-empty:before{
     content: "\e7f8";
 }
@@ -157,6 +162,15 @@
 } 
 .icon-stop-project:before {
     content: "\e896";
+}
+.icon-database:before {
+    content: "\e7d5";
+}
+.icon-pencil:before {
+    content: "\e83e";
+}
+.icon-upload-project:before {
+    content: "\e827";
 }
 
 /* 重写easyui部分css */
@@ -294,6 +308,27 @@ a:hover{
     border-top: 1px solid #e0dfdf;
     text-align: center;
 }
+.tabs li a.tabs-inner{
+    border-radius:0;
+}
+.datagrid-header, .datagrid-td-rownumber{
+    background: #f5f5f5;
+}
+.datagrid-header td, 
+.datagrid-body td, 
+.datagrid-footer td{
+    border-style: solid;
+    border-color: #e6e6e6;
+}
+.datagrid-btn-separator{
+    border: none;
+}
+.datagrid-toolbar{
+    border-width: 1px 0;
+}
+.layout-split-north{
+    border-bottom: 5px solid #fff;
+}
 
 /* 自己扩展 */
 iframe{
@@ -357,15 +392,21 @@ input[type="checkbox"]::after{
     white-space: pre-wrap;
     text-decoration: none;
     margin: 2px;
+    font-size: 14px;
 }
-#ull a img{
-    margin: 15px 0 10px 0 !important;
+#ull a span{
+    font-size: 36px;
+    width: 40px;
+    height: 40px;
+    display: block;
+    margin: 8px auto 4px;
+    color: #666;
 }
 #ull a:hover {
     cursor: pointer;
     background: #f0f0f0;
 }
-#ull a:hover img{
+#ull a:hover span{
     transform:scale(1.4);
 }
 #ull .active {
@@ -446,4 +487,124 @@ input[type="checkbox"]::after{
 }
 .layout-expand{
     background: #f1f1f1;
+}
+.tree-line,
+.tree-join,
+.tree-joinbottom{
+    background: none;
+}
+.tree-lines .tree-node-last .tree-expanded, 
+.tree-lines .tree-root-one .tree-expanded,
+.tree-lines .tree-expanded, 
+.tree-lines .tree-root-first .tree-expanded,
+.tree-lines .tree-node-last .tree-collapsed, 
+.tree-lines .tree-root-one .tree-collapsed,
+.tree-lines .tree-collapsed, 
+.tree-lines .tree-root-first .tree-collapsed{
+    font-family: "iconfont" !important;
+    font-size: 14px;
+    color: #666;
+    font-style: normal;
+    line-height: 18px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background: none;
+}
+.tree-lines .tree-node-last .tree-expanded:before, 
+.tree-lines .tree-root-one .tree-expanded:before,
+.tree-lines .tree-expanded:before,
+.tree-lines .tree-root-first .tree-expanded:before{
+    content: "\e999";
+}
+.tree-lines .tree-node-last .tree-collapsed:before, 
+.tree-lines .tree-root-one .tree-collapsed:before,
+.tree-lines .tree-collapsed:before, 
+.tree-lines .tree-root-first .tree-collapsed:before{
+    content: "\e99c";
+}
+
+.icon-device1,
+.icon-new-device,
+.icon-data-center,
+.icon-io-point,
+.icon-channel,
+.icon-meter,
+.icon-system-point,
+.icon-calculation-point,
+.icon-user-point,
+.icon-data-storage,
+.icon-scheduler,
+.icon-alarm_event,
+.icon-js_script{
+    font-family: "iconfont" !important;
+    font-size: 16px;
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background: none;
+}
+.icon-device1:before {
+    content: "\e894";
+}
+.icon-new-device:before {
+    content: "\e81e";
+}
+.icon-data-center:before {
+    content: "\e851";
+}
+.icon-io-point:before {
+    content: "\e84a";
+}
+.icon-channel:before {
+    content: "\e83a";
+}
+.icon-meter:before {
+    content: "\e821";
+}
+.icon-system-point:before,
+.icon-calculation-point:before,
+.icon-user-point:before {
+    content: "\e7b2";
+}
+.icon-data-storage:before {
+    content: "\e7d5";
+}
+.icon-scheduler:before {
+    content: "\e7ed";
+}  
+.icon-alarm_event:before {
+    content: "\e796";
+}
+.icon-js_script:before {
+    content: "\e884";
+}
+
+.panel-body.form-layout{
+    background: #fff;
+}
+.form:after{
+    content: '';
+    display: block;
+    clear: both;
+}
+.form .form-group{
+    display: inline-block;
+    margin-bottom: 10px;
+    margin-right: 20px; 
+}
+.form .form-group .form-label{
+    font-size: 14px;
+    margin-right: 10px;
+}
+.form .form-btn{
+    float: right;
+}
+.form .form-group label{
+    font-size: 14px;
+}
+#querytb .panel-header{
+    background: #f0f1f1;
+}
+.tree-disable .tree-node{
+    cursor: not-allowed;
 }

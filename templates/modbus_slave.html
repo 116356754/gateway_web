@@ -24,8 +24,8 @@
 <body>
     <div id='app' style="position:absolute; width:100%;height:100%;left:0;top:0">
         <div class="easyui-layout" data-options="fit:true">
-            <div id="modbus_config" data-options="region:'north',split:true,collapsible:true" style="height:260px; overflow:hidden">
-                <form id="querytb" method="post" style="padding:10px;" accept-charset="UTF-8">
+            <div id="modbus_config" class="form-layout" data-options="region:'north',split:true,collapsible:true" style="height:160px; overflow:hidden">
+                <form id="querytb" class="form" method="post" style="padding:10px;" accept-charset="UTF-8">
                     <div id="rtu_div" style="width:550px;height:300px;padding:10px;display:none">
                         <label style="display:inline-block;width:85px">{{ $t('index.Serialport_number') }}</label>
                         <label style="display:inline-block;width:85px">{{ $t('index.baud') }}</label>
@@ -38,10 +38,18 @@
                     </div>
 
                     <div id="config" style="width:350px;height:260px;padding:10px;display:none">
-                        <input class="easyui-combobox" id='serial_baud' v-bind:label="baud" value="9600" labelWidth="70px" required="true" data-options="editable:false" style="height:25px;width:200px"><br><br>
-                        <input class="easyui-combobox" id='serial_data' v-bind:label="databit" value="8" labelWidth="70px" required="true" data-options="editable:false" style="height:25px;width:200px"><br><br>
-                        <input class="easyui-combobox" id='serial_stop' v-bind:label="stopbit" value="1" labelWidth="70px" required="true" data-options="editable:false" style="height:25px;width:200px"><br><br>
-                        <input class="easyui-combobox" id='serial_parity' v-bind:label="parity" value="N" labelWidth="70px" required="true" data-options="editable:false" style="height:25px;width:200px">
+                        <div class="form-group">
+                            <input class="easyui-combobox" id='serial_baud' v-bind:label="baud" value="9600" labelWidth="70px" required="true" data-options="editable:false" style="height:25px;width:200px">
+                        </div>
+                        <div class="form-group">
+                            <input class="easyui-combobox" id='serial_data' v-bind:label="databit" value="8" labelWidth="70px" required="true" data-options="editable:false" style="height:25px;width:200px">
+                        </div>
+                        <div class="form-group">
+                            <input class="easyui-combobox" id='serial_stop' v-bind:label="stopbit" value="1" labelWidth="70px" required="true" data-options="editable:false" style="height:25px;width:200px">
+                        </div>
+                        <div class="form-group">
+                            <input class="easyui-combobox" id='serial_parity' v-bind:label="parity" value="N" labelWidth="70px" required="true" data-options="editable:false" style="height:25px;width:200px">
+                        </div>
                     </div>
                     <!-- <div>
                         <input id="slave_id" v-bind:label="slave_id" labelWidth="60px" class="easyui-numberspinner" style="width:150px;" required="required" data-options="min:1,max:255,editable:false"><br><br>
@@ -49,29 +57,54 @@
                         <input class="easyui-combobox" id='lastValue' labelWidth="70px" required="true" data-options="editable:false" style="height:25px;width:200px">
                         <a id="btnSearch" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-ok'" onclick="doSearch()">{{ $t('common.save') }}</a>
                     </div> -->
-                    <input id="slave_id" v-bind:label="slave_id" labelWidth="60px" class="easyui-numberspinner" style="width:110px;" required="required" data-options="min:1,max:255,editable:false"><br><br>
-                    <label class="my_protocol" style="font-size:14px;"><input id="TCP_check" class="input_agreement_protocol" type="checkbox"><span></span>Modbus TCP</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input class="easyui-textbox" id='port' v-bind:label="port" labelWidth="60px" style="width:110px" validType="eqmaxLength[5]"><br><br>
-
-                    <label class="my_protocol" style="font-size:14px;"><input id="RTU_check" class="input_agreement_protocol" type="checkbox"><span></span>Modbus RTU</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <a id="rtu_config" href="#" onclick="display_rtu()" class="easyui-linkbutton" data-options="iconCls:'icon-set'">{{ $t('modbus_slave.config') }}</a>
-                    <br><br>
-                    <label class="my_protocol" style="font-size:14px;"><input id="DTU_check" class="input_agreement_protocol" type="checkbox"><span></span>{{ $t('modbus_slave.DTU') }}</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <label style="font-size:12px;">{{ $t('modbus_slave.messageFormat') }}</label>
-                    <input class="easyui-combobox" id='messageFormat' labelWidth="70px" required="true" data-options="editable:false" style="height:25px;width:60px">&nbsp;&nbsp;&nbsp;
-                    <label style="font-size:12px;">{{ $t('modbus_slave.heartbeatId') }}</label>
-                    <input class="easyui-numberbox" id='heartbeatId' labelWidth="60px" required="true" style="width:80px" validType="eqmaxLength[8]">&nbsp;&nbsp;&nbsp;
-                    <label class="my_protocol" style="font-size:12px;"><input id="heartbeatOnce" class="input_agreement_protocol" type="checkbox"><span></span></label>
-                    <label style="font-size:12px;">{{ $t('modbus_slave.heartbeatInterval') }}</label>
-                    <input class="easyui-numberbox" id='heartbeatInterval' disabled="disabled" labelWidth="60px" required="true" style="width:50px" validType="eqmaxLength[5]">&nbsp;&nbsp;&nbsp;
-                    <label style="font-size:12px;">{{ $t('modbus_slave.remoteIp') }}</label>
-                    <input class="easyui-textbox" id='remoteIp' labelWidth="60px" required="true" validType="ip" style="width:110px">&nbsp;&nbsp;&nbsp;
-                    <label style="font-size:12px;">{{ $t('modbus_slave.remotePort') }}</label>
-                    <input class="easyui-numberbox" id='remotePort' labelWidth="60px" required="true" style="width:50px"><br><br>
-
-                    <label style="font-size:12px;">{{ $t('modbus_slave.exception_deal') }}</label>
-                    <input class="easyui-combobox" id='lastValue' labelWidth="70px" required="true" data-options="editable:false" style="height:25px;width:200px"><br><br>
-                    <a id="btnSearch" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-ok'" onclick="doSearch()">{{ $t('common.save') }}</a>
+                    <div class="form-group">
+                        <input id="slave_id" v-bind:label="slave_id" labelWidth="60px" class="easyui-numberspinner" style="width:110px;" required="required" data-options="min:1,max:255,editable:false">
+                    </div>
+                    <div class="form-group">
+                        <label class="my_protocol" style="font-size:14px;"><input id="TCP_check" class="input_agreement_protocol" type="checkbox"><span></span>Modbus TCP</label>
+                    </div>
+                    <div class="form-group">
+                        <input class="easyui-textbox" id='port' v-bind:label="port" labelWidth="60px" style="width:110px" validType="eqmaxLength[5]">
+                    </div>
+                    <div class="form-group">
+                        <label class="my_protocol" style="font-size:14px;"><input id="RTU_check" class="input_agreement_protocol" type="checkbox"><span></span>Modbus RTU</label>
+                    </div>
+                    <div class="form-group">
+                        <a id="rtu_config" href="#" onclick="display_rtu()" class="easyui-linkbutton" data-options="iconCls:'icon-set'">{{ $t('modbus_slave.config') }}</a>    
+                    </div>
+                    <div class="form-group">
+                        <label class="my_protocol" style="font-size:14px;"><input id="DTU_check" class="input_agreement_protocol" type="checkbox"><span></span>{{ $t('modbus_slave.DTU') }}</label>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">{{ $t('modbus_slave.messageFormat') }}</label>
+                        <input class="easyui-combobox" id='messageFormat' labelWidth="70px" required="true" data-options="editable:false" style="height:25px;width:60px">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">{{ $t('modbus_slave.heartbeatId') }}</label>
+                        <input class="easyui-numberbox" id='heartbeatId' labelWidth="60px" required="true" style="width:80px" validType="eqmaxLength[8]">
+                    </div>
+                    <div class="form-group">
+                        <label class="my_protocol" style="font-size:12px;"><input id="heartbeatOnce" class="input_agreement_protocol" type="checkbox"><span></span></label>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">{{ $t('modbus_slave.heartbeatInterval') }}</label>
+                        <input class="easyui-numberbox" id='heartbeatInterval' disabled="disabled" labelWidth="60px" required="true" style="width:50px" validType="eqmaxLength[5]">    
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">{{ $t('modbus_slave.remoteIp') }}</label>
+                        <input class="easyui-textbox" id='remoteIp' labelWidth="60px" required="true" validType="ip" style="width:110px">    
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">{{ $t('modbus_slave.remotePort') }}</label>
+                        <input class="easyui-numberbox" id='remotePort' labelWidth="60px" required="true" style="width:50px">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">{{ $t('modbus_slave.exception_deal') }}</label>
+                        <input class="easyui-combobox" id='lastValue' labelWidth="70px" required="true" data-options="editable:false" style="height:25px;width:200px">    
+                    </div>
+                   <div class="form-btn">
+                        <a id="btnSearch" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-ok'" onclick="doSearch()">{{ $t('common.save') }}</a>
+                    </div>
                 </form>
             </div>
 

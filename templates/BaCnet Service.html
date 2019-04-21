@@ -26,29 +26,57 @@
 <body>
     <div id='app' style="position:absolute; width:100%;height:100%;left:0;top:0">
         <div class="easyui-layout" data-options="fit:true">
-            <div id="modbus_config" data-options="region:'north',split:true,collapsible:true" style="height:280px; overflow:hidden">
-                <form id="querytb" method="post" style="padding:10px;" accept-charset="UTF-8">
-                    <div style="float: left;width: 30%">
-                        <input class="easyui-textbox" id='deviceId' v-bind:label="slave_id" labelWidth="110px" style="height:25px;width:222px"><br><br>
-                        <input class="easyui-textbox" id='deviceName' v-bind:label="device_name" labelWidth="110px" style="height:25px;width:222px"><br><br>
-                        <input class="easyui-textbox" id='description' v-bind:label="description" labelWidth="110px" style="height:25px;width:222px"><br><br>
-                        <input class="easyui-textbox" id='manufacturer_name' v-bind:label="manufacturer_name" labelWidth="110px" style="height:25px;width:222px"><br><br>
-                        <input class="easyui-textbox" id='manufacturer_id' v-bind:label="manufacturer_id" labelWidth="110px" style="height:25px;width:222px"><br><br>
-                        <input class="easyui-textbox" id='location' v-bind:label="location" labelWidth="110px" style="height:25px;width:222px">
-                    </div>
-                    <div style="float: left;width: 26%">
-                        <label class="my_protocol" style="font-size:12px;"><input class="input_agreement_protocol" id="BaCnetip_check" type="checkbox"><span></span>{{ $t('bacnet_service.ip_slave') }}</label><br><br>
-                        <input class="easyui-textbox" id='port' v-bind:label="port" labelWidth="80px" validType="eqmaxLength[5]"><br><br>
-                        <input class="easyui-combobox" id='net_name' v-bind:label="net_name" data-options="editable:false" labelWidth="80px" style="height:25px;width:172px">
-                    </div>
-                    <div style="float: left;width: 26%">
-                        <label class="my_protocol" style="font-size:12px;"><input class="input_agreement_protocol" id="BaCnetmstp_check" type="checkbox"><span></span>{{ $t('bacnet_service.mstp_slave') }}</label><br><br>
-                        <input class="easyui-combobox" id='com' v-bind:label="serialport" data-options="editable:false" labelWidth="90px" style="height:25px;width:172px"><br><br>
-                        <input class="easyui-combobox" id='baud' v-bind:label="baud" data-options="editable:false" labelWidth="90px" style="height:25px;width:172px"><br><br>
-                        <input class="easyui-textbox" id='mac' v-bind:label="mac" labelWidth="90px" validType="eqmaxLength[5]"><br><br>
-                        <input class="easyui-textbox" id='timeout' v-bind:label="timeout" labelWidth="90px" validType="eqmaxLength[5]">
+            <div id="modbus_config" class="form-layout" data-options="region:'north',split:true,collapsible:true" style="height:230px; overflow:hidden">
+                <form id="querytb" class="form" method="post" style="padding:10px;" accept-charset="UTF-8">
+                    <div>
+                        <div class="form-group">
+                            <input class="easyui-textbox" id='deviceId' v-bind:label="slave_id" labelWidth="110px" style="height:25px;width:222px">
+                        </div>
+                        <div class="form-group">
+                            <input class="easyui-textbox" id='deviceName' v-bind:label="device_name" labelWidth="110px" style="height:25px;width:222px">
+                        </div>
+                        <div class="form-group">
+                            <input class="easyui-textbox" id='description' v-bind:label="description" labelWidth="110px" style="height:25px;width:222px">
+                        </div>
+                        <div class="form-group">
+                            <input class="easyui-textbox" id='manufacturer_name' v-bind:label="manufacturer_name" labelWidth="110px" style="height:25px;width:222px">
+                        </div>
+                        <div class="form-group">
+                            <input class="easyui-textbox" id='manufacturer_id' v-bind:label="manufacturer_id" labelWidth="110px" style="height:25px;width:222px">
+                        </div>
+                        <div class="form-group">
+                            <input class="easyui-textbox" id='location' v-bind:label="location" labelWidth="110px" style="height:25px;width:222px">
+                        </div>
                     </div>
                     <div>
+                        <div class="form-group">
+                            <label class="my_protocol"><input class="input_agreement_protocol" id="BaCnetip_check" type="checkbox"><span></span>{{ $t('bacnet_service.ip_slave') }}</label>
+                        </div>
+                        <div class="form-group">
+                            <input class="easyui-textbox" id='port' v-bind:label="port" labelWidth="80px" validType="eqmaxLength[5]">
+                        </div>
+                        <div class="form-group">
+                            <input class="easyui-combobox" id='net_name' v-bind:label="net_name" data-options="editable:false" labelWidth="80px" style="height:25px;width:172px">
+                        </div>
+                    </div>
+                    <div>
+                        <div class="form-group">
+                            <label class="my_protocol"><input class="input_agreement_protocol" id="BaCnetmstp_check" type="checkbox"><span></span>{{ $t('bacnet_service.mstp_slave') }}</label>
+                        </div>
+                        <div class="form-group">
+                            <input class="easyui-combobox" id='com' v-bind:label="serialport" data-options="editable:false" labelWidth="90px" style="height:25px;width:172px">
+                        </div>
+                        <div class="form-group">
+                            <input class="easyui-combobox" id='baud' v-bind:label="baud" data-options="editable:false" labelWidth="90px" style="height:25px;width:172px">
+                        </div>
+                        <div class="form-group">
+                            <input class="easyui-textbox" id='mac' v-bind:label="mac" labelWidth="90px" validType="eqmaxLength[5]">
+                        </div>
+                        <div class="form-group">
+                            <input class="easyui-textbox" id='timeout' v-bind:label="timeout" labelWidth="120px" validType="eqmaxLength[5]">
+                        </div>
+                    </div>
+                    <div class="form-btn">
                         <a id="btnSearch" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-ok'" onclick="doSearch()">{{ $t('common.save') }}</a>
                     </div>
                 </form>

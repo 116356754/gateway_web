@@ -128,7 +128,7 @@
                                     </td>
                                 </tr>
                             </table>
-                            <a href="javascript:void(0)" id="database_menu" class="easyui-menubutton" data-options="menu:'#menu-database-config',iconCls:'icon-setting'">{{ $t('index.database') }}</a>
+                            <a href="javascript:void(0)" id="database_menu" class="easyui-menubutton" data-options="menu:'#menu-database-config',iconCls:'icon-database'">{{ $t('index.database') }}</a>
 
                             <div id="menu-database-config" class="easyui-menu">
                                 <div data-options="iconCls:'icon-search'" id="btn-inquireAlarm" onclick="alarm_inquire()">{{ $t('index.inquireAlarm') }}</div>
@@ -209,7 +209,7 @@
                     <div id="log_div">
                         <label><input id="log_scroll_btn" type="checkbox" checked>{{ $t('index.Whether_to_scroll') }}</label>
                         <a class="icon-save easyui-tooltip" v-bind:title="save" id="log_save_btn" onclick="log_save()"></a>
-                        <a v-bind:title="Empty" class="icon-remove easyui-tooltip" onclick="log_delete()"></a>
+                        <a v-bind:title="Empty" class="icon-empty easyui-tooltip" onclick="log_delete()"></a>
                     </div>
                     <div region="south" split="true" style="height: 30px">
                         <div class="info-footer">

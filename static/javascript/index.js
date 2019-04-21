@@ -338,7 +338,7 @@ function project_open_close() {
 function addElementLi(obj, name) { // 往ul标签中添加'a'标签
     var ul = document.getElementById(obj);
     var li = document.createElement("a");
-    li.innerHTML = "<img src='../static/images/plugin_big.gif' style='margin-top: 10px;'/><br>" + name;
+    li.innerHTML = "<span class='icon-device1'></span>" + name;
     ul.appendChild(li);
 }
 
