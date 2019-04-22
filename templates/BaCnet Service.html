@@ -26,7 +26,7 @@
 <body>
     <div id='app' style="position:absolute; width:100%;height:100%;left:0;top:0">
         <div class="easyui-layout" data-options="fit:true">
-            <div id="modbus_config" class="form-layout" data-options="region:'north',split:true,collapsible:true" style="height:230px; overflow:hidden">
+            <div id="modbus_config" class="form-layout" data-options="region:'north',split:true,collapsible:true" style="height:200px; overflow:hidden">
                 <form id="querytb" class="form" method="post" style="padding:10px;" accept-charset="UTF-8">
                     <div>
                         <div class="form-group">
@@ -76,9 +76,7 @@
                             <input class="easyui-textbox" id='timeout' v-bind:label="timeout" labelWidth="120px" validType="eqmaxLength[5]">
                         </div>
                     </div>
-                    <div class="form-btn">
-                        <a id="btnSearch" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-ok'" onclick="doSearch()">{{ $t('common.save') }}</a>
-                    </div>
+                    <a id="btnSearch" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-ok'" onclick="doSearch()">{{ $t('common.save') }}</a>
                 </form>
                 <div id='mrx' title="导入Excel配置" style="display:none;width:300px;height:100px">
                     <input type=file id="excel-file" accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="padding:20px;">

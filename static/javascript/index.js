@@ -124,7 +124,7 @@ function delete_pro() {
 
 function new_treejson(gw_type, gw_version, gw_remark) {
     RTUmainsite = [{ "text": "ModbusRTUClient", "id": "ModbusRTUClient" }, { "text": "DL/T 645", "id": "DLT645" }, { "text": "CJ188", "id": "CJ188" }, { "text": "BACnetMSTP", "id": "BACnetMSTP" }, { "text": "Siemens S7-200 PPI", "id": "S7_200_PPI" }, { "text": "MBus_EnergyMeter", "id": "MBus_EnergyMeter" }];
-    TCPmainsite = [{ "text": "ModbusTCPClient", "id": "ModbusTCPClient" }, { "text": "ModbusRTU_over_TCP", "id": "ModbusRTU_over_TCP" }, { "text": "BACnetIP", "id": "BACnetIP" }, { "text": "Siemens S7-200 Network", "id": "S7_200_Network" }, { "text": "Siemens S7-1200 Network", "id": "S7_1200_Network" }, { "text": "丹弗斯主控器", "id": "Danfoss" }];
+    TCPmainsite = [{ "text": "ModbusTCPClient", "id": "ModbusTCPClient" }, { "text": "ModbusRTU_over_TCP", "id": "ModbusRTU_over_TCP" }, { "text": "BACnetIP", "id": "BACnetIP" }, { "text": "Siemens S7-200 Network", "id": "S7_200_Network" }, { "text": "Siemens S7-1200 Network", "id": "S7_1200_Network" }, { "text": "Danfoss", "id": "Danfoss" }];
     RTUmainsite_noMSTP = [{ "text": "ModbusRTUClient", "id": "ModbusRTUClient" }, { "text": "DL/T 645", "id": "DLT645" }, { "text": "CJ188", "id": "CJ188" }, { "text": "Siemens S7-200 PPI", "id": "S7_200_PPI" }, { "text": "MBus_EnergyMeter", "id": "MBus_EnergyMeter" }];
     comport = [{ "text": "com1", "selected": true }];
     for (i = 2; i < 21; i++) {
@@ -356,8 +356,9 @@ function check() { // 设置选中文件夹
     for (var k = 0; k < a.length; k++) {
         if (a[k] == this) { //判断是不是当前选择的行
             a[k].className = 'active'
-            $('#text').textbox('setText', a[k].innerHTML.slice(a[k].innerHTML.indexOf("<br>") + 4)); // 文本框中设置值为选中的文件夹的名称
-            $('#pro_path').html('&#12288;&#12288;&#12288;' + messages[initial]['index']['project_path'] + getCurrentDirectory() + '\\Project\\' + a[k].innerHTML.slice(a[k].innerHTML.indexOf("<br>") + 4))
+            console.log(a[k].innerHTML.split("</span>")[1])
+            $('#text').textbox('setText', a[k].innerHTML.split("</span>")[1]); // 文本框中设置值为选中的文件夹的名称
+            $('#pro_path').html('&#12288;&#12288;&#12288;' + messages[initial]['index']['project_path'] + getCurrentDirectory() + '\\Project\\' + a[k].innerHTML.split("</span>")[1])
         } else {
             a[k].className = ''
         }

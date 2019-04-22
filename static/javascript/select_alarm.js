@@ -61,6 +61,9 @@ function data_ajax() {
             }
         })
     }
+    if (JSON.stringify(content) == '[]') {
+        $.messager.alert(self.parent.messages[initial]['common']['system_hint'], self.parent.messages[initial]['select_alarm']['no_alarm'].format(start_time, stop_time), "info")
+    }
     $("#alarm_xls_config").datagrid('reload');
 }
 

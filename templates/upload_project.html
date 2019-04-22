@@ -107,28 +107,64 @@
     }
 
     $(function() {
-        initial = self.parent.initial;
-        $('#enter_passwd').textbox('setValue', '');
-        $('#enter_passwd_dialog').dialog({
-            title: self.parent.messages[initial]['index']['verify_password'],
-            closed: false,
-            draggable: false,
-            modal: true,
-            buttons: [{
-                text: self.parent.messages[initial]['common']['ok'],
-                iconCls: 'icon-ok',
-                handler: function() {
-                    valid_passwd()
+        value = get_baseurl();
+        $.ajax({
+            type: 'get',
+            url: 'http://' + value + '/get_version',
+            timeout: 2000,
+            success: function(data) {
+                if (data.password == 'not_used_passwd') {
+                    $('#project_new').dialog({
+                        title: self.parent.messages[initial]['index']['Backup_pro'],
+                        closed: false,
+                        draggable: false,
+                        modal: true,
+                        buttons: [{
+                            text: self.parent.messages[initial]['common']['ok'],
+                            iconCls: 'icon-ok',
+                            handler: function() {
+                                dir = $('#pro_new').textbox('getText');
+                                project_new(dir);
+                                $('#project_new').dialog('close');
+                            }
+                        }, {
+                            text: self.parent.messages[initial]['common']['cancel'],
+                            iconCls: 'icon-cancel',
+                            handler: function() {
+                                $('#project_new').dialog('close')
+                            }
+                        }]
+                    });
+                    $("#project_new").dialog('open'); //必须先显示，再弹出
+                } else {
+                    initial = self.parent.initial;
+                    $('#enter_passwd').textbox('setValue', '');
+                    $('#enter_passwd_dialog').dialog({
+                        title: self.parent.messages[initial]['index']['verify_password'],
+                        closed: false,
+                        draggable: false,
+                        modal: true,
+                        buttons: [{
+                            text: self.parent.messages[initial]['common']['ok'],
+                            iconCls: 'icon-ok',
+                            handler: function() {
+                                valid_passwd()
+                            }
+                        }, {
+                            text: self.parent.messages[initial]['common']['cancel'],
+                            iconCls: 'icon-cancel',
+                            handler: function() {
+                                $('#enter_passwd_dialog').dialog('close')
+                            }
+                        }]
+                    });
+                    $("#enter_passwd_dialog").dialog('open'); //必须先显示，再弹出
                 }
-            }, {
-                text: self.parent.messages[initial]['common']['cancel'],
-                iconCls: 'icon-cancel',
-                handler: function() {
-                    $('#enter_passwd_dialog').dialog('close')
-                }
-            }]
+            },
+            error: function(data) {
+                $.messager.alert(messages[initial]['common']['system_hint'], messages[initial]['index']['connectip_fail'].format(value), "info");
+            }
         });
-        $("#enter_passwd_dialog").dialog('open'); //必须先显示，再弹出
     });
 
     // 验证密码

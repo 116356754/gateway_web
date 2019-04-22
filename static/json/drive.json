@@ -7,5 +7,5 @@
     { "text": "Siemens S7-200 Network", "id": "S7_200_Network" },
     { "text": "Siemens S7-1200 Network", "id": "S7_1200_Network" },
     { "text": "MBus_EnergyMeter", "id": "MBus_EnergyMeter" },
-    { "text": "丹弗斯主控器", "id": "Danfoss" }
+    { "text": "Danfoss", "id": "Danfoss" }
 ]

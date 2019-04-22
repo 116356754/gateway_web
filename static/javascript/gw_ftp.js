@@ -146,7 +146,7 @@ function download_project_to_gw(dir) {
         modal: true,
         buttons: [{
             text: messages[initial]['index']['add_device'],
-            iconCls: 'icon-set',
+            iconCls: 'icon-gw-add',
             handler: function() {
                 display_dialog('dlg-url-set', messages[initial]['index']['gw_connect']);
                 bURL = get_baseurl(); // 网关地址
@@ -156,7 +156,7 @@ function download_project_to_gw(dir) {
             }
         }, {
             text: messages[initial]['index']['download'],
-            iconCls: 'icon-download',
+            iconCls: 'icon-project',
             handler: function() {
                 var root = $('#tt').tree('getRoot');
                 if (root['children'] && root['children'][0]['text']) {

@@ -127,6 +127,9 @@ function start_htcomhex() {
         $('#message_button').linkbutton('enable');
         $('#change_button').linkbutton('enable');
         $('#open_serial').linkbutton('disable');
+        $('#Serial_testport').combobox('disable');
+        $('#Serial_test_baud').combobox('disable');
+        $('#Serial_test_parity').combobox('disable');
     }
 }
 
@@ -140,6 +143,9 @@ function change_htcomhex() {
         $('#change_button').linkbutton('disable');
         $('#message_button').linkbutton('disable');
         $('#open_serial').linkbutton('enable');
+        $('#Serial_testport').combobox('enable');
+        $('#Serial_test_baud').combobox('enable');
+        $('#Serial_test_parity').combobox('enable');
     }
 }
 

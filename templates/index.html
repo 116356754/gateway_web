@@ -152,7 +152,7 @@
                                     </td>
                                 </tr>
                             </table>
-                            <a href="javascript:void(0)" id="gw_database_menu" class="easyui-menubutton" data-options="menu:'#menu-gwdatabase-config',iconCls:'icon-setting'">{{ $t('index.database') }}</a>
+                            <a href="javascript:void(0)" id="gw_database_menu" class="easyui-menubutton" data-options="menu:'#menu-gwdatabase-config',iconCls:'icon-database'">{{ $t('index.database') }}</a>
 
                             <div id="menu-gwdatabase-config" class="easyui-menu">
                                 <div data-options="iconCls:'icon-history-data'" id="btn-history-upload">{{ $t('index.offline_monitoring') }}</div>
@@ -163,7 +163,7 @@
 
                             <div id="menu-system-config" class="easyui-menu">
                                 <div data-options="iconCls:'icon-set-ip'" id="btn-update" onclick="set_ip()">{{ $t('index.configIP') }}</div>
-                                <div data-options="iconCls:'icon-gw-upload'" id="btn-update" onclick="upload_project()">{{ $t('index.upload_project') }}</div>
+                                <div data-options="iconCls:'icon-history-data'" id="btn-update" onclick="upload_project()">{{ $t('index.upload_project') }}</div>
                                 <div data-options="iconCls:'icon-set-passwd'" id="btn-update" onclick="set_passwd()">{{ $t('index.passwd_set') }}</div>
                                 <div data-options="iconCls:'icon-set-ntp'" id="btn-update" onclick="set_ntp()">{{ $t('index.School_time') }}</div>
                                 <div data-options="iconCls:'icon-set-reboot'" id="btn-update" onclick="reboot_gw()">{{ $t('index.reboot_gw') }}</div>
@@ -198,9 +198,9 @@
             </div>
 
 
-            <div region="south" split="true" style="height: 200px; background: #fff; ">
+            <div region="south" split="true" v-bind:title="System_log" data-options="tools:'#log_div'" style="height: 200px; background: #fff; ">
                 <div class="easyui-layout" data-options="fit:true">
-                    <div class="easyui-panel" v-bind:title="System_log" class="log-div" data-options="tools:'#log_div'">
+                    <div class="easyui-panel" class="log-div">
                         <div id="real_log">
                         </div>
 
@@ -215,7 +215,7 @@
                         <div class="info-footer">
                             <label for="company">&copy; Copyright 2019 by</label>
                             <a href="javascript:void(0)" id="company" onclick="open_web()"></a>
-                            <span id="version" style="float:right; padding-right:20px;" class="head">Version 内测版v1.4</span>
+                            <span id="version" style="float:right; padding-right:20px;" class="head">Version v2.2.0.1</span>
                             <!--  <img id="tubiao" src='../static/images/connect.png' width="20" height="20"
                      style="float:right; padding-right:20px;" align="absmiddle"/>
                 <label id="status" style="float:right; padding-right:5px;"></label> -->

@@ -117,6 +117,22 @@
         }
     }).$mount('#app')
 
+    $("#Serial_test_baud").combobox({
+        url: "../static/json/baudrate.json",
+        valueField: 'text',
+        textField: 'text',
+        method: "GET",
+        panelHeight: 'auto'
+    });
+
+    $("#Serial_test_parity").combobox({
+        url: "../static/json/parity.json",
+        valueField: 'id',
+        textField: 'text',
+        method: "GET",
+        panelHeight: 'auto'
+    });
+
     var checked = false;
     $("#scroll_btn").change(function() {
         if ($("#scroll_btn").is(":checked")) {

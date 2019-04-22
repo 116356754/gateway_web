@@ -60,6 +60,7 @@ function treeDebugMode() {
                     document.getElementById('mainPanle').innerHTML = '<iframe id=debug_real src="../templates/debug_real.html" style="width:100%;height:100%;background:#fafafa;"></iframe>';
                     cfxApi.sendCodetoNamepipe(row.pointName);
                 } else {
+                    // $(this).addClass('tree-disable');
                     document.getElementById('mainPanle').innerHTML = '';
                 }
             }

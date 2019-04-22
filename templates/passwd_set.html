@@ -75,6 +75,15 @@
         }
     });
 
+    $("#not_used").change(function() {
+        var status = $("#not_used").is(":checked");
+        if (status) {
+            $('#oldPasswd').textbox('setValue', "");
+        } else {
+            $('#oldPasswd').textbox('setValue', "not_used_passwd");
+        }
+    });
+
     $(function() {
         value = get_baseurl();
         $.ajax({
