@@ -103,28 +103,7 @@
 
         initial = self.parent.initial;
         messages = self.parent.messages;
-        $('#passwd_dialog').dialog({
-            title: messages[initial]['index']['passwd'],
-            closable: true,
-            draggable: false,
-            modal: true,
-            buttons: [{
-                text: messages[initial]['common']['ok'],
-                iconCls: 'icon-ok',
-                handler: function() {
-                    set_passwd();
-                }
-            }, {
-                text: messages[initial]['common']['cancel'],
-                iconCls: 'icon-cancel',
-                handler: function() {
-                    $('#passwd_dialog').dialog('close')
-                }
-            }]
-
-        });
     });
-
     //设置密码
     function set_passwd() {
         value = get_baseurl();

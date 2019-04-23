@@ -204,7 +204,20 @@ function check(children) {
 
 // 设置网关ip
 function set_ip() {
-    document.getElementById('mainPanle').innerHTML = '<iframe src="../templates/ip.html" style="width:100%;height:100%;background:#fafafa;"></iframe>';
+    $("#win").dialog({
+        title: self.parent.messages[initial]['system']['ip_config'],
+        width:600,
+        height:260,
+        modal:true,
+        content:'<iframe src="../templates/ip.html"></iframe>',
+        buttons: [{
+            text: self.parent.messages[initial]['system']['Apply_to_gateway'],
+            iconCls: 'icon-ok',
+            handler: function() {
+                ip_ftp();
+            }
+        }]
+    });
 }
 
 // 上传工程
@@ -214,12 +227,53 @@ function upload_project() {
 
 // 设置密码
 function set_passwd() {
-    document.getElementById('mainPanle').innerHTML = '<iframe src="../templates/passwd_set.html" style="width:100%;height:100%;background:#fafafa;"></iframe>';
+    $('#win').dialog({
+        title: messages[initial]['index']['passwd'],
+        closable: true,
+        width:400,
+        height:300,
+        modal: true,
+        content:'<iframe src="../templates/passwd_set.html"></iframe>',
+        buttons: [{
+            text: messages[initial]['common']['ok'],
+            iconCls: 'icon-ok',
+            handler: function() {
+                set_passwd();
+            }
+        }, {
+            text: messages[initial]['common']['cancel'],
+            iconCls: 'icon-cancel',
+            handler: function() {
+                $('#win').dialog('close')
+            }
+        }]
+
+    });
 }
 
 // 网关校时
 function set_ntp() {
-    document.getElementById('mainPanle').innerHTML = '<iframe src="../templates/ntp.html" style="width:100%;height:100%;background:#fafafa;"></iframe>';
+    $('#win').dialog({
+        title: messages[initial]['index']['passwd'],
+        closable: true,
+        width:400,
+        height:300,
+        modal: true,
+        content:'<iframe src="../templates/ntp.html"></iframe>',
+        buttons: [{
+            text: messages[initial]['common']['ok'],
+            iconCls: 'icon-ok',
+            handler: function() {
+                set_passwd();
+            }
+        }, {
+            text: messages[initial]['common']['cancel'],
+            iconCls: 'icon-cancel',
+            handler: function() {
+                $('#win').dialog('close')
+            }
+        }]
+    });
 }
 
 // 重启网关

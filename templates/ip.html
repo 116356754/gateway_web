@@ -1,12 +1,6 @@
 <!doctype html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 
-<style type="text/css">
-    .input_container {
-        margin-bottom: 13px;
-    }
-</style>
-
 <head>
     <meta charset="UTF-8" />
     <link rel="shortcut icon" href="../static/favicon.ico">
@@ -23,33 +17,31 @@
 </head>
 
 
-<div id='app'>
-    <div class="easyui-panel" id="i18n_data" style="padding:20px 60px;width:450px">
-        <form class="main_form" id="ip_form">
-            <div class="input_container">
-                <label for="dhcp" style="padding-right: 10px">{{ $t('system.dhcp') }}</label>
-                <input class="easyui-switchbutton" id='dhcp' name="dhcp" data-options="onText:'Yes',offText:'No'" unchecked>
-            </div>
-            <div class="input_container">
-                <input class="easyui-combobox" id='eh' v-bind:label="eh" labelWidth="90px" data-options="editable:false" name="eth" style="height:25px;width:300px">
-            </div>
-            <div class="input_container">
-                <input class="easyui-textbox" id='ip' v-bind:label="ip" validType="ip" labelWidth="90px" required="true" name="IPADDR" style="height:25px;width:300px">
-            </div>
-            <div class="input_container">
-                <input class="easyui-textbox" id='netmask' v-bind:label="netmask" validType="ip" labelWidth="90px" required="true" name="NETMASK" style="height:25px;width:300px">
-            </div>
-            <div class="input_container">
-                <input class="easyui-textbox" id='gwy' v-bind:label="gwy" validType="ip" labelWidth="90px" required="true" name="GATEWAY" style="height:25px;width:300px">
-            </div>
-            <div class="input_container">
-                <input class="easyui-textbox" id='dns1' v-bind:label="dns1" validType="ip" labelWidth="90px" required="true" name="dns1" style="height:25px;width:300px">
-            </div>
-            <div class="input_container">
-                <input class="easyui-textbox" id='dns2' v-bind:label="dns2" validType="ip" labelWidth="90px" required="true" name="dns2" style="height:25px;width:300px">
-            </div>
-        </form>
-    </div>
+<div id="app">
+    <form class="form form-win" id="ip_form">
+        <div class="form-group form-div">
+            <label for="dhcp" style="padding-right: 10px">{{ $t('system.dhcp') }}</label>
+            <input class="easyui-switchbutton" id='dhcp' name="dhcp" data-options="onText:'Yes',offText:'No'" unchecked>
+        </div>
+        <div class="form-group">
+            <input class="easyui-combobox" id='eh' v-bind:label="eh" labelWidth="90px" data-options="editable:false" name="eth" style="height:25px;width:240px">
+        </div>
+        <div class="form-group">
+            <input class="easyui-textbox" id='ip' v-bind:label="ip" validType="ip" labelWidth="90px" required="true" name="IPADDR" style="height:25px;width:240px">
+        </div>
+        <div class="form-group">
+            <input class="easyui-textbox" id='netmask' v-bind:label="netmask" validType="ip" labelWidth="90px" required="true" name="NETMASK" style="height:25px;width:240px">
+        </div>
+        <div class="form-group">
+            <input class="easyui-textbox" id='gwy' v-bind:label="gwy" validType="ip" labelWidth="90px" required="true" name="GATEWAY" style="height:25px;width:240px">
+        </div>
+        <div class="form-group">
+            <input class="easyui-textbox" id='dns1' v-bind:label="dns1" validType="ip" labelWidth="90px" required="true" name="dns1" style="height:25px;width:240px">
+        </div>
+        <div class="form-group">
+            <input class="easyui-textbox" id='dns2' v-bind:label="dns2" validType="ip" labelWidth="90px" required="true" name="dns2" style="height:25px;width:240px">
+        </div>
+    </form>
 </div>
 
 
@@ -89,18 +81,4 @@
             }
         }
     }).$mount('#app')
-
-    $("#i18n_data").dialog({
-        title: self.parent.messages[initial]['system']['ip_config'],
-        closable: false,
-        draggable: false,
-        shadow: false,
-        buttons: [{
-            text: self.parent.messages[initial]['system']['Apply_to_gateway'],
-            iconCls: 'icon-ok',
-            handler: function() {
-                ip_ftp();
-            }
-        }]
-    });
 </script>

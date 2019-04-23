@@ -8,7 +8,7 @@
 [class^="icon-"],
 [class*=" icon-"],
 .panel-tool-close,
-.messager-question {
+.messager-icon {
     font-family: "iconfont" !important;
     font-size: 16px;
     font-style: normal;
@@ -42,6 +42,7 @@
 .icon-set-reboot,
 .icon-update,
 .messager-question,
+.messager-info,
 .icon-template-add,
 .icon-add,
 .icon-redo,
@@ -52,6 +53,7 @@
 .icon-stop-project,
 .icon-database,
 .icon-pencil,
+.icon-reload,
 .icon-upload-project,
 .panel-tool-close {
     background: none;
@@ -176,7 +178,9 @@
 .messager-question:before {
     content: "\e78c";
 }
-
+.messager-info:before {
+    content: "\e783";
+}
 .icon-add:before {
     content: "\e9a9";
 }
@@ -208,7 +212,9 @@
 .icon-pencil:before {
     content: "\e83e";
 }
-
+.icon-reload:before {
+    content: "\e79b";
+}
 .icon-upload-project:before {
     content: "\e827";
 }
@@ -219,7 +225,9 @@
 .panel-body {
     background-color: #f0f1f1;
 }
-
+.panel-header{
+    background: #F2F2F2;
+}
 .panel-header,
 .panel-body {
     border: none;
@@ -323,7 +331,9 @@
     margin: 0 -5px;
     padding: 10px;
 }
-
+.window .messager-body.window-body {
+    width: calc(100% - 10px) !important;
+}
 .window .window-body .panel-body {
     background: #fff;
 }
@@ -746,4 +756,17 @@ input[type="checkbox"]::after {
 
 .tree-disable .tree-node {
     cursor: not-allowed;
+}
+#win{
+    padding: 0;
+}
+#win iframe{
+    width: 100%;
+    height: 100%;
+}
+.form-win.form{
+    padding: 10px 20px;
+}
+.form-win.form .form-div{
+    display: block;
 }

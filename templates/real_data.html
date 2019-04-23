@@ -24,13 +24,8 @@
 </head>
 
 <style type="text/css">
-    body {
-        padding: 0;
-        margin: 0;
-    }
-    
+  
     table {
-        border: #95b8e7 1px solid;
         border-collapse: collapse;
         border-spacing: 0;
         text-align: center;
@@ -41,28 +36,24 @@
     table th {
         height: 28px;
         line-height: 28px;
-        background: -webkit-linear-gradient(#eff5fe, #e0ecff);
-        background: -moz-linear-gradient(#eff5fe, #e0ecff);
-        background: -o-linear-gradient(#eff5fe, #e0ecff);
-        background: linear-gradient(#eff5fe, #e0ecff);
         filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#eff5fe', endColorstr='#e0ecff', GradientType=0);
-        border-bottom: #95b8e7 1px solid;
-        border-right: #95b8e7 1px dotted;
+        border-bottom: #e6e6e6 1px solid;
+        border-right: #e6e6e6 1px solid;
     }
     
     table td {
         height: 28px;
         line-height: 28px;
-        border: #95b8e7 1px dotted;
+        border: #e6e6e6 1px solid;
         padding: 0px;
     }
     
     table tr:nth-child(odd) {
-        background: #F4F4F4;
+        background: #f5f5f5;
     }
     
     table tr:hover {
-        background: #e2edff;
+        background: #e6e6e6;
     }
 </style>
 
@@ -88,7 +79,7 @@
                 </div>
             </div>
             <div id="app" data-options="region:'center'" v-bind:title="data">
-                <a v-on:click="button" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-reload'">Refresh</a>
+                <a v-on:click="button" href="#" class="easyui-linkbutton" plain="true" data-options="iconCls:'icon-reload'">Refresh</a>
                 <table id="t1" border="1px" cellspacing="0" width="100%">
                     <tr align="center">
                         <td>{{ $t('real_data.name') }}</td>
