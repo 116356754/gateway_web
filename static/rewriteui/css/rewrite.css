@@ -782,3 +782,49 @@ input[type="checkbox"]::after {
 .form-win.form .form-div {
     display: block;
 }
+
+#querytb .panel-body{
+    font-size: 14px;
+}
+
+#querytb .querytb-label{
+    display: inline-block;
+    width: 90px;
+    margin-right: 10px;
+}
+#querytb .separated{
+    border-bottom: 1px solid #D4D4D4;
+    width:calc(100% + 30px);
+    margin: 0 -15px;
+}
+#querytb .theme{
+    width: 100%;
+    padding: 20px 0 0 0;
+}
+#querytb .theme .textbox,
+#querytb .theme .switchbutton{
+    margin-right: 10px;
+}
+#querytb .theme .filter{
+    display: inline-block;
+}
+#querytb .changemqttbtn{
+   width: 100%;
+   text-align: right;
+   margin-top: 10px;
+}
+#newtopic_form{
+    font-size: 14px;
+}
+#newtopic_form .filter{
+    display: inline-block;
+}
+#newtopic_form .textbox,
+#newtopic_form .switchbutton{
+    margin-right: 10px;
+}
+#newtopic_form .newtopic-label{
+    display: inline-block;
+    width: 70px;
+    margin-right: 10px;
+}
