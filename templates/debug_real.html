@@ -233,7 +233,6 @@
         cfxApi.sendCodetoWritepipe(data);
     }
     real_data = JSON.parse(self.parent.debug_real_data);
-    console.log(real_data)
     if (real_data['val'] != null) {
         real_data['val'].forEach(function(tag) {
             var time = new Date(tag['timestamp'] * 1000);

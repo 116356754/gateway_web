@@ -40,7 +40,7 @@ function tag_dialog(server_type, point) {
     $('#tag_dialog').dialog({
         title: messages[initial]['tag_tree']['select_point'],
         closable: true,
-        draggable: false,
+        draggable: true,
         modal: true,
         buttons: [{
                 text: messages[initial]['common']['ok'],

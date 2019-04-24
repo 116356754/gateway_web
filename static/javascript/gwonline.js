@@ -205,18 +205,11 @@ function check(children) {
 // 设置网关ip
 function set_ip() {
     $("#win").dialog({
-        title: self.parent.messages[initial]['system']['ip_config'],
-        width:600,
-        height:260,
-        modal:true,
-        content:'<iframe src="../templates/ip.html"></iframe>',
-        buttons: [{
-            text: self.parent.messages[initial]['system']['Apply_to_gateway'],
-            iconCls: 'icon-ok',
-            handler: function() {
-                ip_ftp();
-            }
-        }]
+        title: messages[initial]['system']['ip_config'],
+        width: 600,
+        height: 260,
+        modal: true,
+        content: '<iframe src="../templates/ip.html"></iframe>'
     });
 }
 
@@ -230,23 +223,10 @@ function set_passwd() {
     $('#win').dialog({
         title: messages[initial]['index']['passwd'],
         closable: true,
-        width:400,
-        height:300,
+        width: 320,
+        height: 270,
         modal: true,
-        content:'<iframe src="../templates/passwd_set.html"></iframe>',
-        buttons: [{
-            text: messages[initial]['common']['ok'],
-            iconCls: 'icon-ok',
-            handler: function() {
-                set_passwd();
-            }
-        }, {
-            text: messages[initial]['common']['cancel'],
-            iconCls: 'icon-cancel',
-            handler: function() {
-                $('#win').dialog('close')
-            }
-        }]
+        content: '<iframe src="../templates/passwd_set.html"></iframe>'
 
     });
 }
@@ -256,23 +236,10 @@ function set_ntp() {
     $('#win').dialog({
         title: messages[initial]['index']['passwd'],
         closable: true,
-        width:400,
-        height:300,
+        width: 500,
+        height: 300,
         modal: true,
-        content:'<iframe src="../templates/ntp.html"></iframe>',
-        buttons: [{
-            text: messages[initial]['common']['ok'],
-            iconCls: 'icon-ok',
-            handler: function() {
-                set_passwd();
-            }
-        }, {
-            text: messages[initial]['common']['cancel'],
-            iconCls: 'icon-cancel',
-            handler: function() {
-                $('#win').dialog('close')
-            }
-        }]
+        content: '<iframe src="../templates/ntp.html"></iframe>'
     });
 }
 

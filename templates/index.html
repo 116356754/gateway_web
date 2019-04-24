@@ -165,7 +165,7 @@
                                 <div data-options="iconCls:'icon-set-ip'" id="btn-update" onclick="set_ip()">{{ $t('index.configIP') }}</div>
                                 <div data-options="iconCls:'icon-history-data'" id="btn-update" onclick="upload_project()">{{ $t('index.upload_project') }}</div>
                                 <div data-options="iconCls:'icon-set-passwd'" id="btn-update" onclick="set_passwd()">{{ $t('index.passwd_set') }}</div>
-                                <div data-options="iconCls:'icon-set-ntp'" id="btn-update" onclick="set_ntp()">{{ $t('index.School_time') }}</div>
+                                <!-- <div data-options="iconCls:'icon-set-ntp'" id="btn-update" onclick="set_ntp()">{{ $t('index.School_time') }}</div> -->
                                 <div data-options="iconCls:'icon-set-reboot'" id="btn-update" onclick="reboot_gw()">{{ $t('index.reboot_gw') }}</div>
                                 <div data-options="iconCls:'icon-update'" id="btn-update" onclick="gw_update()">{{ $t('index.gw_update') }}</div>
                             </div>
@@ -215,7 +215,7 @@
                         <div class="info-footer">
                             <label for="company">&copy; Copyright 2019 by</label>
                             <a href="javascript:void(0)" id="company" onclick="open_web()"></a>
-                            <span id="version" style="float:right; padding-right:20px;" class="head">Version v2.2.0.1</span>
+                            <span id="version" style="float:right; padding-right:20px;" class="head">Version v2.2.0.2</span>
                             <!--  <img id="tubiao" src='../static/images/connect.png' width="20" height="20"
                      style="float:right; padding-right:20px;" align="absmiddle"/>
                 <label id="status" style="float:right; padding-right:5px;"></label> -->
@@ -338,13 +338,6 @@
 
             <!-- MQTT配置窗口 -->
             <div id="dlg-mqtt" style="width:600px;height:600px;padding:10px;display:none">
-            </div>
-
-            <!-- 密码设定窗口 -->
-            <div id="passwd_dialog" style="width:320px;height:200px;padding:10px;display:none">
-                <input class="easyui-textbox" type="password" v-bind:label="oldPasswd" labelWidth="100px" required="true" id='oldPasswd' style="height:25px;width:240px"><br><br>
-                <input class="easyui-textbox" type="password" v-bind:label="newPasswd" labelWidth="100px" required="true" id='newPasswd' style="height:25px;width:240px"><br><br>
-                <input class="easyui-textbox" type="password" v-bind:label="confirmPasswd" labelWidth="100px" required="true" id='confirmPasswd' style="height:25px;width:240px">
             </div>
 
             <!-- 关于窗口 -->
@@ -574,8 +567,7 @@
                     <div id="ff" class="easyui-layout" data-options="fit:true">
                         <div data-options="region:'north'" style="height:70px;padding:10px">
                             <label class="my_protocol" style="font-size:12px;"><input id="event_check" class="input_agreement_protocol" type="checkbox" checked><span></span>{{ $t('common.enable') }}</label><br>
-                            <input class="easyui-textbox" id='event_name' v-bind:label="eventName" value="New Event" labelWidth="90px" style="width: 30%" validType="maxLength[30]">
-                            <font color="red">*</font>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <input class="easyui-textbox" id='event_name' v-bind:label="eventName" value="New Event" labelWidth="90px" style="width: 30%" validType="maxLength[30]"> &nbsp;&nbsp;&nbsp;&nbsp;
                             <input class="easyui-textbox" id='event_content' v-bind:label="eventDescription" labelWidth="80px" style="width: 30%" validType="maxLength[30]">
                         </div>
                         <div data-options="region:'west'" v-bind:title="eventSource" style="width:26%;"><br>
@@ -590,27 +582,27 @@
                                 <div style="margin-bottom:5px">
                                     <div>{{ $t('index.between') }}</div>
                                     <input id='event_interval' class="easyui-textbox" value="5000" required="true" style="width:85%;height:20px">
-                                    <font color="red">*</font>
+
                                 </div>
                                 <div style="margin-bottom:5px">
                                     <div>{{ $t('event.Association_point_name') }}</div>
                                     <input id='event_piontname' class="easyui-textbox" buttonAlign="left" required="true" buttonText="Add" style="width:85%;height:20px">
-                                    <font color="red">*</font>
+
                                 </div>
                                 <div style="margin-bottom:5px">
                                     <div id="event_max_div">{{ $t('event.max') }}</div>
                                     <input id='event_max' class="easyui-textbox" value="0" required="true" style="width:85%;height:20px">
-                                    <font color="red">*</font>
+
                                 </div>
                                 <div style="margin-bottom:5px">
                                     <div id="event_min_div">{{ $t('event.min') }}</div>
                                     <input id='event_min' class="easyui-textbox" value="0" required="true" style="width:85%;height:20px">
-                                    <font color="red">*</font>
+
                                 </div>
                                 <div style="margin-bottom:5px">
                                     <div>{{ $t('event.delay') }}</div>
                                     <input id='delay' class="easyui-textbox" value="0" required="true" style="width:85%;height:20px">
-                                    <font color="red">*</font>
+
                                 </div>
                             </div>
                         </div>

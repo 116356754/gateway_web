@@ -57,7 +57,6 @@ function event_data(type, old_name) {
     } else {
         sql = 'update js set name="{0}",enable="{1}",runType="{2}",param=nullif("{3}",""),script="{4}" where name="{5}"'.format(name, enable, runtype, param, script, old_name);
     }
-    console.log(sql)
     result = insertsql(path, sql)
     if (result == 'true') {
         self.parent.insert_info(self.parent.messages[initial]['common']['Saved_successfully'])

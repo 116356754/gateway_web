@@ -23,23 +23,21 @@
 </head>
 
 <body>
-    <div id='app' style="position:absolute; width:100%;height:100%;left:0;top:0">
-        <div class="easyui-layout" data-options="fit:true">
-            <div id="storage_title" class="table-responsive table2excel" data-options="region:'center',split:false">
-                <div style="position:absolute;top:20%;left:5%">
-                    <label class="my_protocol" style="font-size:15px;"><input id="ntp_check" type="checkbox" class="input_agreement_protocol"><span></span></label>
-                    <label style="font-size:15px" for="ntp_server">{{ $t('ntp.with_server') }}</label>
-                    <input class="easyui-textbox" id='ntp_server' value="time.windows.com" style="height:25px;width:250px">
-                    <label style="font-size:15px">{{ $t('ntp.synchronization') }}</label><input class="easyui-numberbox" id='cycle' value="60" style="height:25px;width:40px">
-                    <label style="font-size:15px">{{ $t('ntp.one') }}</label><br><br>
-                    <label class="my_protocol" style="font-size:15px;"><input id="server_used" type="checkbox" class="input_agreement_protocol"><span></span>{{ $t('ntp.server_used') }}</label><br><br>
-                    <div style="text-align:right;margin-top:40px ">
-                        <a href="# " class="easyui-linkbutton " iconCls="icon-set-ntp" onclick="pc_ntp()">{{ $t('ntp.sync_with_pc') }}</a>
-                        <a href="# " class="easyui-linkbutton " iconCls="icon-ok" onclick="save_ntp()">{{ $t('ntp.set_gateway') }}</a>
-                    </div>
-                </div>
+    <div id='app'>
+        <div id="storage_title">
+            <div style="margin-top:60px"></div>
+            <label class="my_protocol" style="font-size:15px;"><input id="ntp_check" type="checkbox" class="input_agreement_protocol"><span></span></label>
+            <label style="font-size:15px" for="ntp_server">{{ $t('ntp.with_server') }}</label>
+            <input class="easyui-textbox" id='ntp_server' value="time.windows.com" style="height:25px;width:250px">
+            <label style="font-size:15px">{{ $t('ntp.synchronization') }}</label><input class="easyui-numberbox" id='cycle' value="60" style="height:25px;width:40px">
+            <label style="font-size:15px">{{ $t('ntp.one') }}</label><br><br>
+            <label class="my_protocol" style="font-size:15px;"><input id="server_used" type="checkbox" class="input_agreement_protocol"><span></span>{{ $t('ntp.server_used') }}</label><br><br>
+            <div style="text-align:right;margin-top:40px ">
+                <a href="# " class="easyui-linkbutton " iconCls="icon-set-ntp" onclick="pc_ntp()">{{ $t('ntp.sync_with_pc') }}</a>
+                <a href="# " class="easyui-linkbutton " iconCls="icon-ok" onclick="save_ntp()">{{ $t('ntp.set_gateway') }}</a>
             </div>
         </div>
+    </div>
     </div>
 </body>
 

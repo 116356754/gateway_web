@@ -588,7 +588,7 @@
                     self.parent.insert_info(self.parent.messages[initial]['common']['load_success']);
                 } else {
                     if (result.indexOf('NOT NULL') != -1) {
-                        $.messager.alert(self.parent.messages[initial]['common']['system_hint'], 'Excel中“名称”、“点类型”、“Modbus寄存器地址”、“Modbus数据类型”和“异常默认值”不能为空！', "info")
+                        $.messager.alert(self.parent.messages[initial]['common']['system_hint'], 'Excel中“名称”、“数据区”、“Modbus寄存器地址”、“Modbus数据类型”和“异常默认值”不能为空！', "info")
                     } else if (result.indexOf('UNIQUE') != -1) {
                         $.messager.alert(self.parent.messages[initial]['common']['system_hint'], self.parent.messages[initial]['common']['duplicate_name'], "info")
                     } else {

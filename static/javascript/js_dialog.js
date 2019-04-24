@@ -57,8 +57,11 @@ $(function() {
             display_tag('js_script', 'read_tag', true)
         },
         onChange(newValue, oldValue) {
-            func_tree_select = $('#func_tree').tree("getSelected");
-            $("#func_preview").textbox("setValue", func_tree_select.functag.format(newValue));
+            if (newValue != "") {
+                func_tree_select = $('#func_tree').tree("getSelected");
+                $("#func_preview").textbox("setValue", func_tree_select.functag.format(newValue));
+                $("#read_tag").textbox("setValue", "");
+            }
         }
     });
 })

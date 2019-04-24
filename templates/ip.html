@@ -17,31 +17,34 @@
 </head>
 
 
-<div id="app">
-    <form class="form form-win" id="ip_form">
-        <div class="form-group form-div">
-            <label for="dhcp" style="padding-right: 10px">{{ $t('system.dhcp') }}</label>
-            <input class="easyui-switchbutton" id='dhcp' name="dhcp" data-options="onText:'Yes',offText:'No'" unchecked>
-        </div>
-        <div class="form-group">
-            <input class="easyui-combobox" id='eh' v-bind:label="eh" labelWidth="90px" data-options="editable:false" name="eth" style="height:25px;width:240px">
-        </div>
-        <div class="form-group">
-            <input class="easyui-textbox" id='ip' v-bind:label="ip" validType="ip" labelWidth="90px" required="true" name="IPADDR" style="height:25px;width:240px">
-        </div>
-        <div class="form-group">
-            <input class="easyui-textbox" id='netmask' v-bind:label="netmask" validType="ip" labelWidth="90px" required="true" name="NETMASK" style="height:25px;width:240px">
-        </div>
-        <div class="form-group">
-            <input class="easyui-textbox" id='gwy' v-bind:label="gwy" validType="ip" labelWidth="90px" required="true" name="GATEWAY" style="height:25px;width:240px">
-        </div>
-        <div class="form-group">
-            <input class="easyui-textbox" id='dns1' v-bind:label="dns1" validType="ip" labelWidth="90px" required="true" name="dns1" style="height:25px;width:240px">
-        </div>
-        <div class="form-group">
-            <input class="easyui-textbox" id='dns2' v-bind:label="dns2" validType="ip" labelWidth="90px" required="true" name="dns2" style="height:25px;width:240px">
-        </div>
-    </form>
+<div id='app'>
+    <div id="app">
+        <form class="form form-win" id="ip_form">
+            <div class="form-group form-div">
+                <label for="dhcp" style="padding-right: 10px">{{ $t('system.dhcp') }}</label>
+                <input class="easyui-switchbutton" id='dhcp' name="dhcp" data-options="onText:'Yes',offText:'No'" unchecked>
+            </div>
+            <div class="form-group">
+                <input class="easyui-combobox" id='eh' v-bind:label="eh" labelWidth="110px" data-options="editable:false" name="eth" style="height:25px;width:240px">
+            </div>
+            <div class="form-group">
+                <input class="easyui-textbox" id='ip' v-bind:label="ip" validType="ip" labelWidth="110px" required="true" name="IPADDR" style="height:25px;width:240px">
+            </div>
+            <div class="form-group">
+                <input class="easyui-textbox" id='netmask' v-bind:label="netmask" validType="ip" labelWidth="110px" required="true" name="NETMASK" style="height:25px;width:240px">
+            </div>
+            <div class="form-group">
+                <input class="easyui-textbox" id='gwy' v-bind:label="gwy" validType="ip" labelWidth="110px" required="true" name="GATEWAY" style="height:25px;width:240px">
+            </div>
+            <div class="form-group">
+                <input class="easyui-textbox" id='dns1' v-bind:label="dns1" validType="ip" labelWidth="110px" required="true" name="dns1" style="height:25px;width:240px">
+            </div>
+            <div class="form-group">
+                <input class="easyui-textbox" id='dns2' v-bind:label="dns2" validType="ip" labelWidth="110px" required="true" name="dns2" style="height:25px;width:240px">
+            </div>
+        </form>
+        <a href="# " style="float:right" class="easyui-linkbutton " iconCls="icon-ok" onclick="ip_ftp()">{{ $t('system.Apply_to_gateway') }}</a>
+    </div>
 </div>
 
 

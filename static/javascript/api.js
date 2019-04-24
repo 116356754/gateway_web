@@ -385,17 +385,6 @@ $.extend($.fn.dialog.methods, {
     }
 });
 
-// $('#enter_passwd_dialog').dialog('bindButtonEvents', {
-//     ok: function() {
-//         console.log('bbbbbbb')
-//         $('#enter_passwd_dialog').dialog('close');
-//         download_valid_passwd(file_name, dir)
-//     },
-//     cancel: function() {
-//         $('#enter_passwd_dialog').dialog('close')
-//     }
-// });
-
 
 
 // 显示easyui dialog

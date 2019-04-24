@@ -143,7 +143,7 @@ $(function() {
                 },
                 {
                     field: 'dataType',
-                    title: self.parent.messages[initial]['modbus_slave']['dataType'],
+                    title: self.parent.messages[initial]['opcua']['dataType'],
                     width: 100,
                     align: 'center',
                     editor: {

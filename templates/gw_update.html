@@ -39,23 +39,33 @@
                     success: function(data) {
                         gwModel = data['gwModel'];
                         if ('GT6657' == gwModel) {
-                            cfxApi.uploadFileFtp('/home/', 'update.tar.gz', getCurrentDirectory() + '\\Firmware\\A9\\update.tar.gz', function(status) {
-                                if (status) {
-                                    self.parent.insert_info(self.parent.messages[initial]['index']['update_success'])
-                                    reboot_gw(value);
-                                } else {
-                                    self.parent.insert_info(self.parent.messages[initial]['index']['download_fail'])
-                                }
-                            })
+                            file_list = JSON.parse(scanFile(getCurrentDirectory() + '\\Firmware\\A9\\'))
+                            if (file_list[0] == 'update.tar.gz') {
+                                cfxApi.uploadFileFtp('/home/', 'update.tar.gz', getCurrentDirectory() + '\\Firmware\\A9\\update.tar.gz', function(status) {
+                                    if (status) {
+                                        self.parent.insert_info(self.parent.messages[initial]['index']['update_success'])
+                                        reboot_gw(value);
+                                    } else {
+                                        self.parent.insert_info(self.parent.messages[initial]['index']['download_fail'])
+                                    }
+                                })
+                            } else {
+                                $.messager.alert(messages[initial]['common']['system_hint'], messages[initial]['index']['nothave_updatefile'], "info");
+                            }
                         } else {
-                            cfxApi.uploadFileFtp('/home/', 'update.tar.gz', getCurrentDirectory() + '\\Firmware\\ARM\\update.tar.gz', function(status) {
-                                if (status) {
-                                    self.parent.insert_info(self.parent.messages[initial]['index']['update_success'])
-                                    reboot_gw(value);
-                                } else {
-                                    self.parent.insert_info(self.parent.messages[initial]['index']['download_fail'])
-                                }
-                            })
+                            file_list = JSON.parse(scanFile(getCurrentDirectory() + '\\Firmware\\ARM\\'))
+                            if (file_list[0] == 'update.tar.gz') {
+                                cfxApi.uploadFileFtp('/home/', 'update.tar.gz', getCurrentDirectory() + '\\Firmware\\ARM\\update.tar.gz', function(status) {
+                                    if (status) {
+                                        self.parent.insert_info(self.parent.messages[initial]['index']['update_success'])
+                                        reboot_gw(value);
+                                    } else {
+                                        self.parent.insert_info(self.parent.messages[initial]['index']['download_fail'])
+                                    }
+                                })
+                            } else {
+                                $.messager.alert(messages[initial]['common']['system_hint'], messages[initial]['index']['nothave_updatefile'], "info");
+                            }
                         }
 
                     },

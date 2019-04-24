@@ -2,7 +2,7 @@
         "text": "读写函数",
         "children": [{
             "text": "读取位地址：ReadBit",
-            "document": "bool ReadBit( @Tag点名称)\n从指定Tag点读取BOOL\n返回值：",
+            "document": "bool ReadBit( @Tag点名称)\n从指定Tag点读取BOOL\n",
             "function": "ReadBit()",
             "functag": "ReadBit('{0}')"
         }, {
