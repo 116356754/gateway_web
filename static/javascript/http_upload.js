@@ -1,7 +1,7 @@
 // 验证是否选择了罗米云
 function mqtt_check(used, path, mqtt_object) {
     if (!used) {
-        $.messager.alert(self.parent.messages[initial]['common']['system_hint'], self.parent.messages[initial]['http']['mqtt_enable'], "info");
+        $.messager.alert(self.parent.messages[initial]['common']['system_hint'], self.parent.messages[initial]['http']['mqtt_enable'].format(self.parent.luomiyun_name), "info");
     } else {
         $.messager.confirm(self.parent.messages[initial]['common']['system_hint'], self.parent.messages[initial]['index']['upload_to_yun'].format(mqtt_object['base']['ip']), function(r) {
             if (r) {

@@ -135,6 +135,7 @@ function tag_json(dir, tree_json, AIBI) {
                         level3['children'] = []
                         result_object.forEach(function(tag) {
                             tag['text'] = tag['tagCode'];
+                            tag["iconCls"] = "icon-tag";
                             level3['children'].push(tag)
                         })
                     })
@@ -146,7 +147,8 @@ function tag_json(dir, tree_json, AIBI) {
             result_object = JSON.parse(result);
             level1['children'] = []
             result_object.forEach(function(tag) {
-                tag['text'] = tag['tagCode']
+                tag['text'] = tag['tagCode'];
+                tag["iconCls"] = "icon-tag";
                 level1['children'].push(tag)
             })
         } else if (level1['text'] == messages[initial]['index']['calculate']) {
@@ -155,7 +157,8 @@ function tag_json(dir, tree_json, AIBI) {
             result_object = JSON.parse(result);
             level1['children'] = []
             result_object.forEach(function(tag) {
-                tag['text'] = tag['tagCode']
+                tag['text'] = tag['tagCode'];
+                tag["iconCls"] = "icon-tag";
                 level1['children'].push(tag)
             })
         } else if (level1['text'] == messages[initial]['index']['system']) {
@@ -164,7 +167,8 @@ function tag_json(dir, tree_json, AIBI) {
             result_object = JSON.parse(result);
             level1['children'] = []
             result_object.forEach(function(tag) {
-                tag['text'] = tag['tagCode']
+                tag['text'] = tag['tagCode'];
+                tag["iconCls"] = "icon-tag";
                 level1['children'].push(tag)
             });
             sql = "select tagCode,description,objectType from DEVICE_STATUS_VIEW";
@@ -173,6 +177,7 @@ function tag_json(dir, tree_json, AIBI) {
             result_object.forEach(function(tag) {
                 tag['deviceCode'] = 'system';
                 tag['text'] = tag['tagCode'];
+                tag["iconCls"] = "icon-tag";
                 level1['children'].push(tag)
             });
         }

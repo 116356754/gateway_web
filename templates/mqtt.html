@@ -61,9 +61,9 @@
             <form id='newtopic_form'>
                 <label for="newtopic" style="padding-right: 10px">{{$t('mqtt.realtopic')}}</label>
                 <input class="easyui-textbox" id='newtopic' required='true' style="width:130px;"><br><br>
-                <input class="easyui-combobox" id='newtopicqos' data-options="editable:false,panelHeight: 'auto'" style="width:60px;height: 24px">
+                <input class="easyui-combobox" id='newtopicqos' data-options="editable:false,panelHeight: 'auto'" style="width:60px;height: 20px">
                 <label for="newtopicretain" style="padding-left: 5px">retained:</label>
-                <input id="newtopicretain" class="easyui-switchbutton" labelWidth="100px" data-options="onText:'Yes',offText:'No'" style="height:24px;width:50px">
+                <input id="newtopicretain" class="easyui-switchbutton" labelWidth="100px" data-options="onText:'Yes',offText:'No'" style="height:20px;width:50px">
                 <label for="newfreq" style="padding-right: 10px">{{$t('mqtt.freq')}}</label>
                 <input class="easyui-numberbox" id='newfreq' required='true' style="width:80px;">
                 <div style="margin-top:20px">
@@ -167,106 +167,105 @@
             </form>
         </div>
         <div class="easyui-layout" data-options="fit:true">
-            <div data-options="region:'west'" style="width:470px">
+            <div data-options="region:'west'" class="form-layout" style="width:490px">
                 <div class="container">
                     <form method=POST enctype=multipart/form-data id='mrx' title="导入Excel配置" action="/mqtt/excelload" style="display:none;width:300px;height:150px">
                         <input type=file name=the_file accept="application/vnd.ms-excel">
                         <input type=submit style='position:absolute;right:120px;top:100px;width:60px'>
                     </form>
                     <div class="container" style="width:470px;margin-left:auto;margin-right:auto;">
-                        <form id="querytb">
-                            <div class="easyui-panel" style="width:470px;padding:0 15px;" title="  ">
-                                <div style="margin-bottom: 10px;">
-                                    <label class="my_protocol" style="font-size:16px;"><input id="mqtt_check" class="input_agreement_protocol" type="checkbox"><span></span>{{ $t('mqtt.used') }}</label>
-                                </div>
-                                <div style="margin-bottom:10px">
-                                    <label class="querytb-label">{{ $t('mqtt.ipaddr') }}</label>
-                                    <input id='ip' class="easyui-textbox" required="true" style="width:200px;height:24px">
-                                </div>
-                                <div style="margin-bottom:10px">
-                                    <label class="querytb-label">{{ $t('mqtt.port') }}</label>
-                                    <input id='port' class="easyui-textbox" required="true" style="width:200px;height:24px">
-                                </div>
-                                <div style="margin-bottom:10px">
-                                    <label class="querytb-label">{{ $t('mqtt.clientid') }}</label>
-                                    <input id='clientid' class="easyui-textbox" required="true" style="width:200px;height:24px">
-                                </div>
+                        <form id="querytb" style="padding:0 15px;">
+                            <div style="margin-bottom: 10px;">
+                                <label class="my_protocol" style="font-size:16px;"><input id="mqtt_check" class="input_agreement_protocol" type="checkbox"><span></span>{{ $t('mqtt.used') }}</label>
+                            </div>
+                            <div style="margin-bottom:10px">
+                                <label class="querytb-label">{{ $t('mqtt.ipaddr') }}</label>
+                                <input id='ip' class="easyui-textbox" required="true" style="width:200px;height:24px">
+                            </div>
+                            <div style="margin-bottom:10px">
+                                <label class="querytb-label">{{ $t('mqtt.port') }}</label>
+                                <input id='port' class="easyui-textbox" required="true" style="width:200px;height:24px">
+                            </div>
+                            <div style="margin-bottom:10px">
+                                <label class="querytb-label">{{ $t('mqtt.clientid') }}</label>
+                                <input id='clientid' class="easyui-textbox" required="true" style="width:200px;height:24px">
+                            </div>
 
-                                <div class="easyui-tabs" data-options="border:true,plain:true" style="width:470px;height:160px;margin: 0 -15px;">
-                                    <div title="Gerenal" style="padding:20px 20px 0;display:none;">
-                                        <div style="margin-bottom:10px">
-                                            <label class="querytb-label">Keep Alive(s):</label>
-                                            <input id='keep_alive' class="easyui-numberbox" required="true" style="width:200px;height:24px">
-                                        </div>
-                                        <div style="margin-bottom:10px">
-                                            <label class="querytb-label">Timeout(s):</label>
-                                            <input id='timeout' class="easyui-numberbox" required="true" style="width:200px;height:24px">
-                                        </div>
-                                        <div style="margin-bottom:10px">
-                                            <label class="querytb-label" for="clean_session">Clean Session:</label>
-                                            <input id="clean_session" class="easyui-switchbutton" labelWidth="110px" data-options="onText:'Yes',offText:'No'">
-                                        </div>
+                            <div class="easyui-tabs" data-options="border:true,plain:true" style="width:470px;height:160px;margin: 0 -15px;">
+                                <div title="Gerenal" style="padding:20px 20px 0;display:none;">
+                                    <div style="margin-bottom:10px">
+                                        <label class="querytb-label">Keep Alive(s):</label>
+                                        <input id='keep_alive' class="easyui-numberbox" required="true" style="width:200px;height:24px">
                                     </div>
-                                    <div title="User Credentials" style="padding:20px;">
-                                        <div style="margin-bottom:10px">
-                                            <label class="querytb-label">{{ $t('mqtt.username') }}</label>
-                                            <input id='username' class="easyui-textbox" style="width:200px;height:24px">
-                                        </div>
-                                        <div style="margin-bottom:10px">
-                                            <label class="querytb-label">{{ $t('mqtt.password') }}</label>
-                                            <input id='password' class="easyui-textbox" style="width:200px;height:24px">
-                                        </div>
+                                    <div style="margin-bottom:10px">
+                                        <label class="querytb-label">Timeout(s):</label>
+                                        <input id='timeout' class="easyui-numberbox" required="true" style="width:200px;height:24px">
                                     </div>
-                                    <div title="SSL/TLS" style="padding:20px;display:none;">
-                                        <div style="margin-bottom:20px">
-                                            <label for="ssl" class="querytb-label">{{ $t('mqtt.enablessl') }}</label>
-                                            <input id="ssl" class="easyui-switchbutton" labelWidth="110px" data-options="onText:'Yes',offText:'No'">
-                                            <a id="ssl_check" href="#" class="easyui-linkbutton">...</a>
-                                        </div>
-                                    </div>
-                                    <div title="Last Will and Testament" style="padding:20px;display:none;">
-                                        <div style="margin-bottom:20px">
-                                            <label for="lastwillenable" class="querytb-label">{{ $t('mqtt.enablelastwill') }}</label>
-                                            <input id="lastwillenable" class="easyui-switchbutton" labelWidth="110px" data-options="onText:'Yes',offText:'No'">
-                                            <a id="last_will_button" href="#" class="easyui-linkbutton">...</a>
-                                        </div>
+                                    <div style="margin-bottom:10px">
+                                        <label class="querytb-label" for="clean_session">Clean Session:</label>
+                                        <input id="clean_session" class="easyui-switchbutton" labelWidth="110px" data-options="onText:'Yes',offText:'No'">
                                     </div>
                                 </div>
-                                <div class="separated"></div>
-                                <div class="theme">
+                                <div title="User Credentials" style="padding:20px;">
                                     <div style="margin-bottom:10px">
-                                        <div style="margin-bottom:10px;">{{ $t('mqtt.realtopic') }}</div>
-                                        <input id='realtopic' class="easyui-combobox" value="aaa" data-options="editable:false,panelHeight: 'auto'" required="true" style="width:150px;height:24px">
-                                        <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick='add_realtopic()'>Add</a>
-                                        <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove'" onclick='remove_realtopic()'>Remove</a>
-                                        <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-pencil'" onclick='edit_realtopic()'>Edit</a><br><br>
-                                        <input class="easyui-combobox" id='realqos' readonly="readonly" data-options="editable:false,panelHeight: 'auto'" style="width:90px;height: 24px">
-                                        <label for="realretain" style="padding-left: 5px">retained:</label>
-                                        <input id="realretain" class="easyui-switchbutton" readonly="readonly" labelWidth="100px" data-options="onText:'Yes',offText:'No'" style="height:24px;width:50px;">
-                                        <label for="freq" style="padding-left: 5px">{{ $t('mqtt.freq') }}</label>
-                                        <input id='freq' class="easyui-textbox" readonly="readonly" required="true" editable='false' style="width:90px;height:24px">
+                                        <label class="querytb-label">{{ $t('mqtt.username') }}</label>
+                                        <input id='username' class="easyui-textbox" style="width:200px;height:24px">
                                     </div>
-                                    <div style="margin-bottom:20px">
-                                        <label class="querytb-label">{{ $t('mqtt.filter') }}</label>
-                                        <div class="filter">
-                                            <label class="my_protocol"><input id="valChange" type="checkbox" class="input_agreement_protocol" disabled="disabled"><span></span>{{ $t('mqtt.valChange') }}</label>
-                                            <label class="my_protocol"><input id="statusGood" type="checkbox" class="input_agreement_protocol" disabled="disabled"><span></span>{{ $t('mqtt.statusGood') }}</label>
-                                            <label class="my_protocol"><input id="timestampChange" type="checkbox" class="input_agreement_protocol" disabled="disabled"><span></span>{{ $t('mqtt.timestampChange') }}</label>
-                                        </div>
+                                    <div style="margin-bottom:10px">
+                                        <label class="querytb-label">{{ $t('mqtt.password') }}</label>
+                                        <input id='password' class="easyui-textbox" style="width:200px;height:24px">
                                     </div>
+                                </div>
+                                <div title="SSL/TLS" style="padding:20px;display:none;">
                                     <div style="margin-bottom:20px">
-                                        <label class="querytb-label">{{ $t('mqtt.mustache') }}</label>
-                                        <input id='mustache_combo' class="easyui-combobox" readonly="readonly" data-options="editable:false,panelHeight: 'auto'" required="true" style="width:150px;height:24px">
+                                        <label for="ssl" class="querytb-label">{{ $t('mqtt.enablessl') }}</label>
+                                        <input id="ssl" class="easyui-switchbutton" labelWidth="110px" data-options="onText:'Yes',offText:'No'">
+                                        <a id="ssl_check" href="#" class="easyui-linkbutton">...</a>
+                                    </div>
+                                </div>
+                                <div title="Last Will and Testament" style="padding:20px;display:none;">
+                                    <div style="margin-bottom:20px">
+                                        <label for="lastwillenable" class="querytb-label">{{ $t('mqtt.enablelastwill') }}</label>
+                                        <input id="lastwillenable" class="easyui-switchbutton" labelWidth="110px" data-options="onText:'Yes',offText:'No'">
+                                        <a id="last_will_button" href="#" class="easyui-linkbutton">...</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="separated"></div>
+                            <div class="theme">
+                                <div style="margin-bottom:10px">
+                                    <div style="margin-bottom:10px;">{{ $t('mqtt.realtopic') }}</div>
+                                    <input id='realtopic' class="easyui-combobox" value="aaa" data-options="editable:false,panelHeight: 'auto'" required="true" style="width:150px;height:24px">
+                                    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick='add_realtopic()'>Add</a>
+                                    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove'" onclick='remove_realtopic()'>Remove</a>
+                                    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-pencil'" onclick='edit_realtopic()'>Edit</a><br><br>
+                                    <input class="easyui-combobox" id='realqos' readonly="readonly" data-options="editable:false,panelHeight: 'auto'" style="width:90px;height: 24px">
+                                    <label for="realretain" style="padding-left: 5px">retained:</label>
+                                    <input id="realretain" class="easyui-switchbutton" readonly="readonly" labelWidth="100px" data-options="onText:'Yes',offText:'No'" style="height:24px;width:50px;">
+                                    <label for="freq" style="padding-left: 5px">{{ $t('mqtt.freq') }}</label>
+                                    <input id='freq' class="easyui-textbox" readonly="readonly" required="true" editable='false' style="width:90px;height:24px">
+                                </div>
+                                <div style="margin-bottom:20px">
+                                    <label class="querytb-label">{{ $t('mqtt.filter') }}</label>
+                                    <div class="filter">
+                                        <label class="my_protocol"><input id="valChange" type="checkbox" class="input_agreement_protocol" disabled="disabled"><span></span>{{ $t('mqtt.valChange') }}</label>
+                                        <label class="my_protocol"><input id="statusGood" type="checkbox" class="input_agreement_protocol" disabled="disabled"><span></span>{{ $t('mqtt.statusGood') }}</label>
+                                        <label class="my_protocol"><input id="timestampChange" type="checkbox" class="input_agreement_protocol" disabled="disabled"><span></span>{{ $t('mqtt.timestampChange') }}</label>
                                     </div>
                                 </div>
                                 <div style="margin-bottom:20px">
-                                    <label class="querytb-label">拓展主题:</label>
-                                    <a id="topic_check" href="#" class="easyui-linkbutton" style="width:60px;">...</a>
+                                    <label class="querytb-label">{{ $t('mqtt.mustache') }}</label>
+                                    <input id='mustache_combo' class="easyui-combobox" readonly="readonly" data-options="editable:false,panelHeight: 'auto'" required="true" style="width:150px;height:24px">
                                 </div>
-                                <div class="separated"></div>
-                                <div class="changemqttbtn">
-                                    <a id="changemqttbtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">{{ $t('common.save') }}</a>
-                                </div>
+                            </div>
+                            <div style="margin-bottom:20px">
+                                <label class="querytb-label">拓展主题:</label>
+                                <a id="topic_check" href="#" class="easyui-linkbutton" style="width:60px;">...</a>
+                            </div>
+                            <div class="separated"></div>
+                            <div class="changemqttbtn">
+                                <a id="changemqttbtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">{{ $t('common.save') }}</a>
                             </div>
                         </form>
                     </div>

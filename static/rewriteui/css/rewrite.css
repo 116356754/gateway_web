@@ -662,6 +662,7 @@ input[type="checkbox"]::after {
 .icon-io-point,
 .icon-channel,
 .icon-meter,
+.icon-tag,
 .icon-system-point,
 .icon-calculation-point,
 .icon-user-point,
@@ -690,7 +691,7 @@ input[type="checkbox"]::after {
 }
 
 .icon-io-point:before {
-    content: "\e84a";
+    content: "\e84c";
 }
 
 .icon-channel:before {
@@ -699,6 +700,10 @@ input[type="checkbox"]::after {
 
 .icon-meter:before {
     content: "\e835";
+}
+
+.icon-tag:before {
+    content: "\e84a";
 }
 
 .icon-user-point:before {
@@ -783,47 +788,56 @@ input[type="checkbox"]::after {
     display: block;
 }
 
-#querytb .panel-body{
+#querytb .panel-body {
     font-size: 14px;
 }
 
-#querytb .querytb-label{
+#querytb .querytb-label {
     display: inline-block;
     width: 90px;
     margin-right: 10px;
 }
-#querytb .separated{
+
+#querytb .separated {
     border-bottom: 1px solid #D4D4D4;
-    width:calc(100% + 30px);
+    width: calc(100% + 30px);
     margin: 0 -15px;
 }
-#querytb .theme{
+
+#querytb .theme {
     width: 100%;
     padding: 20px 0 0 0;
 }
+
 #querytb .theme .textbox,
-#querytb .theme .switchbutton{
+#querytb .theme .switchbutton {
     margin-right: 10px;
 }
-#querytb .theme .filter{
+
+#querytb .theme .filter {
     display: inline-block;
 }
-#querytb .changemqttbtn{
-   width: 100%;
-   text-align: right;
-   margin-top: 10px;
+
+#querytb .changemqttbtn {
+    width: 100%;
+    text-align: right;
+    margin-top: 10px;
 }
-#newtopic_form{
+
+#newtopic_form {
     font-size: 14px;
 }
-#newtopic_form .filter{
+
+#newtopic_form .filter {
     display: inline-block;
 }
+
 #newtopic_form .textbox,
-#newtopic_form .switchbutton{
+#newtopic_form .switchbutton {
     margin-right: 10px;
 }
-#newtopic_form .newtopic-label{
+
+#newtopic_form .newtopic-label {
     display: inline-block;
     width: 70px;
     margin-right: 10px;

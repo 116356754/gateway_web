@@ -301,7 +301,7 @@ function server_display(gw_conf2) { // 根据选择的网关型号显示服务�
 
 function project_open_dialog() {
     $("#text").next().hide(); // 隐藏textbox
-    display_dialog('project_open', messages[initial]['index']['Open_project']);
+    display_dialog('project_open', messages[initial]['index']['projectManagement']);
     $('#project_open').dialog({
         buttons: [{
                 text: messages[initial]['index']['New_project'],
@@ -318,7 +318,7 @@ function project_open_dialog() {
                 }
             },
             {
-                text: messages[initial]['common']['ok'],
+                text: messages[initial]['index']['Open_project'],
                 iconCls: 'icon-ok',
                 handler: function() {
                     project_open('dialog')

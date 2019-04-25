@@ -87,7 +87,7 @@ var oemData = {
 }
 var help_oem = false
 var upload_oem = false // 为true时隐藏帮助按钮和上传云端按钮
-var luomiyun_name = "LUOMI YUN"
+var luomiyun_name = "IotDDC"
 var mqtt_default = { "used": false, "base": { "ip": "192.168.1.10", "port": 1883, "keep_alive": 60, "timeout": 60, "clean_session": false, "username": "", "password": "", "clientid": "gw1" }, "ssl": null, "topics": { "realtime": { "topicList": [{ "topic": "lm/gw/status/gw1", "freq": 10 }], "qos": 0, "retain": false }, "history": { "topic": "lm/gw/history/gw1", "qos": 0, "retain": false }, "ctrlResponse": { "topic": "lm/gw/ctrlResponse/gw1", "qos": 0, "retain": false }, "ctrlRequest": { "topic": "lm/gw/ctrlRequest/gw1", "qos": 0 }, "inquire": { "topic": "lm/gw/inquire/gw1", "qos": 0 }, "inquireResponse": { "topic": "lm/gw/inquireResponse/gw1", "qos": 0, "retain": false }, "reboot": { "topic": "lm/gw/reboot/gw1", "qos": 0 }, "lastwill": { "enable": false, "topic": "lm/gw/lastwill/gw1", "qos": 0, "retain": false, "message": "" } }, "mode": { "filter": ["statusGood"], "format": "default", "timeformat": "2006-01-02 15:04:05", "write": "default" } }
 
 //惟则
