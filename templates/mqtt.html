@@ -167,14 +167,14 @@
             </form>
         </div>
         <div class="easyui-layout" data-options="fit:true">
-            <div data-options="region:'west'" class="form-layout" style="width:490px">
+            <div data-options="region:'west'" class="form-layout" style="width:470px;border-right: 1px solid #c0c4c5;">
                 <div class="container">
                     <form method=POST enctype=multipart/form-data id='mrx' title="导入Excel配置" action="/mqtt/excelload" style="display:none;width:300px;height:150px">
                         <input type=file name=the_file accept="application/vnd.ms-excel">
                         <input type=submit style='position:absolute;right:120px;top:100px;width:60px'>
                     </form>
-                    <div class="container" style="width:470px;margin-left:auto;margin-right:auto;">
-                        <form id="querytb" style="padding:0 15px;">
+                    <div class="container" style="width:469px;margin-left:auto;margin-right:auto;">
+                        <form id="querytb" style="padding:10px 15px;">
                             <div style="margin-bottom: 10px;">
                                 <label class="my_protocol" style="font-size:16px;"><input id="mqtt_check" class="input_agreement_protocol" type="checkbox"><span></span>{{ $t('mqtt.used') }}</label>
                             </div>
@@ -191,7 +191,7 @@
                                 <input id='clientid' class="easyui-textbox" required="true" style="width:200px;height:24px">
                             </div>
 
-                            <div class="easyui-tabs" data-options="border:true,plain:true" style="width:470px;height:160px;margin: 0 -15px;">
+                            <div class="easyui-tabs" data-options="border:true,plain:true" style="width:469px;height:160px;margin: 0 -15px;">
                                 <div title="Gerenal" style="padding:20px 20px 0;display:none;">
                                     <div style="margin-bottom:10px">
                                         <label class="querytb-label">Keep Alive(s):</label>

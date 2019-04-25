@@ -27,12 +27,14 @@
     <label id="ip_label">当前调试的网关IP：</label>
     <div id="linux_contocol" class="easyui-tabs" data-options="fit:true" style="height:100%">
         <div v-bind:title="debug" style="display:none;">
-            <div id="log-container" style="height: 85%; overflow-y: scroll; background: #333;">
+            <div id="log-container" class="debug-log" style="height: 85%;">
             </div>
-            <label class="my_protocol" style="font-size:14px;"><input id="showMessage_btn" class="input_agreement_protocol" type="checkbox" ><span></span>是否只显示报文</label>
-            <label class="my_protocol" style="font-size:14px;"><input id="scroll_btn" class="input_agreement_protocol" type="checkbox" ><span></span>是否滚动</label>
-            <a href="# " class="easyui-linkbutton " onclick="clearContext()">清屏</a>
-
+            <div class="debug-tool">
+                <label class="my_protocol" style="font-size:14px;"><input id="showMessage_btn" class="input_agreement_protocol" type="checkbox" ><span></span>是否只显示报文</label>
+                <label class="my_protocol" style="font-size:14px;"><input id="scroll_btn" class="input_agreement_protocol" type="checkbox" ><span></span>是否滚动</label>
+                <a href="# " class="easyui-linkbutton " onclick="clearContext()">清屏</a>
+            </div>
+            
         </div>
         <!-- <div v-bind:title="real_message" style="display:none">
             <div class="easyui-layout" style="width:770px;height:450px">
@@ -46,33 +48,43 @@
             </div>
         </div> -->
         <div title="Ping" style="display:none;">
-            <label for="order">{{ $t('index.order') }}</label>
-            <input class="easyui-textbox" id="order" required="true" validType="ip" data-options="multiline:true,prompt:'请输入IP， 如192.168.1.10'" style="width: 250px;height:25px">
-            <a href="# " class="easyui-linkbutton " iconCls="icon-ok" onclick="send_order()">{{ $t('common.ok') }}</a>
-            <a href="# " class="easyui-linkbutton " iconCls="icon-remove" onclick="clear_order()">{{ $t('index.clear') }}</a><br><br>
-            <div id="ping_callback" style="height: 75%; overflow-y: scroll; background: #333;">
+            <div class="debu-head">
+                <label for="order">{{ $t('index.order') }}</label>
+                <input class="easyui-textbox" id="order" required="true" validType="ip" data-options="multiline:true,prompt:'请输入IP， 如192.168.1.10'" style="width: 250px;height:25px">
+                <a href="# " class="easyui-linkbutton " iconCls="icon-ok" onclick="send_order()">{{ $t('common.ok') }}</a>
+                <a href="# " class="easyui-linkbutton " iconCls="icon-remove" onclick="clear_order()">{{ $t('index.clear') }}</a>
             </div>
-            <a href="# " class="easyui-linkbutton " onclick="clearPing()">清屏</a>
+            <div id="ping_callback" class="debug-log" style="height: 75%;">
+            </div>
+            <div class="debug-tool">
+                <a href="# " class="easyui-linkbutton " onclick="clearPing()">清屏</a>
+            </div>
         </div>
         <div v-bind:title="Serial_test" style="display:none;">
-            <label for="Serial_testport">{{ $t('index.Serialport_number') }}</label>
-            <input class="easyui-combobox" id='Serial_testport' required="true" data-options="editable:false" style="height:25px;width:70px">
-            <label for="Serial_test_baud">{{ $t('index.baud') }}</label>
-            <input class="easyui-combobox" id='Serial_test_baud' value="9600" required="true" data-options="editable:false" style="height:25px;width:65px">
-            <!-- <label for="Serial_test_data">{{ $t('index.databit') }}</label>
-                    <input class="easyui-combobox" id='Serial_test_data' value="8" required="true" data-options="editable:false" style="height:25px;width:45px">
-                    <label for="Serial_test_stop">{{ $t('index.stopbit') }}</label>
-                    <input class="easyui-combobox" id='Serial_test_stop' value="1" required="true" data-options="editable:false" style="height:25px;width:45px"> -->
-            <label for="Serial_test_parity">{{ $t('index.parity') }}</label>
-            <input class="easyui-combobox" id='Serial_test_parity' value="N" required="true" data-options="editable:false" style="height:25px;width:75px">
-            <a href="# " id="open_serial" class="easyui-linkbutton " iconCls="icon-ok" onclick="start_htcomhex()">{{ $t('common.ok') }}</a>
-            <a href="# " id="change_button" class="easyui-linkbutton " data-options="disabled:true" iconCls="icon-ok" onclick="change_htcomhex()">{{ $t('common.change') }}</a><br><br>
-            <input class="easyui-textbox" id='message' data-options="multiline:true,prompt:'Please enter the message'" required="true" style="height:30px;width:400px">
-            <a href="# " id="message_button" class="easyui-linkbutton " data-options="disabled:true" iconCls="icon-ok" onclick="send_message()">{{ $t('common.ok') }}</a>
-            <a href="# " class="easyui-linkbutton " iconCls="icon-remove" onclick="clear_message()">{{ $t('index.clear') }}</a><br><br>
-            <div id="htcomhex_callback" style="height: 64%; overflow-y: scroll; background: #333;">
+            <div class="debu-head">
+                <label for="Serial_testport">{{ $t('index.Serialport_number') }}</label>
+                <input class="easyui-combobox" id='Serial_testport' required="true" data-options="editable:false" style="height:25px;width:70px">
+                <label for="Serial_test_baud">{{ $t('index.baud') }}</label>
+                <input class="easyui-combobox" id='Serial_test_baud' value="9600" required="true" data-options="editable:false" style="height:25px;width:65px">
+                <!-- <label for="Serial_test_data">{{ $t('index.databit') }}</label>
+                        <input class="easyui-combobox" id='Serial_test_data' value="8" required="true" data-options="editable:false" style="height:25px;width:45px">
+                        <label for="Serial_test_stop">{{ $t('index.stopbit') }}</label>
+                        <input class="easyui-combobox" id='Serial_test_stop' value="1" required="true" data-options="editable:false" style="height:25px;width:45px"> -->
+                <label for="Serial_test_parity">{{ $t('index.parity') }}</label>
+                <input class="easyui-combobox" id='Serial_test_parity' value="N" required="true" data-options="editable:false" style="height:25px;width:75px">
+                <a href="# " id="open_serial" class="easyui-linkbutton " iconCls="icon-ok" onclick="start_htcomhex()">{{ $t('common.ok') }}</a>
+                <a href="# " id="change_button" class="easyui-linkbutton " data-options="disabled:true" iconCls="icon-ok" onclick="change_htcomhex()">{{ $t('common.change') }}</a>
             </div>
-            <a href="# " class="easyui-linkbutton " onclick="clearHtcomhex()">清屏</a>
+            <div class="debu-head">
+                <input class="easyui-textbox" id='message' data-options="multiline:true,prompt:'Please enter the message'" required="true" style="height:30px;width:400px">
+                <a href="# " id="message_button" class="easyui-linkbutton " data-options="disabled:true" iconCls="icon-ok" onclick="send_message()">{{ $t('common.ok') }}</a>
+                <a href="# " class="easyui-linkbutton " iconCls="icon-remove" onclick="clear_message()">{{ $t('index.clear') }}</a>
+            </div>
+            <div id="htcomhex_callback" class="debug-log" style="height: 64%;">
+            </div>
+            <div class="debug-tool">
+                <a href="# " class="easyui-linkbutton " onclick="clearHtcomhex()">清屏</a>
+            </div>
         </div>
     </div>
 

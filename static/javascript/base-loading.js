@@ -7,7 +7,7 @@ var _LoadingTop = _PageHeight > 61 ? (_PageHeight - 61) / 2 : 0,
 //加载gif地址 
 var Loadimagerul = "../static/images/loading.gif";
 //在页面未加载完毕之前显示的loading Html自定义内容 
-var _LoadingHtml = '<div id="loadingDiv" style="position:absolute;left:0;width:100%;height:' + _PageHeight + 'px;top:0;background:#f3f8ff;opacity:1;filter:alpha(opacity=80);z-index:10000;"><div style="position: absolute; cursor1: wait; left: ' + _LoadingLeft + 'px; top:' + _LoadingTop + 'px; width:150px;; height: 40px; line-height: 40px; padding-left: 20px; padding-right: 5px; background: #fff  no-repeat scroll 5px 12px; border: 2px solid #8DB2E3; color: #15428B; font-size:14px; font-weight:bold;">loading...</div></div>';
+var _LoadingHtml = '<div id="loadingDiv" style="position:absolute;left:0;width:100%;height:' + _PageHeight + 'px;top:0;background:#fff;opacity:1;filter:alpha(opacity=80);z-index:10000;"><div class="loading"><span></span><span></span><span></span><span></span><span></span></div></div>';
 //呈现loading效果 
 document.write(_LoadingHtml);
 //监听加载状态改变 
