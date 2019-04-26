@@ -1,37 +1,45 @@
 [{
         "text": "读写函数",
+        "iconCls": "icon-funcs",
         "children": [{
             "text": "读取位地址：ReadBit",
+            "iconCls": "icon-func",
             "document": "bool ReadBit( @Tag点名称)\n从指定Tag点读取BOOL\n",
             "function": "ReadBit()",
             "functag": "ReadBit('{0}')"
         }, {
             "text": "读取状态：ReadStatus",
+            "iconCls": "icon-func",
             "document": "bool ReadStatus( @Tag点名称)\n从指定Tag点读取状态\n",
             "function": "ReadStatus()",
             "functag": "ReadStatus('{0}')"
         }, {
             "text": "读取整型：ReadInt",
+            "iconCls": "icon-func",
             "document": "int ReadInt( @Tag点名称)\n从指定Tag点读取整型\n",
             "function": "ReadInt()",
             "functag": "ReadInt('{0}')"
         }, {
             "text": "读取浮点数：ReadFloat",
+            "iconCls": "icon-func",
             "document": "float ReadFloat( @Tag点名称)\n从指定Tag点读取浮点数\n",
             "function": "ReadFloat()",
             "functag": "ReadFloat('{0}')"
         }, {
             "text": "设置位地址：WriteBit",
+            "iconCls": "icon-func",
             "document": "bool WriteBit( @Tag点名称,设定值)\n向指定Tag点写入BOOL\n",
             "function": "WriteBit(,)",
             "functag": "WriteBit('{0}',)"
         }, {
             "text": "设置整型：WriteInt",
+            "iconCls": "icon-func",
             "document": "int WriteInt( @Tag点名称,设定值)\n向指定Tag点写入整型\n",
             "function": "WriteInt(,)",
             "functag": "WriteInt('{0}',)"
         }, {
             "text": "设置浮点数：WriteFloat",
+            "iconCls": "icon-func",
             "document": "float WriteFloat( @Tag点名称,设定值)\n向指定Tag点写入浮点数\n",
             "function": "WriteFloat(,)",
             "functag": "WriteFloat('{0}',)"
@@ -39,8 +47,10 @@
     },
     {
         "text": "系统函数",
+        "iconCls": "icon-funcs",
         "children": [{
             "text": "延迟函数：Sleep",
+            "iconCls": "icon-func",
             "document": "Sleep( 毫秒)\n延迟函数，输入参数值为毫秒\n使用示例：\nSleep(1000)//延迟等待1000mS\n",
             "function": "Sleep()"
         }]

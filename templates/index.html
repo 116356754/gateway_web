@@ -48,6 +48,7 @@
     <script src="../static/javascript/tag_tree.js"></script>
     <script src='../static/resource/echarts.min.js'></script>
     <script src="../static/javascript/js_dialog.js"></script>
+    <script src="../static/javascript/base-loading.js"></script>
     <title>Index - LM Gateway</title>
 </head>
 
@@ -89,11 +90,11 @@
     </div>
 </noscript>
 
-<div id="loading-mask" style="position:absolute;top:0px; left:0px; width:100%; height:100%; background:#D2E0F2; z-index:20000">
+<!-- <div id="loading-mask" style="position:absolute;top:0px; left:0px; width:100%; height:100%; background:#D2E0F2; z-index:20000">
     <div id="pageloading" style="position:absolute; top:50%; left:50%; margin:-120px 0px 0px -120px; text-align:center;  border:2px solid #8DB2E3; width:200px; height:60px;  font-size:14px;padding:10px; font-weight:bold; background:#fff; color:#15428B;">
         <img src="../static/images/loading.gif" align="absmiddle" /> loading...
     </div>
-</div>
+</div> -->
 
 <body>
     <!-- <script src="../static/resource/include.js"></script>
@@ -165,7 +166,7 @@
                                 <div data-options="iconCls:'icon-set-ip'" id="btn-update" onclick="set_ip()">{{ $t('index.configIP') }}</div>
                                 <div data-options="iconCls:'icon-history-data'" id="btn-update" onclick="upload_project()">{{ $t('index.upload_project') }}</div>
                                 <div data-options="iconCls:'icon-set-passwd'" id="btn-update" onclick="set_passwd()">{{ $t('index.passwd_set') }}</div>
-                                <!-- <div data-options="iconCls:'icon-set-ntp'" id="btn-update" onclick="set_ntp()">{{ $t('index.School_time') }}</div> -->
+                                <div data-options="iconCls:'icon-set-ntp'" id="btn-update" onclick="set_ntp()">{{ $t('index.School_time') }}</div>
                                 <div data-options="iconCls:'icon-set-reboot'" id="btn-update" onclick="reboot_gw()">{{ $t('index.reboot_gw') }}</div>
                                 <div data-options="iconCls:'icon-update'" id="btn-update" onclick="gw_update()">{{ $t('index.gw_update') }}</div>
                             </div>
@@ -185,7 +186,7 @@
                         <div id="menu-help" class="easyui-menu">
                             <!-- <div data-options="iconCls:'icon-search'" id="btn-update">检测更新</div>
                             <div class="menu-sep"></div> -->
-                            <div data-options="iconCls:'icon-help-word'" id="btn-help">{{ $t('index.Help_document') }}</div>
+                            <!-- <div data-options="iconCls:'icon-help-word'" id="btn-help">{{ $t('index.Help_document') }}</div> -->
                             <div data-options="iconCls:'icon-help-about'" id="btn-about">{{ $t('index.about') }}</div>
                             <div data-options="iconCls:'icon-help-log'" id="btn-version">{{ $t('index.Release_Notes') }}</div>
                             <div data-options="iconCls:'icon-help-registered'" id="btn-registered">{{ $t('index.registered') }}</div>
@@ -349,7 +350,7 @@
             <div id="gw_add" style="width:350px;height:320px;padding:10px;display:none">
                 <form id="gw_add_form">
                     <label for="gw_new">{{ $t('index.gw_name') }}</label><br>
-                    <input class="easyui-textbox" id="gw_new" style="width: 200px;" required="true" value="Gateway_1" validType='maxLength[15]'><br><br>
+                    <input class="easyui-textbox" id="gw_new" style="width: 200px;" required="true" value="Gateway" validType='maxLength[15]'><br><br>
                     <label for="gw_type">{{ $t('index.gw_class') }}</label><br>
                     <input class="easyui-combobox" id='gw_type' data-options="editable:false,panelHeight: 'auto'" style="width:200px;editable:false"><br><br>
                     <label for="gw_version">{{ $t('index.Gateway_model') }}</label><br>
@@ -368,7 +369,7 @@
                 <form id="channel_dialog_form">
                     <div class="input_container">
                         <label for="channelName">{{ $t('index.channel_name') }}</label>
-                        <input class="easyui-textbox" id='channelName' required="true" value="Channel_1" validType='maxLength[15]' style="height:25px;width:120px">
+                        <input class="easyui-textbox" id='channelName' required="true" value="Channel1" validType='maxLength[15]' style="height:25px;width:120px">
                     </div>
                     <div class="input_container">
                         <label for="channel">{{ $t('index.channel') }}</label>
@@ -435,7 +436,7 @@
                 <form id="equipment_add_form">
                     <div class="input_container">
                         <!-- <label for="equipment_name" style="padding-right: 10px">{{ $t('index.device_name') }}</label> -->
-                        <input class="easyui-textbox" id='equipment_name' v-bind:label="device_name" labelWidth="110px" value="Device_1" required="ture" validType='maxLength[15]' style="height:25px;width:280px">
+                        <input class="easyui-textbox" id='equipment_name' v-bind:label="device_name" labelWidth="110px" value="Device1" required="ture" validType='maxLength[15]' style="height:25px;width:280px">
                     </div>
                     <div id="device_addr_div" class="input_container">
                         <!-- <label for="equipment_addr" style="padding-right: 10px">{{ $t('index.device_addr') }}</label> -->

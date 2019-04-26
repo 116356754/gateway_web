@@ -15,7 +15,7 @@ function index_callback(ip) {
     $('#download_gw_tree').tree('append', {
         parent: root.target,
         data: [{
-            iconCls: 'icon-device',
+            iconCls: 'icon-new-device',
             text: ip
         }]
     });
@@ -29,7 +29,7 @@ function add_gw() {
     //     $('#download_gw_tree').tree('append', {
     //         parent: root.target,
     //         data: [{
-    //             iconCls: 'icon-device',
+    //             iconCls: 'icon-new-device',
     //             text: ip
     //         }]
     //     });
@@ -504,6 +504,7 @@ $(function() {
     //电脑注册
     $('#btn-registered').bind('click', function() {
         status = cfxApi.isExistUkey()
+        console.log(status)
         if (status == "true") {
             $.messager.alert(messages[initial]['common']['system_hint'], messages[initial]['index']['registration_code_correct'], "info")
         } else {

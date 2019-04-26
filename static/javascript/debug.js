@@ -14,9 +14,9 @@ function main_debug() { // 调试页面的第一个选项卡，在点击“调�
         ws.close();
         ws = null;
     }
-    change_htcomhex();
+    // change_htcomhex();
     // 指定websocket路径,此地址建议根据用js动态获取
-    ws = new WebSocket('ws://' + gwip + '/ws?processType=collect');
+    ws = new WebSocket('ws://' + gwip + '/ws?processType=gw');
     ws.onmessage = function(event) {
         if (showmessage) { // 是否只显示报文
             if (event.data.search("Tx") != -1 || event.data.search("Rx") != -1) {
@@ -73,17 +73,21 @@ $(document).ready(function() {
         onSelect: function(title, index) {
             if (title == self.parent.messages[initial]['index']['debug']) {
                 main_debug();
+                $("#open_serial").linkbutton('enable');
+                change_htcomhex();
             }
         }
     });
 });
 
 function send_order() {
+    $("#open_serial").linkbutton('enable');
+    change_htcomhex();
     if (ws) {
         ws.close();
         ws = null;
     }
-    change_htcomhex();
+    // change_htcomhex();
     // 指定websocket路径,此地址建议根据用js动态获取
     ip = $("#order").textbox("getValue");
     ws = new WebSocket('ws://' + gwip + '/ws?processType=ping&ip=' + ip);
@@ -125,7 +129,6 @@ function start_htcomhex() {
             console.log(evt.data);
         };
         $('#message_button').linkbutton('enable');
-        $('#change_button').linkbutton('enable');
         $('#open_serial').linkbutton('disable');
         $('#Serial_testport').combobox('disable');
         $('#Serial_test_baud').combobox('disable');
@@ -135,18 +138,12 @@ function start_htcomhex() {
 
 // 用指定的串口打开htcomhex
 function change_htcomhex() {
-    if ($("#change_button").linkbutton('options').disabled == false) {
-        if (ws) {
-            ws.close();
-            // ws = null;
-        }
-        $('#change_button').linkbutton('disable');
-        $('#message_button').linkbutton('disable');
-        $('#open_serial').linkbutton('enable');
-        $('#Serial_testport').combobox('enable');
-        $('#Serial_test_baud').combobox('enable');
-        $('#Serial_test_parity').combobox('enable');
-    }
+    $('#message_button').linkbutton('disable');
+    $('#open_serial').linkbutton('enable');
+    $('#Serial_testport').combobox('enable');
+    $('#Serial_test_baud').combobox('enable');
+    $('#Serial_test_parity').combobox('enable');
+
 }
 
 // 串口测试发送报文

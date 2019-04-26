@@ -30,7 +30,7 @@ function add_tree(bURL) {
             $('#gw_tree').tree('append', {
                 parent: root.target,
                 data: [{
-                    iconCls: 'icon-device',
+                    iconCls: 'icon-new-device',
                     text: bURL
                 }]
             });
@@ -46,7 +46,7 @@ function add_tree(bURL) {
             $('#download_gw_tree').tree('append', {
                 parent: root.target,
                 data: [{
-                    iconCls: 'icon-device',
+                    iconCls: 'icon-new-device',
                     text: bURL
                 }]
             });

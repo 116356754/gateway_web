@@ -174,7 +174,7 @@ function gwonline_callback(ip) {
     $('#gw_tree').tree('append', {
         parent: root.target,
         data: [{
-            iconCls: 'icon-device',
+            iconCls: 'icon-new-device',
             text: ip
         }]
     });

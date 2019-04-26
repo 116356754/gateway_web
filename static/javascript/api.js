@@ -233,12 +233,12 @@ function add_channel_name(value) {
     content = JSON.parse(value);
     for (var k = content.length; k > 0; k--) {
         last_name = content[k - 1].text;
-        if (!isNaN(last_name.slice(8))) {
-            name = 'Channel_' + (parseInt(last_name.slice(8)) + 1).toString();
+        if (!isNaN(last_name.slice(7))) {
+            name = 'Channel' + (parseInt(last_name.slice(7)) + 1).toString();
             return name;
         }
     }
-    return 'Channel_1';
+    return 'Channel1';
 }
 
 // 新建设备时自动生成名称
@@ -246,12 +246,12 @@ function add_device_name(value) {
     content = JSON.parse(value);
     for (var k = content.length; k > 0; k--) {
         last_name = content[k - 1].text;
-        if (!isNaN(last_name.slice(7))) {
-            name = 'Device_' + (parseInt(last_name.slice(7)) + 1).toString();
+        if (!isNaN(last_name.slice(6))) {
+            name = 'Device' + (parseInt(last_name.slice(6)) + 1).toString();
             return name;
         }
     }
-    return 'Device_1';
+    return 'Device1';
 }
 
 // sqlite 创建数据库

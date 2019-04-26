@@ -15,6 +15,23 @@ $(function() {
                 }
             }
         });
+        $('#func_tree').tree({
+            url: '../static/json/func_tree.json',
+            onClick: function(row) {
+                var level = easyui_tree_options.getLevel(this, row);
+                if (level == 1) {
+                    $("#func_document").val("");
+                } else if (level == 2) {
+                    $("#func_document").val(row.document);
+                    $("#func_preview").textbox("setValue", row.function);
+                    if (row.function == 'Sleep()') {
+                        document.getElementById("read_tag_div").style.display = 'none';
+                    } else {
+                        document.getElementById("read_tag_div").style.display = '';
+                    }
+                }
+            }
+        });
     } else {   
         $('#runtype').combobox({
             url: '../static/json/runtype_english.json',
@@ -31,25 +48,24 @@ $(function() {
                 }
             }
         });
-    }
-
-    $('#func_tree').tree({
-        url: '../static/json/func_tree.json',
-        onClick: function(row) {
-            var level = easyui_tree_options.getLevel(this, row);
-            if (level == 1) {
-                $("#func_document").val("");
-            } else if (level == 2) {
-                $("#func_document").val(row.document);
-                $("#func_preview").textbox("setValue", row.function);
-                if (row.function == 'Sleep()') {
-                    document.getElementById("read_tag_div").style.display = 'none';
-                } else {
-                    document.getElementById("read_tag_div").style.display = '';
+        $('#func_tree').tree({
+            url: '../static/json/func_tree_english.json',
+            onClick: function(row) {
+                var level = easyui_tree_options.getLevel(this, row);
+                if (level == 1) {
+                    $("#func_document").val("");
+                } else if (level == 2) {
+                    $("#func_document").val(row.document);
+                    $("#func_preview").textbox("setValue", row.function);
+                    if (row.function == 'Sleep()') {
+                        document.getElementById("read_tag_div").style.display = 'none';
+                    } else {
+                        document.getElementById("read_tag_div").style.display = '';
+                    }
                 }
             }
-        }
-    });
+        });
+    }
 
     $('#read_tag').textbox({
         onClickButton: function() {

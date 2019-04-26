@@ -19,6 +19,7 @@
     <script src="../static/javascript/calculate.js"></script>
     <script src="../static/resource/xlsx.core.min.js"></script>
     <script src="../static/resource/jquery.table2excel.js"></script>
+    <script src="../static/javascript/base-loading.js"></script>
 </head>
 
 <body>
@@ -54,7 +55,7 @@
                             <div style="position: absolute;top:50px;left:10px">
                                 <input class="easyui-textbox" id='new_id' v-bind:label="name" value="tag1" labelWidth="70px" style="width: 200px" validType="maxLength[15]"><br><br>
                                 <input class="easyui-textbox" id='new_name' v-bind:label="description" labelWidth="70px" style="width: 200px"><br><br>
-                                <!-- <input class="easyui-textbox" id='new_cycle' label="周期(s)：" value="10" labelWidth="60px" style="width: 200px" validType="eqmaxLength[3]"> -->
+                                <!-- <label>注：A、B、C、D</label> -->
                             </div>
                         </div>
                         <div data-options="region:'center'" v-bind:title="expression_config" style=""><br> &#12288;

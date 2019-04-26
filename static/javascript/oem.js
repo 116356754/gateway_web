@@ -4,6 +4,7 @@ var oemData = {
         "gw_type": [{ "text": "MODBUS网关", "id": "MODBUS Gateway", "selected": true },
             { "text": "BACNET网关", "id": "BACNET Gateway" },
             { "text": "MQTT网关", "id": "MQTT Gateway" },
+            { "text": "IoT网关", "id": "IoT Gateway" },
             { "text": "OPC UA网关", "id": "OPC UA Gateway" },
             { "text": "全功能网关", "id": "All Function Gateway" }
         ],
@@ -22,6 +23,9 @@ var oemData = {
                 { 'text': 'LM Gateway401-MQTT' }, { 'text': 'LM Gateway402-MQTT' },
                 { 'text': 'LM Gateway412-MQTT' }, { 'text': 'LM Gateway414-MQTT' }
             ],
+            "IoT Gateway": [{ 'text': 'LM Gateway201-IoT', "selected": true }, { 'text': 'LM Gateway202-IoT' },
+                { 'text': 'LM Gateway203-IoT' }, { 'text': 'LM Gateway414-IoT' }
+            ],
             "All Function Gateway": [{ 'text': 'LM Gateway201-A', "selected": true }, { 'text': 'LM Gateway202-A' },
                 { 'text': 'LM Gateway414-A' }
             ]
@@ -31,6 +35,7 @@ var oemData = {
             "BACNET Gateway": ["BACnet_Service"],
             "OPC UA Gateway": ["OPC_UA"],
             "MQTT Gateway": ["mqtt", "luomiyun"],
+            "IoT Gateway": ["modbus_slave", "mqtt", "luomiyun"],
             "All Function Gateway": ["modbus_slave", "BACnet_Service", "OPC_UA", "mqtt", "luomiyun"]
         },
         "companyName": "黄山罗米测控技术有限公司",
@@ -39,6 +44,7 @@ var oemData = {
         "gw_type": [{ "text": "MODBUS Gateway", "id": "MODBUS Gateway", "selected": true },
             { "text": "BACNET Gateway", "id": "BACNET Gateway" },
             { "text": "MQTT Gateway", "id": "MQTT Gateway" },
+            { "text": "IoT Gateway", "id": "IoT Gateway" },
             { "text": "OPC UA Gateway", "id": "OPC UA Gateway" },
             { "text": "All Function Gateway", "id": "All Function Gateway" }
         ],
@@ -57,6 +63,9 @@ var oemData = {
                 { 'text': 'LM Gateway401-MQTT' }, { 'text': 'LM Gateway402-MQTT' },
                 { 'text': 'LM Gateway412-MQTT' }, { 'text': 'LM Gateway414-MQTT' }
             ],
+            "IoT Gateway": [{ 'text': 'LM Gateway201-IoT', "selected": true }, { 'text': 'LM Gateway202-IoT' },
+                { 'text': 'LM Gateway203-IoT' }, { 'text': 'LM Gateway414-IoT' }
+            ],
             "All Function Gateway": [{ 'text': 'LM Gateway201-A', "selected": true }, { 'text': 'LM Gateway202-A' },
                 { 'text': 'LM Gateway414-A' }
             ]
@@ -66,6 +75,7 @@ var oemData = {
             "BACNET Gateway": ["BACnet_Service"],
             "OPC UA Gateway": ["OPC_UA"],
             "MQTT Gateway": ["mqtt", "luomiyun"],
+            "IoT Gateway": ["modbus_slave", "mqtt", "luomiyun"],
             "All Function Gateway": ["modbus_slave", "BACnet_Service", "OPC_UA", "mqtt", "luomiyun"]
         },
         "companyName": "Huangshan Luomi Measurement and Control Technology Co., Ltd.",
@@ -81,13 +91,14 @@ var oemData = {
     "414": "414",
     "-M": "-M",
     "-MQTT": "-MQTT",
+    "-IoT": "-IoT",
     "-B": "-B",
     "-OPC UA": "-OPC UA",
     "-A": "-A"
 }
 var help_oem = false
 var upload_oem = false // 为true时隐藏帮助按钮和上传云端按钮
-var luomiyun_name = "IotDDC"
+var luomiyun_name = "IoTDDC"
 var mqtt_default = { "used": false, "base": { "ip": "192.168.1.10", "port": 1883, "keep_alive": 60, "timeout": 60, "clean_session": false, "username": "", "password": "", "clientid": "gw1" }, "ssl": null, "topics": { "realtime": { "topicList": [{ "topic": "lm/gw/status/gw1", "freq": 10 }], "qos": 0, "retain": false }, "history": { "topic": "lm/gw/history/gw1", "qos": 0, "retain": false }, "ctrlResponse": { "topic": "lm/gw/ctrlResponse/gw1", "qos": 0, "retain": false }, "ctrlRequest": { "topic": "lm/gw/ctrlRequest/gw1", "qos": 0 }, "inquire": { "topic": "lm/gw/inquire/gw1", "qos": 0 }, "inquireResponse": { "topic": "lm/gw/inquireResponse/gw1", "qos": 0, "retain": false }, "reboot": { "topic": "lm/gw/reboot/gw1", "qos": 0 }, "lastwill": { "enable": false, "topic": "lm/gw/lastwill/gw1", "qos": 0, "retain": false, "message": "" } }, "mode": { "filter": ["statusGood"], "format": "default", "timeformat": "2006-01-02 15:04:05", "write": "default" } }
 
 //惟则

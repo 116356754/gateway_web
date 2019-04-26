@@ -17,6 +17,7 @@
     <script src="../static/resource/vue.min.js"></script>
     <script src="../static/resource/vue-i18n.min.js"></script>
     <script src="../static/javascript/mqtt.js"></script>
+    <script src="../static/javascript/base-loading.js"></script>
     <style type="text/css">
         body {
             opacity: 0;
@@ -94,17 +95,17 @@
                     </div>
                     <div v-bind:title="inquire">
                         <div style="padding:20px">
+                            <div>{{ $t('mqtt.inquiretopic') }}</div>
+                            <input id='inquiretopic' class="easyui-textbox" style="width:180px;height:20px">
+                            <input class="easyui-combobox" id='inquireqos' value="0" data-options="editable:false,panelHeight: 'auto'" style="width:60px;height: 20px">
+                            <!-- <label for="inquireretain" style="padding-left: 5px">retained:</label>
+                                <input id="inquireretain" class="easyui-switchbutton" labelWidth="100px" data-options="onText:'Yes',offText:'No'" style="height:20px;width:50px"> -->
+                            <br><br>
                             <div>{{ $t('mqtt.inquireResponseTopic') }}</div>
                             <input id='inquireResponsetopic' class="easyui-textbox" style="width:180px;height:20px">
                             <input class="easyui-combobox" id='inquireResponseqos' value="0" data-options="editable:false,panelHeight: 'auto'" style="width:60px;height: 20px">
                             <label for="inquireResponseretain" style="padding-left: 5px">retained:</label>
                             <input id="inquireResponseretain" class="easyui-switchbutton" labelWidth="100px" data-options="onText:'Yes',offText:'No'" style="height:20px;width:50px">
-                            <br><br>
-                            <div>{{ $t('mqtt.inquiretopic') }}</div>
-                            <input id='inquiretopic' class="easyui-textbox" style="width:180px;height:20px">
-                            <input class="easyui-combobox" id='inquireqos' value="0" data-options="editable:false,panelHeight: 'auto'" style="width:60px;height: 20px">
-                            <label for="inquireretain" style="padding-left: 5px">retained:</label>
-                            <input id="inquireretain" class="easyui-switchbutton" labelWidth="100px" data-options="onText:'Yes',offText:'No'" style="height:20px;width:50px">
                         </div>
                     </div>
                     <div v-bind:title="publishalarm">
@@ -121,8 +122,9 @@
                             <div>{{ $t('mqtt.writetopic') }}</div>
                             <input id='writetopic' class="easyui-textbox" style="width:180px;height:20px">
                             <input class="easyui-combobox" id='writeqos' value="0" data-options="editable:false,panelHeight: 'auto'" style="width:60px;height: 20px">
-                            <label for="writeretain" style="padding-left: 5px">retained:</label>
-                            <input id="writeretain" class="easyui-switchbutton" labelWidth="100px" data-options="onText:'Yes',offText:'No'" style="height:20px;width:50px">
+                            <!-- <label for="writeretain" style="padding-left: 5px">retained:</label>
+                            <input id="writeretain" class="easyui-switchbutton" labelWidth="100px" data-options="onText:'Yes',offText:'No'" style="height:20px;width:50px"> -->
+                            <input id='write_js' class="easyui-combobox" data-options="editable:false,panelHeight: 'auto'" required="true" style="width:100px;height:24px">
                             <br><br>
                             <div>{{ $t('mqtt.writeresponsetopic') }}</div>
                             <input id='writeResponsetopic' class="easyui-textbox" style="width:180px;height:20px">
@@ -136,8 +138,8 @@
                             <div>{{ $t('mqtt.reboottopic') }}</div>
                             <input id='reboottopic' class="easyui-textbox" style="width:180px;height:20px">
                             <input class="easyui-combobox" id='rebootqos' value="0" data-options="editable:false,panelHeight: 'auto'" style="width:60px;height: 20px">
-                            <label for="rebootretain" style="padding-left: 5px">retained:</label>
-                            <input id="rebootretain" class="easyui-switchbutton" labelWidth="100px" data-options="onText:'Yes',offText:'No'" style="height:20px;width:50px">
+                            <!-- <label for="rebootretain" style="padding-left: 5px">retained:</label>
+                            <input id="rebootretain" class="easyui-switchbutton" labelWidth="100px" data-options="onText:'Yes',offText:'No'" style="height:20px;width:50px"> -->
                             <br><br>
                             <div>{{ $t('mqtt.rebootresponsetopic') }}</div>
                             <input id='rebootResponsetopic' class="easyui-textbox" style="width:180px;height:20px">
@@ -151,8 +153,8 @@
                             <div>{{ $t('mqtt.configtopic') }}</div>
                             <input id='configtopic' class="easyui-textbox" style="width:180px;height:20px">
                             <input class="easyui-combobox" id='configqos' value="0" data-options="editable:false,panelHeight: 'auto'" style="width:60px;height: 20px">
-                            <label for="configretain" style="padding-left: 5px">retained:</label>
-                            <input id="configretain" class="easyui-switchbutton" labelWidth="100px" data-options="onText:'Yes',offText:'No'" style="height:20px;width:50px">
+                            <!-- <label for="configretain" style="padding-left: 5px">retained:</label>
+                            <input id="configretain" class="easyui-switchbutton" labelWidth="100px" data-options="onText:'Yes',offText:'No'" style="height:20px;width:50px"> -->
                             <br><br>
                             <div style="display:none">
                                 <div>网关配置发布的主题:</div>
@@ -167,7 +169,7 @@
             </form>
         </div>
         <div class="easyui-layout" data-options="fit:true">
-            <div data-options="region:'west'" class="form-layout" style="width:470px;border-right: 1px solid #c0c4c5;">
+            <div data-options="region:'west'" class="form-layout" style="width:490px;border-right: 1px solid #c0c4c5;">
                 <div class="container">
                     <form method=POST enctype=multipart/form-data id='mrx' title="导入Excel配置" action="/mqtt/excelload" style="display:none;width:300px;height:150px">
                         <input type=file name=the_file accept="application/vnd.ms-excel">
@@ -256,7 +258,7 @@
                                 </div>
                                 <div style="margin-bottom:20px">
                                     <label class="querytb-label">{{ $t('mqtt.mustache') }}</label>
-                                    <input id='mustache_combo' class="easyui-combobox" readonly="readonly" data-options="editable:false,panelHeight: 'auto'" required="true" style="width:150px;height:24px">
+                                    <input id='mustache_combo' class="easyui-textbox" readonly="readonly" data-options="editable:false,panelHeight: 'auto'" required="true" style="width:150px;height:24px">
                                 </div>
                             </div>
                             <div style="margin-bottom:20px">
@@ -332,7 +334,7 @@
     var dir = self.parent.$('#text').textbox('getText'); // 选中的文件夹名称
     feature_path = 'Project/' + dir + '/Gateway';
 
-    mustaches = JSON.parse(scanFile(cfxApi.getCurrentDirectory() + '\\mqtt\\template'));
+    mustaches = JSON.parse(scanFile(cfxApi.getCurrentDirectory() + '\\mqtt\\realtime'));
     mustaches_object = new Array();
     mustaches.forEach(function(oneMustache) {
         if (oneMustache != 'mqtt.conf') {
@@ -345,6 +347,21 @@
         valueField: 'text',
         textField: 'text',
         data: mustaches_object,
+        panelHeight: 'auto'
+    });
+    write_mustaches = JSON.parse(scanFile(cfxApi.getCurrentDirectory() + '\\mqtt\\write'));
+    write_object = new Array();
+    write_mustaches.forEach(function(oneMustache) {
+        if (oneMustache != 'mqtt.conf') {
+            write_object.push({
+                'text': oneMustache
+            })
+        }
+    })
+    $("#write_js").combobox({
+        valueField: 'text',
+        textField: 'text',
+        data: write_object,
         panelHeight: 'auto'
     });
     if (self.parent.vm.$i18n.locale == 'zh-CN') {
@@ -509,7 +526,7 @@
             $("#timestampChange").prop("checked", false);
             $("#newtimestampChange").prop("checked", false);
         }
-        $("#mustache_combo").combobox('setValue', oneTopic['format']);
+        $("#mustache_combo").textbox('setValue', oneTopic['format']);
         $("#newmustache_combo").combobox('setValue', oneTopic['format']);
     }
 
@@ -589,38 +606,19 @@
         if (obj['subscribe']['inquire']) {
             $('#inquiretopic').textbox('setValue', obj['subscribe']['inquire'].topic);
             $('#inquireqos').combobox('setValue', obj['subscribe']['inquire'].qos);
-            if (obj['subscribe']['inquire'].retain) {
-                $('#inquireretain').switchbutton('check');
-            } else {
-                $('#inquireretain').switchbutton('uncheck');
-            }
         }
         if (obj['subscribe']['reboot']) {
             $('#reboottopic').textbox('setValue', obj['subscribe']['reboot'].topic);
             $('#rebootqos').combobox('setValue', obj['subscribe']['reboot'].qos);
-            if (obj['subscribe']['reboot'].retain) {
-                $('#rebootretain').switchbutton('check');
-            } else {
-                $('#rebootretain').switchbutton('uncheck');
-            }
         }
         if (obj['subscribe']['write']) {
             $('#writetopic').textbox('setValue', obj['subscribe']['write'].topic);
             $('#writeqos').combobox('setValue', obj['subscribe']['write'].qos);
-            if (obj['subscribe']['write'].retain) {
-                $('#writeretain').switchbutton('check');
-            } else {
-                $('#writeretain').switchbutton('uncheck');
-            }
+            $('#write_js').combobox('setValue', obj['subscribe']['write'].format);
         }
         if (obj['subscribe']['config']) {
             $('#configtopic').textbox('setValue', obj['subscribe']['config'].topic);
             $('#configqos').combobox('setValue', obj['subscribe']['config'].qos);
-            if (obj['subscribe']['config'].retain) {
-                $('#configretain').switchbutton('check');
-            } else {
-                $('#configretain').switchbutton('uncheck');
-            }
         }
     }
 
@@ -748,8 +746,7 @@
             };
             expandtopic["subscribe"]["inquire"] = {
                 topic: document.getElementById('inquiretopic').value,
-                qos: parseInt($("#inquireqos").combobox('getValue')),
-                retain: $("#inquireretain").switchbutton("options").checked
+                qos: parseInt($("#inquireqos").combobox('getValue'))
             }
         };
         current_alarmtopic = $("#alarmtopic").textbox('getValue');
@@ -770,7 +767,7 @@
             expandtopic["subscribe"]["write"] = {
                 topic: document.getElementById('writetopic').value,
                 qos: parseInt($("#writeqos").combobox('getValue')),
-                retain: $("#writeretain").switchbutton("options").checked
+                format: $("#write_js").combobox('getValue')
             }
         };
         current_reboottopic = $("#reboottopic").textbox('getValue');
@@ -782,8 +779,7 @@
             };
             expandtopic["subscribe"]["reboot"] = {
                 topic: document.getElementById('reboottopic').value,
-                qos: parseInt($("#rebootqos").combobox('getValue')),
-                retain: $("#rebootretain").switchbutton("options").checked
+                qos: parseInt($("#rebootqos").combobox('getValue'))
             }
         };
         current_configtopic = $("#configtopic").textbox('getValue');
@@ -795,8 +791,7 @@
             // };
             expandtopic["subscribe"]["config"] = {
                 topic: document.getElementById('configtopic').value,
-                qos: parseInt($("#configqos").combobox('getValue')),
-                retain: $("#configretain").switchbutton("options").checked
+                qos: parseInt($("#configqos").combobox('getValue'))
             }
         };
         oldcontent = selectsql(feature_path, "select config from iot where name='MQTT'");

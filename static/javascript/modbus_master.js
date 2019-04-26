@@ -19,11 +19,14 @@ function doSearch() {
         }
         result = updatesql(obj.path, sql);
         if (result == 'true') {
-            obj.select.protocolConf = addr_value;
+            self.parent.$('#tt').tree('update', {
+                target: obj.select.target,
+                advance: JSON.stringify({ "baseAddr": addr_value })
+            });
+            self.parent.insert_info(self.parent.messages[initial]['modbus_master']['baseaddr_success'])
         } else {
             $.messager.alert(result);
         }
-        self.parent.insert_info(self.parent.messages[initial]['modbus_master']['baseaddr_success'])
     }
 }
 

@@ -18,6 +18,7 @@
     <script src="../static/resource/vue-i18n.min.js"></script>
     <script src="../static/javascript/luomiyun.js"></script>
     <script src="../static/javascript/http_upload.js"></script>
+    <script src="../static/javascript/base-loading.js"></script>
     <style type="text/css">
         body {
             opacity: 0;
@@ -54,8 +55,8 @@
                             </div>
                             <div class="separated"></div>
                             <div class="changemqttbtn">
-                                <a id="uploadcloud" onclick="upload_cloud()" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-upload-project'">{{ $t('index.luomiyun') }}</a>
                                 <a id="changemqttbtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">{{ $t('common.save') }}</a>
+                                <a id="uploadcloud" onclick="upload_cloud()" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-upload-project'">{{ $t('index.luomiyun') }}</a>
                             </div>
                         </form>
                     </div>
