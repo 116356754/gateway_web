@@ -934,7 +934,9 @@ input[type="checkbox"]::after {
 
 .debug-tool {
     padding-left: 20px;
-    margin-top: 10px;
+    position: absolute;
+    top: 2px;
+    right: 18px;
 }
 
 .debug-tool label {
